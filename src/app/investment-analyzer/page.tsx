@@ -276,8 +276,8 @@ export default function InvestmentAnalyzer() {
             <div className="flex items-center justify-center gap-3 mb-6">
               <Brain className="w-12 h-12 text-white" />
               <h1 className="text-5xl lg:text-6xl font-bold">
-                Investment Intelligence
-                <span className="block text-gray-300">A* Algorithm Demo</span>
+                F.A.I.T.H. AI Engine
+                <span className="block text-gray-300">Kingdom Investment AI</span>
               </h1>
             </div>
             
