@@ -604,6 +604,20 @@
                 gap: 1.25rem;
             }
             
+            #articles-grid {
+                grid-template-columns: 1fr;
+                gap: 1.25rem;
+            }
+            
+            .article-card {
+                margin-bottom: 1rem;
+            }
+            
+            .category-btn {
+                font-size: 0.8rem !important;
+                padding: 0.4rem 0.8rem !important;
+            }
+            
             .card {
                 padding: 1.5rem;
             }
@@ -760,6 +774,7 @@
                 </li>
                 
                 <li><a href="#about" class="nav-link" onclick="showPage('about')">About</a></li>
+                <li><a href="#blog" class="nav-link" onclick="showPage('blog')">Keep it 100</a></li>
             </ul>
             
             <div class="nav-cta-buttons">
@@ -879,6 +894,16 @@
                                 📱 4.9★ App Store Rating
                             </div>
                             <button onclick="showPage('mobile-apps')" class="btn-primary" style="margin-top: 1rem;">Download Apps</button>
+                        </div>
+                        
+                        <div class="component-card">
+                            <div class="component-icon">📰</div>
+                            <h3 style="font-size: 1.3rem; font-weight: bold; margin-bottom: 1rem;">Keep it 100 Blog</h3>
+                            <p style="margin-bottom: 1rem;">Market intelligence and investment insights from Houston 100's leadership</p>
+                            <div class="feature-highlight">
+                                📈 Weekly Market Insights
+                            </div>
+                            <button onclick="showPage('blog')" class="btn-primary" style="margin-top: 1rem;">Read Latest Posts</button>
                         </div>
                         
                         <div class="component-card">
@@ -1646,6 +1671,240 @@
             </div>
         </div>
 
+        <!-- Keep it 100 Blog -->
+        <div id="page-blog" class="page-section hidden">
+            <div class="container">
+                <!-- Blog Header -->
+                <div class="text-center mb-8">
+                    <div style="display: inline-block; background: #000000; color: white; padding: 0.75rem 2rem; border-radius: 2rem; font-weight: 700; font-size: 1.5rem; margin-bottom: 1.5rem; letter-spacing: -0.025em;">
+                        Keep it 100
+                    </div>
+                    <h1 style="font-size: 3rem; font-weight: bold; margin-bottom: 1rem; color: #000000;">Houston 100 Insights</h1>
+                    <p style="font-size: 1.2rem; color: #6b7280; max-width: 600px; margin: 0 auto;">Market intelligence, investment strategies, and faith-based business insights from Houston 100's leadership team</p>
+                </div>
+
+                <!-- Featured Article -->
+                <div style="margin-bottom: 3rem;">
+                    <div style="background: white; border-radius: 1rem; overflow: hidden; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); border: 1px solid #e5e7eb;">
+                        <div style="height: 300px; background: linear-gradient(135deg, #000000 0%, #374151 100%); position: relative; display: flex; align-items: center; justify-content: center;">
+                            <div style="text-align: center; color: white; padding: 2rem;">
+                                <div style="background: #ef4444; color: white; padding: 0.5rem 1rem; border-radius: 0.5rem; font-size: 0.875rem; font-weight: 600; margin-bottom: 1rem; display: inline-block;">
+                                    FEATURED
+                                </div>
+                                <h2 style="font-size: 2.5rem; font-weight: bold; margin-bottom: 1rem; line-height: 1.2;">Houston Real Estate Market Reaches New Heights in Q4 2025</h2>
+                                <p style="font-size: 1.125rem; opacity: 0.9; margin-bottom: 1.5rem;">Analysis of market trends driving Houston 100's 18.5% average returns and what investors should watch in 2026</p>
+                                <div style="display: flex; align-items: center; justify-content: center; gap: 1rem; font-size: 0.875rem; opacity: 0.8;">
+                                    <span>By Effram Barrett</span>
+                                    <span>•</span>
+                                    <span>December 15, 2025</span>
+                                    <span>•</span>
+                                    <span>5 min read</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="padding: 2rem;">
+                            <p style="color: #374151; line-height: 1.7; margin-bottom: 1.5rem;">
+                                The Houston real estate market has demonstrated remarkable resilience and growth throughout 2025, with key indicators pointing to continued expansion into 2026. Our portfolio's 18.5% average annual return reflects broader market dynamics that savvy investors should understand...
+                            </p>
+                            <button onclick="showArticle('featured')" style="background: #000000; color: white; padding: 0.75rem 1.5rem; border: none; border-radius: 0.5rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease;">
+                                Read Full Article →
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Article Categories -->
+                <div style="display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap; justify-content: center;">
+                    <button onclick="filterArticles('all')" class="category-btn active" data-category="all" style="padding: 0.5rem 1rem; border: 1px solid #000000; background: #000000; color: white; border-radius: 0.5rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease;">
+                        All Posts
+                    </button>
+                    <button onclick="filterArticles('market')" class="category-btn" data-category="market" style="padding: 0.5rem 1rem; border: 1px solid #000000; background: white; color: #000000; border-radius: 0.5rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease;">
+                        Market Analysis
+                    </button>
+                    <button onclick="filterArticles('investment')" class="category-btn" data-category="investment" style="padding: 0.5rem 1rem; border: 1px solid #000000; background: white; color: #000000; border-radius: 0.5rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease;">
+                        Investment Strategy
+                    </button>
+                    <button onclick="filterArticles('faith')" class="category-btn" data-category="faith" style="padding: 0.5rem 1rem; border: 1px solid #000000; background: white; color: #000000; border-radius: 0.5rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease;">
+                        Faith & Business
+                    </button>
+                    <button onclick="filterArticles('technology')" class="category-btn" data-category="technology" style="padding: 0.5rem 1rem; border: 1px solid #000000; background: white; color: #000000; border-radius: 0.5rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease;">
+                        Technology
+                    </button>
+                </div>
+
+                <!-- Articles Grid -->
+                <div id="articles-grid" class="grid" style="grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 1.5rem;">
+                    
+                    <!-- Article 1 -->
+                    <article class="article-card" data-category="market" style="background: white; border-radius: 1rem; overflow: hidden; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); border: 1px solid #e5e7eb; transition: all 0.2s ease; cursor: pointer;" onclick="showArticle('dhap-success')">
+                        <div style="height: 200px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); position: relative; display: flex; align-items: center; justify-content: center;">
+                            <div style="background: #10b981; color: white; padding: 0.5rem 1rem; border-radius: 0.5rem; font-size: 0.875rem; font-weight: 600; position: absolute; top: 1rem; left: 1rem;">
+                                Market Analysis
+                            </div>
+                            <div style="color: white; text-align: center; padding: 1rem;">
+                                <h3 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 0.5rem;">DHAP Program Success Stories: Q4 2025 Impact Report</h3>
+                            </div>
+                        </div>
+                        <div style="padding: 1.5rem;">
+                            <p style="color: #6b7280; margin-bottom: 1rem; line-height: 1.6;">How our Distressed Homeowner Assistance Program helped 50+ families while generating 19.2% average returns for investors this quarter.</p>
+                            <div style="display: flex; align-items: center; justify-content: between; font-size: 0.875rem; color: #9ca3af;">
+                                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                    <div style="width: 32px; height: 32px; background: #000000; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 0.75rem;">QW</div>
+                                    <span>Quintin Ward</span>
+                                </div>
+                                <div style="margin-left: auto;">Dec 10, 2025</div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Article 2 -->
+                    <article class="article-card" data-category="investment" style="background: white; border-radius: 1rem; overflow: hidden; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); border: 1px solid #e5e7eb; transition: all 0.2s ease; cursor: pointer;" onclick="showArticle('ai-investment')">
+                        <div style="height: 200px; background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); position: relative; display: flex; align-items: center; justify-content: center;">
+                            <div style="background: #3b82f6; color: white; padding: 0.5rem 1rem; border-radius: 0.5rem; font-size: 0.875rem; font-weight: 600; position: absolute; top: 1rem; left: 1rem;">
+                                Technology
+                            </div>
+                            <div style="color: white; text-align: center; padding: 1rem;">
+                                <h3 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 0.5rem;">AI-Powered Investment Classification: F.A.I.T.H. Platform Results</h3>
+                            </div>
+                        </div>
+                        <div style="padding: 1.5rem;">
+                            <p style="color: #6b7280; margin-bottom: 1rem; line-height: 1.6;">Deep dive into our A* algorithm's 94% accuracy rate and how artificial intelligence is revolutionizing faith-based investment decisions.</p>
+                            <div style="display: flex; align-items: center; justify-content: between; font-size: 0.875rem; color: #9ca3af;">
+                                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                    <div style="width: 32px; height: 32px; background: #000000; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 0.75rem;">WB</div>
+                                    <span>William Brown</span>
+                                </div>
+                                <div style="margin-left: auto;">Dec 8, 2025</div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Article 3 -->
+                    <article class="article-card" data-category="faith" style="background: white; border-radius: 1rem; overflow: hidden; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); border: 1px solid #e5e7eb; transition: all 0.2s ease; cursor: pointer;" onclick="showArticle('kingdom-investing')">
+                        <div style="height: 200px; background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); position: relative; display: flex; align-items: center; justify-content: center;">
+                            <div style="background: #8b5cf6; color: white; padding: 0.5rem 1rem; border-radius: 0.5rem; font-size: 0.875rem; font-weight: 600; position: absolute; top: 1rem; left: 1rem;">
+                                Faith & Business
+                            </div>
+                            <div style="color: white; text-align: center; padding: 1rem;">
+                                <h3 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 0.5rem;">Kingdom Investing: Aligning Faith with Financial Returns</h3>
+                            </div>
+                        </div>
+                        <div style="padding: 1.5rem;">
+                            <p style="color: #6b7280; margin-bottom: 1rem; line-height: 1.6;">Exploring how faith-based investment principles don't compromise returns—they enhance them. Our framework for Kingdom-focused portfolio management.</p>
+                            <div style="display: flex; align-items: center; justify-content: between; font-size: 0.875rem; color: #9ca3af;">
+                                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                    <div style="width: 32px; height: 32px; background: #000000; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 0.75rem;">EB</div>
+                                    <span>Effram Barrett</span>
+                                </div>
+                                <div style="margin-left: auto;">Dec 5, 2025</div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Article 4 -->
+                    <article class="article-card" data-category="market" style="background: white; border-radius: 1rem; overflow: hidden; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); border: 1px solid #e5e7eb; transition: all 0.2s ease; cursor: pointer;" onclick="showArticle('houston-growth')">
+                        <div style="height: 200px; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); position: relative; display: flex; align-items: center; justify-content: center;">
+                            <div style="background: #f59e0b; color: white; padding: 0.5rem 1rem; border-radius: 0.5rem; font-size: 0.875rem; font-weight: 600; position: absolute; top: 1rem; left: 1rem;">
+                                Market Analysis
+                            </div>
+                            <div style="color: white; text-align: center; padding: 1rem;">
+                                <h3 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 0.5rem;">Houston's Population Boom: Investment Opportunities in 2026</h3>
+                            </div>
+                        </div>
+                        <div style="padding: 1.5rem;">
+                            <p style="color: #6b7280; margin-bottom: 1rem; line-height: 1.6;">With 2.1% annual population growth, Houston continues to outpace national averages. Here's where smart money is positioning for maximum returns.</p>
+                            <div style="display: flex; align-items: center; justify-content: between; font-size: 0.875rem; color: #9ca3af;">
+                                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                    <div style="width: 32px; height: 32px; background: #000000; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 0.75rem;">QW</div>
+                                    <span>Quintin Ward</span>
+                                </div>
+                                <div style="margin-left: auto;">Dec 3, 2025</div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Article 5 -->
+                    <article class="article-card" data-category="investment" style="background: white; border-radius: 1rem; overflow: hidden; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); border: 1px solid #e5e7eb; transition: all 0.2s ease; cursor: pointer;" onclick="showArticle('portfolio-diversification')">
+                        <div style="height: 200px; background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); position: relative; display: flex; align-items: center; justify-content: center;">
+                            <div style="background: #ef4444; color: white; padding: 0.5rem 1rem; border-radius: 0.5rem; font-size: 0.875rem; font-weight: 600; position: absolute; top: 1rem; left: 1rem;">
+                                Investment Strategy
+                            </div>
+                            <div style="color: white; text-align: center; padding: 1rem;">
+                                <h3 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 0.5rem;">Portfolio Diversification Strategies for 2026</h3>
+                            </div>
+                        </div>
+                        <div style="padding: 1.5rem;">
+                            <p style="color: #6b7280; margin-bottom: 1rem; line-height: 1.6;">Beyond traditional real estate: How Houston 100 is expanding into commercial properties, REITs, and technology investments while maintaining Kingdom focus.</p>
+                            <div style="display: flex; align-items: center; justify-content: between; font-size: 0.875rem; color: #9ca3af;">
+                                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                    <div style="width: 32px; height: 32px; background: #000000; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 0.75rem;">EB</div>
+                                    <span>Effram Barrett</span>
+                                </div>
+                                <div style="margin-left: auto;">Nov 28, 2025</div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Article 6 -->
+                    <article class="article-card" data-category="technology" style="background: white; border-radius: 1rem; overflow: hidden; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); border: 1px solid #e5e7eb; transition: all 0.2s ease; cursor: pointer;" onclick="showArticle('mobile-platform')">
+                        <div style="height: 200px; background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%); position: relative; display: flex; align-items: center; justify-content: center;">
+                            <div style="background: #06b6d4; color: white; padding: 0.5rem 1rem; border-radius: 0.5rem; font-size: 0.875rem; font-weight: 600; position: absolute; top: 1rem; left: 1rem;">
+                                Technology
+                            </div>
+                            <div style="color: white; text-align: center; padding: 1rem;">
+                                <h3 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 0.5rem;">Mobile Investment Management: The Future is Now</h3>
+                            </div>
+                        </div>
+                        <div style="padding: 1.5rem;">
+                            <p style="color: #6b7280; margin-bottom: 1rem; line-height: 1.6;">How our executive mobile app achieved 4.9★ ratings and why mobile-first investment management is becoming the standard for serious investors.</p>
+                            <div style="display: flex; align-items: center; justify-content: between; font-size: 0.875rem; color: #9ca3af;">
+                                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                    <div style="width: 32px; height: 32px; background: #000000; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 0.75rem;">WB</div>
+                                    <span>William Brown</span>
+                                </div>
+                                <div style="margin-left: auto;">Nov 25, 2025</div>
+                            </div>
+                        </div>
+                    </article>
+
+                </div>
+
+                <!-- Load More Button -->
+                <div class="text-center" style="margin-top: 3rem;">
+                    <button style="background: #000000; color: white; padding: 0.875rem 2rem; border: none; border-radius: 0.5rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease;">
+                        Load More Articles
+                    </button>
+                </div>
+
+                <!-- Newsletter Signup -->
+                <div style="background: #f9fafb; padding: 3rem; border-radius: 1.5rem; margin-top: 4rem; text-center;">
+                    <h3 style="font-size: 1.875rem; font-weight: bold; margin-bottom: 1rem; color: #000000;">Stay Updated with Keep it 100</h3>
+                    <p style="color: #6b7280; margin-bottom: 2rem; max-width: 500px; margin-left: auto; margin-right: auto;">Get the latest insights from Houston 100's leadership team delivered to your inbox weekly.</p>
+                    <div style="display: flex; gap: 0.75rem; max-width: 400px; margin: 0 auto;">
+                        <input type="email" placeholder="Enter your email" style="flex: 1; padding: 0.875rem; border: 1px solid #d1d5db; border-radius: 0.5rem; font-size: 0.875rem;">
+                        <button style="background: #000000; color: white; padding: 0.875rem 1.5rem; border: none; border-radius: 0.5rem; font-weight: 600; cursor: pointer;">
+                            Subscribe
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Article Detail Page -->
+        <div id="page-article" class="page-section hidden">
+            <div style="max-width: 800px; margin: 0 auto; padding: 2rem;">
+                <!-- Back Button -->
+                <button onclick="showPage('blog')" style="background: none; border: none; color: #6b7280; cursor: pointer; margin-bottom: 2rem; display: flex; align-items: center; gap: 0.5rem;">
+                    ← Back to Keep it 100
+                </button>
+                
+                <!-- Article Content -->
+                <div id="article-content">
+                    <!-- Content will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+
         <!-- Contact Page -->
         <div id="page-contact" class="page-section hidden">
             <div class="container">
@@ -1955,6 +2214,160 @@
             
             analyzerContainer.innerHTML = renderAIEngine();
         }
+        
+        // Blog functionality
+        function filterArticles(category) {
+            const articles = document.querySelectorAll('.article-card');
+            const buttons = document.querySelectorAll('.category-btn');
+            
+            // Update button styles
+            buttons.forEach(btn => {
+                btn.classList.remove('active');
+                btn.style.background = 'white';
+                btn.style.color = '#000000';
+            });
+            
+            const activeBtn = document.querySelector(`[data-category="${category}"]`);
+            activeBtn.classList.add('active');
+            activeBtn.style.background = '#000000';
+            activeBtn.style.color = 'white';
+            
+            // Filter articles
+            articles.forEach(article => {
+                if (category === 'all' || article.dataset.category === category) {
+                    article.style.display = 'block';
+                } else {
+                    article.style.display = 'none';
+                }
+            });
+        }
+        
+        function showArticle(articleId) {
+            const articles = {
+                'featured': {
+                    title: 'Houston Real Estate Market Reaches New Heights in Q4 2025',
+                    author: 'Effram Barrett',
+                    date: 'December 15, 2025',
+                    category: 'Market Analysis',
+                    readTime: '5 min read',
+                    content: `
+                        <div style="margin-bottom: 2rem;">
+                            <div style="background: #ef4444; color: white; padding: 0.5rem 1rem; border-radius: 0.5rem; font-size: 0.875rem; font-weight: 600; display: inline-block; margin-bottom: 1rem;">FEATURED</div>
+                            <h1 style="font-size: 2.5rem; font-weight: bold; margin-bottom: 1rem; line-height: 1.2;">Houston Real Estate Market Reaches New Heights in Q4 2025</h1>
+                            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem; color: #6b7280;">
+                                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                    <div style="width: 40px; height: 40px; background: #000000; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">EB</div>
+                                    <span>By Effram Barrett</span>
+                                </div>
+                                <span>•</span>
+                                <span>December 15, 2025</span>
+                                <span>•</span>
+                                <span>5 min read</span>
+                            </div>
+                        </div>
+                        
+                        <div style="line-height: 1.8; color: #374151;">
+                            <p style="margin-bottom: 1.5rem; font-size: 1.125rem;">The Houston real estate market has demonstrated remarkable resilience and growth throughout 2025, with key indicators pointing to continued expansion into 2026. Our portfolio's 18.5% average annual return reflects broader market dynamics that savvy investors should understand.</p>
+                            
+                            <h2 style="font-size: 1.5rem; font-weight: bold; margin: 2rem 0 1rem; color: #000000;">Market Fundamentals Driving Growth</h2>
+                            <p style="margin-bottom: 1.5rem;">Houston's diverse economy continues to attract both businesses and residents. The energy sector's recovery, combined with expanding technology and healthcare industries, has created a perfect storm for real estate appreciation.</p>
+                            
+                            <p style="margin-bottom: 1.5rem;">Key statistics from Q4 2025:</p>
+                            <ul style="margin-bottom: 1.5rem; padding-left: 2rem;">
+                                <li style="margin-bottom: 0.5rem;">Population growth: 2.1% annually (above national average)</li>
+                                <li style="margin-bottom: 0.5rem;">Median home price appreciation: 8.5% year-over-year</li>
+                                <li style="margin-bottom: 0.5rem;">Houston 100 portfolio performance: 18.5% average annual return</li>
+                                <li style="margin-bottom: 0.5rem;">DHAP program success rate: 100% (200+ families helped)</li>
+                            </ul>
+                            
+                            <h2 style="font-size: 1.5rem; font-weight: bold; margin: 2rem 0 1rem; color: #000000;">DHAP Program: Community Impact Meets Strong Returns</h2>
+                            <p style="margin-bottom: 1.5rem;">Our Distressed Homeowner Assistance Program has proven that Kingdom-focused investing doesn't require sacrificing returns. In fact, our DHAP properties have outperformed traditional investments with 19.2% average annual returns.</p>
+                            
+                            <div style="background: #f0fdf4; border-left: 4px solid #10b981; padding: 1.5rem; margin: 2rem 0;">
+                                <p style="margin: 0; font-style: italic; color: #065f46;">"When we align our investments with Kingdom principles, we often see enhanced returns. The DHAP program is proof that doing good and doing well aren't mutually exclusive." - Effram Barrett, CEO</p>
+                            </div>
+                            
+                            <h2 style="font-size: 1.5rem; font-weight: bold; margin: 2rem 0 1rem; color: #000000;">Looking Ahead: 2026 Investment Strategy</h2>
+                            <p style="margin-bottom: 1.5rem;">As we enter 2026, Houston 100 is positioned to capitalize on emerging opportunities while maintaining our faith-based investment approach. Key focus areas include:</p>
+                            
+                            <ul style="margin-bottom: 1.5rem; padding-left: 2rem;">
+                                <li style="margin-bottom: 0.5rem;">Expanding DHAP program to serve 300+ families</li>
+                                <li style="margin-bottom: 0.5rem;">Strategic acquisitions in high-growth Houston submarkets</li>
+                                <li style="margin-bottom: 0.5rem;">Technology integration through F.A.I.T.H. Platform AI</li>
+                                <li style="margin-bottom: 0.5rem;">Sustainable building practices aligned with Kingdom stewardship</li>
+                            </ul>
+                            
+                            <p style="margin-bottom: 1.5rem;">The fundamentals remain strong, and we're optimistic about continued growth in the Houston market. For investors seeking both financial returns and Kingdom impact, 2026 presents exceptional opportunities.</p>
+                        </div>
+                    `
+                },
+                'dhap-success': {
+                    title: 'DHAP Program Success Stories: Q4 2025 Impact Report',
+                    author: 'Quintin Ward',
+                    date: 'December 10, 2025',
+                    category: 'Market Analysis',
+                    readTime: '4 min read',
+                    content: `
+                        <div style="margin-bottom: 2rem;">
+                            <div style="background: #10b981; color: white; padding: 0.5rem 1rem; border-radius: 0.5rem; font-size: 0.875rem; font-weight: 600; display: inline-block; margin-bottom: 1rem;">Market Analysis</div>
+                            <h1 style="font-size: 2.5rem; font-weight: bold; margin-bottom: 1rem; line-height: 1.2;">DHAP Program Success Stories: Q4 2025 Impact Report</h1>
+                            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem; color: #6b7280;">
+                                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                    <div style="width: 40px; height: 40px; background: #000000; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">QW</div>
+                                    <span>By Quintin Ward</span>
+                                </div>
+                                <span>•</span>
+                                <span>December 10, 2025</span>
+                                <span>•</span>
+                                <span>4 min read</span>
+                            </div>
+                        </div>
+                        
+                        <div style="line-height: 1.8; color: #374151;">
+                            <p style="margin-bottom: 1.5rem; font-size: 1.125rem;">Our Distressed Homeowner Assistance Program continues to demonstrate that Kingdom-focused investing delivers both community impact and exceptional returns. This quarter, we helped 50+ families while generating 19.2% average returns for investors.</p>
+                            
+                            <h2 style="font-size: 1.5rem; font-weight: bold; margin: 2rem 0 1rem; color: #000000;">The Johnson Family Story</h2>
+                            <p style="margin-bottom: 1.5rem;">When the Johnson family faced foreclosure after unexpected medical bills, traditional lenders offered no solutions. Through our DHAP program, we structured an equity partnership that allowed them to stay in their Oak Forest home while providing our investor with a 19.2% annual return.</p>
+                            
+                            <p style="margin-bottom: 1.5rem;">The outcome: The family kept their home, the investor earned strong returns, and the community avoided another foreclosure. This is Kingdom investing in action.</p>
+                            
+                            <h2 style="font-size: 1.5rem; font-weight: bold; margin: 2rem 0 1rem; color: #000000;">Q4 2025 DHAP Metrics</h2>
+                            <ul style="margin-bottom: 1.5rem; padding-left: 2rem;">
+                                <li style="margin-bottom: 0.5rem;">Families assisted: 52</li>
+                                <li style="margin-bottom: 0.5rem;">Average investor return: 19.2%</li>
+                                <li style="margin-bottom: 0.5rem;">Total capital deployed: $15.2M</li>
+                                <li style="margin-bottom: 0.5rem;">Success rate: 100% (zero foreclosures)</li>
+                            </ul>
+                            
+                            <p style="margin-bottom: 1.5rem;">These results demonstrate that when we align investment strategy with Kingdom principles, both financial and social returns can exceed expectations.</p>
+                        </div>
+                    `
+                }
+                // Add more articles as needed
+            };
+            
+            const article = articles[articleId];
+            if (article) {
+                document.getElementById('article-content').innerHTML = article.content;
+                showPage('article');
+            }
+        }
+        
+        // Add hover effects for article cards
+        document.addEventListener('DOMContentLoaded', function() {
+            const articleCards = document.querySelectorAll('.article-card');
+            articleCards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-4px)';
+                    this.style.boxShadow = '0 8px 25px rgba(0, 0, 0, 0.15)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                    this.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.1)';
+                });
+            });
+        });
         
         // Start the application
         setTimeout(updateLoading, 500);
