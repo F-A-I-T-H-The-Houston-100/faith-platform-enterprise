@@ -61,49 +61,35 @@
             transition: all 0.3s ease;
         }
         
-        .houston-shape.faith::before {
-            background: linear-gradient(45deg, #8B5CF6, #A855F7);
+        .houston-shape.primary::before {
+            background: linear-gradient(45deg, var(--houston-black), #1a1a1a);
             transform: rotate(0deg);
         }
         
-        .houston-shape.credibility::before {
-            background: linear-gradient(45deg, #10B981, #059669);
+        .houston-shape.secondary::before {
+            background: linear-gradient(45deg, var(--houston-gray), #5a5a5a);
             transform: rotate(22.5deg);
         }
         
-        .houston-shape.wealth::before {
-            background: linear-gradient(45deg, #F59E0B, #D97706);
+        .houston-shape.tertiary::before {
+            background: linear-gradient(45deg, var(--houston-white), #f5f5f5);
             transform: rotate(45deg);
-        }
-        
-        .houston-shape.technology::before {
-            background: linear-gradient(45deg, #3B82F6, #1D4ED8);
-            transform: rotate(67.5deg);
+            border: 1px solid rgba(0,0,0,0.1);
         }
         
         .houston-shape:hover::before {
-            transform: scale(1.1) rotate(var(--rotation, 0deg));
-            filter: brightness(1.2);
+            transform: scale(1.08) rotate(var(--rotation, 0deg));
+            filter: brightness(1.1);
         }
         
         /* Floating Elements */
         .floating {
-            animation: float 6s ease-in-out infinite;
+            animation: floatSubtle 8s ease-in-out infinite;
         }
         
-        .floating:nth-child(2n) {
-            animation: float 8s ease-in-out infinite reverse;
-        }
-        
-        .floating:nth-child(3n) {
-            animation: float 10s ease-in-out infinite;
-        }
-        
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            25% { transform: translateY(-15px) rotate(1deg); }
-            50% { transform: translateY(-10px) rotate(0deg); }
-            75% { transform: translateY(-20px) rotate(-1deg); }
+        @keyframes floatSubtle {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
         }
         
         /* Pulse Animation */
@@ -146,7 +132,7 @@
             margin-bottom: 0.5rem;
             text-align: center;
             letter-spacing: -0.03em;
-            animation: float 4s ease-in-out infinite;
+            animation: floatSubtle 8s ease-in-out infinite;
         }
         
         .houston-subtitle {
@@ -156,7 +142,8 @@
             margin-bottom: 3rem;
             text-align: center;
             letter-spacing: 0.05em;
-            animation: float 4s ease-in-out infinite reverse;
+            animation: floatSubtle 8s ease-in-out infinite;
+            animation-delay: -2s;
         }
         
         .loading-text {
@@ -932,7 +919,7 @@
                 <!-- Houston 100 Investments Dropdown -->
                 <li class="nav-dropdown">
                     <button class="nav-dropdown-btn">
-                        <div class="houston-shape wealth"></div>
+                        <div class="houston-shape primary"></div>
                         Houston 100 Investments
                         <span style="font-size: 0.8rem;">▾</span>
                     </button>
@@ -940,21 +927,21 @@
                         <div class="nav-dropdown-section">
                             <div class="nav-dropdown-title">Investments</div>
                             <a href="#real-estate" class="nav-dropdown-item" onclick="showPage('real-estate')">
-                                <div class="houston-shape wealth"></div>
+                                <div class="houston-shape primary"></div>
                                 <div class="nav-dropdown-content">
                                     <h4>Real Estate Overview</h4>
                                     <p>$45.2M portfolio with 18.5% returns</p>
                                 </div>
                             </a>
                             <a href="#dhap" class="nav-dropdown-item" onclick="showPage('dhap')">
-                                <div class="houston-shape faith"></div>
+                                <div class="houston-shape secondary"></div>
                                 <div class="nav-dropdown-content">
                                     <h4>DHAP Program</h4>
                                     <p>Distressed Homeowner Assistance Program</p>
                                 </div>
                             </a>
                             <a href="#properties" class="nav-dropdown-item" onclick="showPage('properties')">
-                                <div class="houston-shape wealth"></div>
+                                <div class="houston-shape tertiary"></div>
                                 <div class="nav-dropdown-content">
                                     <h4>Property Showcase</h4>
                                     <p>View all 247 active properties</p>
@@ -964,21 +951,21 @@
                         <div class="nav-dropdown-section">
                             <div class="nav-dropdown-title">Performance</div>
                             <a href="#portfolio" class="nav-dropdown-item" onclick="showPage('portfolio')">
-                                <div class="houston-shape credibility"></div>
+                                <div class="houston-shape secondary"></div>
                                 <div class="nav-dropdown-content">
                                     <h4>Portfolio Performance</h4>
                                     <p>Transparent performance reporting</p>
                                 </div>
                             </a>
                             <a href="#mobile-apps" class="nav-dropdown-item" onclick="showPage('mobile-apps')">
-                                <div class="houston-shape technology"></div>
+                                <div class="houston-shape tertiary"></div>
                                 <div class="nav-dropdown-content">
                                     <h4>Mobile Apps</h4>
                                     <p>Executive mobile investment suite</p>
                                 </div>
                             </a>
                             <a href="#get-started" class="nav-dropdown-item" onclick="showPage('get-started')">
-                                <div class="houston-shape wealth"></div>
+                                <div class="houston-shape primary"></div>
                                 <div class="nav-dropdown-content">
                                     <h4>Get Started</h4>
                                     <p>4-step onboarding process</p>
@@ -991,7 +978,7 @@
                 <!-- F.A.I.T.H. Dropdown -->
                 <li class="nav-dropdown">
                     <button class="nav-dropdown-btn">
-                        <div class="houston-shape technology"></div>
+                        <div class="houston-shape secondary"></div>
                         F.A.I.T.H.
                         <span style="font-size: 0.8rem;">▾</span>
                     </button>
@@ -999,14 +986,14 @@
                         <div class="nav-dropdown-section">
                             <div class="nav-dropdown-title">AI Technology</div>
                             <a href="#platform" class="nav-dropdown-item" onclick="showPage('platform')">
-                                <div class="houston-shape technology"></div>
+                                <div class="houston-shape secondary"></div>
                                 <div class="nav-dropdown-content">
                                     <h4>F.A.I.T.H. Platform</h4>
                                     <p>AI-powered investment intelligence</p>
                                 </div>
                             </a>
                             <a href="#ai-engine" class="nav-dropdown-item" onclick="showPage('ai-engine')">
-                                <div class="houston-shape technology"></div>
+                                <div class="houston-shape tertiary"></div>
                                 <div class="nav-dropdown-content">
                                     <h4>AI Engine Demo</h4>
                                     <p>A* algorithm investment classification</p>
@@ -1016,21 +1003,21 @@
                         <div class="nav-dropdown-section">
                             <div class="nav-dropdown-title">Enterprise Solutions</div>
                             <a href="#solutions" class="nav-dropdown-item" onclick="showPage('solutions')">
-                                <div class="houston-shape credibility"></div>
+                                <div class="houston-shape primary"></div>
                                 <div class="nav-dropdown-content">
                                     <h4>Enterprise Solutions</h4>
                                     <p>For investment groups and family offices</p>
                                 </div>
                             </a>
                             <a href="#pricing" class="nav-dropdown-item" onclick="showPage('pricing')">
-                                <div class="houston-shape wealth"></div>
+                                <div class="houston-shape secondary"></div>
                                 <div class="nav-dropdown-content">
                                     <h4>Enterprise Pricing</h4>
                                     <p>$300K-$1.4M annual licensing</p>
                                 </div>
                             </a>
                             <a href="#about" class="nav-dropdown-item" onclick="showPage('about')">
-                                <div class="houston-shape credibility"></div>
+                                <div class="houston-shape tertiary"></div>
                                 <div class="nav-dropdown-content">
                                     <h4>Leadership Team</h4>
                                     <p>Meet Houston 100's executives</p>
@@ -1043,7 +1030,7 @@
                 <!-- Keep it 100 Blog Dropdown -->
                 <li class="nav-dropdown">
                     <button class="nav-dropdown-btn">
-                        <div class="houston-shape faith"></div>
+                        <div class="houston-shape tertiary"></div>
                         Keep it 100
                         <span style="font-size: 0.8rem;">▾</span>
                     </button>
@@ -1051,21 +1038,21 @@
                         <div class="nav-dropdown-section">
                             <div class="nav-dropdown-title">Latest Content</div>
                             <a href="#blog" class="nav-dropdown-item" onclick="showPage('blog')">
-                                <div class="houston-shape faith"></div>
+                                <div class="houston-shape tertiary"></div>
                                 <div class="nav-dropdown-content">
                                     <h4>All Articles</h4>
                                     <p>Latest insights and market analysis</p>
                                 </div>
                             </a>
                             <a href="#blog" class="nav-dropdown-item" onclick="showPage('blog'); filterArticles('market')">
-                                <div class="houston-shape credibility"></div>
+                                <div class="houston-shape primary"></div>
                                 <div class="nav-dropdown-content">
                                     <h4>Market Analysis</h4>
                                     <p>Houston real estate market insights</p>
                                 </div>
                             </a>
                             <a href="#blog" class="nav-dropdown-item" onclick="showPage('blog'); filterArticles('investment')">
-                                <div class="houston-shape wealth"></div>
+                                <div class="houston-shape secondary"></div>
                                 <div class="nav-dropdown-content">
                                     <h4>Investment Strategy</h4>
                                     <p>Portfolio and investment insights</p>
@@ -1075,14 +1062,14 @@
                         <div class="nav-dropdown-section">
                             <div class="nav-dropdown-title">Topics</div>
                             <a href="#blog" class="nav-dropdown-item" onclick="showPage('blog'); filterArticles('faith')">
-                                <div class="houston-shape faith"></div>
+                                <div class="houston-shape tertiary"></div>
                                 <div class="nav-dropdown-content">
                                     <h4>Faith & Business</h4>
                                     <p>Kingdom-focused investing principles</p>
                                 </div>
                             </a>
                             <a href="#blog" class="nav-dropdown-item" onclick="showPage('blog'); filterArticles('technology')">
-                                <div class="houston-shape technology"></div>
+                                <div class="houston-shape primary"></div>
                                 <div class="nav-dropdown-content">
                                     <h4>Technology</h4>
                                     <p>AI and innovation insights</p>
@@ -1107,11 +1094,11 @@
                     <p class="floating">Faith-Based Investment Intelligence Powered by F.A.I.T.H. Platform AI</p>
                     <div class="hero-buttons">
                         <a href="#real-estate" class="btn-primary floating" onclick="showPage('real-estate')">
-                            <div class="houston-shape wealth" style="width: 16px; height: 16px;"></div>
+                            <div class="houston-shape primary" style="width: 16px; height: 16px;"></div>
                             Real Estate Investments
                         </a>
                         <a href="#platform" class="btn-secondary floating" onclick="showPage('platform')">
-                            <div class="houston-shape technology" style="width: 16px; height: 16px;"></div>
+                            <div class="houston-shape secondary" style="width: 16px; height: 16px;"></div>
                             F.A.I.T.H. Platform
                         </a>
                     </div>
@@ -1147,114 +1134,114 @@
                     
                     <div class="component-grid">
                         <div class="component-card floating">
-                            <div class="houston-shape technology"></div>
+                            <div class="houston-shape secondary"></div>
                             <h3>F.A.I.T.H. Platform</h3>
                             <p>Houston 100's enterprise AI-powered investment intelligence technology</p>
                             <div class="feature-highlight">
-                                <div class="houston-shape wealth" style="width: 16px; height: 16px;"></div>
+                                <div class="houston-shape primary" style="width: 16px; height: 16px;"></div>
                                 $300K-$1.4M Enterprise Licensing
                             </div>
                             <button onclick="showPage('platform')" class="btn-card">
                                 Explore Technology
-                                <div class="houston-shape technology" style="width: 12px; height: 12px;"></div>
+                                <div class="houston-shape secondary" style="width: 12px; height: 12px;"></div>
                             </button>
                         </div>
                         
                         <div class="component-card floating">
-                            <div class="houston-shape wealth"></div>
+                            <div class="houston-shape primary"></div>
                             <h3>Real Estate Portfolio</h3>
                             <p>$45.2M portfolio with 247 active properties and 18.5% returns</p>
                             <div class="feature-highlight">
-                                <div class="houston-shape credibility" style="width: 16px; height: 16px;"></div>
+                                <div class="houston-shape secondary" style="width: 16px; height: 16px;"></div>
                                 18.5% Average Annual Returns
                             </div>
                             <button onclick="showPage('real-estate')" class="btn-card">
                                 View Properties
-                                <div class="houston-shape wealth" style="width: 12px; height: 12px;"></div>
+                                <div class="houston-shape primary" style="width: 12px; height: 12px;"></div>
                             </button>
                         </div>
                         
                         <div class="component-card floating">
-                            <div class="houston-shape faith"></div>
+                            <div class="houston-shape tertiary"></div>
                             <h3>DHAP Program</h3>
                             <p>Distressed Homeowner Assistance Program creating Kingdom impact</p>
                             <div class="feature-highlight">
-                                <div class="houston-shape faith" style="width: 16px; height: 16px;"></div>
+                                <div class="houston-shape tertiary" style="width: 16px; height: 16px;"></div>
                                 200+ Families Helped
                             </div>
                             <button onclick="showPage('dhap')" class="btn-card">
                                 Learn About DHAP
-                                <div class="houston-shape faith" style="width: 12px; height: 12px;"></div>
+                                <div class="houston-shape tertiary" style="width: 12px; height: 12px;"></div>
                             </button>
                         </div>
                         
                         <div class="component-card floating">
-                            <div class="houston-shape technology"></div>
+                            <div class="houston-shape secondary"></div>
                             <h3>AI Engine Demo</h3>
                             <p>A* algorithm investment classification with 94% accuracy</p>
                             <div class="feature-highlight">
-                                <div class="houston-shape credibility" style="width: 16px; height: 16px;"></div>
+                                <div class="houston-shape primary" style="width: 16px; height: 16px;"></div>
                                 94% Classification Accuracy
                             </div>
                             <button onclick="showPage('ai-engine')" class="btn-card">
                                 Try AI Engine
-                                <div class="houston-shape technology" style="width: 12px; height: 12px;"></div>
+                                <div class="houston-shape secondary" style="width: 12px; height: 12px;"></div>
                             </button>
                         </div>
                         
                         <div class="component-card floating">
-                            <div class="houston-shape credibility"></div>
+                            <div class="houston-shape primary"></div>
                             <h3>Portfolio Performance</h3>
                             <p>Transparent performance tracking and detailed analytics</p>
                             <div class="feature-highlight">
-                                <div class="houston-shape credibility" style="width: 16px; height: 16px;"></div>
+                                <div class="houston-shape secondary" style="width: 16px; height: 16px;"></div>
                                 Real-Time Performance Data
                             </div>
                             <button onclick="showPage('portfolio')" class="btn-card">
                                 View Performance
-                                <div class="houston-shape credibility" style="width: 12px; height: 12px;"></div>
+                                <div class="houston-shape primary" style="width: 12px; height: 12px;"></div>
                             </button>
                         </div>
                         
                         <div class="component-card floating">
-                            <div class="houston-shape technology"></div>
+                            <div class="houston-shape tertiary"></div>
                             <h3>Mobile Apps Suite</h3>
                             <p>Executive mobile intelligence for on-the-go investment management</p>
                             <div class="feature-highlight">
-                                <div class="houston-shape credibility" style="width: 16px; height: 16px;"></div>
+                                <div class="houston-shape secondary" style="width: 16px; height: 16px;"></div>
                                 4.9★ App Store Rating
                             </div>
                             <button onclick="showPage('mobile-apps')" class="btn-card">
                                 Download Apps
-                                <div class="houston-shape technology" style="width: 12px; height: 12px;"></div>
+                                <div class="houston-shape tertiary" style="width: 12px; height: 12px;"></div>
                             </button>
                         </div>
                         
                         <div class="component-card floating">
-                            <div class="houston-shape faith"></div>
+                            <div class="houston-shape secondary"></div>
                             <h3>Keep it 100 Blog</h3>
                             <p>Market intelligence and investment insights from Houston 100's leadership</p>
                             <div class="feature-highlight">
-                                <div class="houston-shape credibility" style="width: 16px; height: 16px;"></div>
+                                <div class="houston-shape primary" style="width: 16px; height: 16px;"></div>
                                 Weekly Market Insights
                             </div>
                             <button onclick="showPage('blog')" class="btn-card">
                                 Read Latest Posts
-                                <div class="houston-shape faith" style="width: 12px; height: 12px;"></div>
+                                <div class="houston-shape secondary" style="width: 12px; height: 12px;"></div>
                             </button>
                         </div>
                         
                         <div class="component-card floating">
-                            <div class="houston-shape wealth"></div>
+                            <div class="houston-shape primary"></div>
                             <h3>Get Started</h3>
                             <p>4-step onboarding process for new investors</p>
                             <div class="feature-highlight">
-                                <div class="houston-shape wealth" style="width: 16px; height: 16px;"></div>
+                                <div class="houston-shape tertiary" style="width: 16px; height: 16px;"></div>
                                 Start Investing in 4 Steps
                             </div>
                             <button onclick="showPage('get-started')" class="btn-card">
                                 Join Houston 100
-                                <div class="houston-shape wealth" style="width: 12px; height: 12px;"></div>
+                                <div class="houston-shape primary" style="width: 12px; height: 12px;"></div>
                             </button>
                         </div>
                     </div>
@@ -1272,7 +1259,7 @@
                 
                 <div class="grid grid-3">
                     <div class="card">
-                        <div class="houston-shape technology" style="width: 48px; height: 48px; margin-bottom: 1.5rem;"></div>
+                        <div class="houston-shape secondary" style="width: 48px; height: 48px; margin-bottom: 1.5rem;"></div>
                         <h3 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 1rem;">AI Hub</h3>
                         <p>5 AI components working together for comprehensive investment intelligence</p>
                         <ul style="margin-top: 1rem; padding-left: 1rem;">
@@ -1285,7 +1272,7 @@
                     </div>
                     
                     <div class="card">
-                        <div class="houston-shape credibility" style="width: 48px; height: 48px; margin-bottom: 1.5rem;"></div>
+                        <div class="houston-shape primary" style="width: 48px; height: 48px; margin-bottom: 1.5rem;"></div>
                         <h3 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 1rem;">Integrations</h3>
                         <p>Seamless connection with all your existing business systems</p>
                         <ul style="margin-top: 1rem; padding-left: 1rem;">
@@ -1298,7 +1285,7 @@
                     </div>
                     
                     <div class="card">
-                        <div class="houston-shape technology" style="width: 48px; height: 48px; margin-bottom: 1.5rem;"></div>
+                        <div class="houston-shape tertiary" style="width: 48px; height: 48px; margin-bottom: 1.5rem;"></div>
                         <h3 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 1rem;">Mobile Apps</h3>
                         <p>Complete mobile suite for on-the-go investment management</p>
                         <ul style="margin-top: 1rem; padding-left: 1rem;">
@@ -1312,7 +1299,7 @@
                 
                 <div class="text-center" style="margin-top: 3rem;">
                     <a href="#pricing" class="btn-primary" onclick="showPage('pricing')">
-                        <div class="houston-shape wealth" style="width: 16px; height: 16px;"></div>
+                        <div class="houston-shape primary" style="width: 16px; height: 16px;"></div>
                         View Enterprise Pricing
                     </a>
                 </div>
@@ -1362,7 +1349,7 @@
                 
                 <div class="grid grid-2" style="margin-top: 3rem;">
                     <div class="card">
-                        <div class="houston-shape faith" style="width: 48px; height: 48px; margin-bottom: 1.5rem;"></div>
+                        <div class="houston-shape secondary" style="width: 48px; height: 48px; margin-bottom: 1.5rem;"></div>
                         <h3 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 1rem;">DHAP Program</h3>
                         <p style="margin-bottom: 1rem;">Help distressed homeowners while earning 15-20% returns</p>
                         <div style="margin-bottom: 1rem;">
@@ -1372,12 +1359,12 @@
                         </div>
                         <button onclick="showPage('dhap')" class="btn-card">
                             Learn About DHAP
-                            <div class="houston-shape faith" style="width: 12px; height: 12px;"></div>
+                            <div class="houston-shape secondary" style="width: 12px; height: 12px;"></div>
                         </button>
                     </div>
                     
                     <div class="card">
-                        <div class="houston-shape wealth" style="width: 48px; height: 48px; margin-bottom: 1.5rem;"></div>
+                        <div class="houston-shape primary" style="width: 48px; height: 48px; margin-bottom: 1.5rem;"></div>
                         <h3 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 1rem;">Property Portfolio</h3>
                         <p style="margin-bottom: 1rem;">Diversified real estate holdings across Houston metro</p>
                         <div style="margin-bottom: 1rem;">
@@ -1387,14 +1374,14 @@
                         </div>
                         <button onclick="showPage('properties')" class="btn-card">
                             View Properties
-                            <div class="houston-shape wealth" style="width: 12px; height: 12px;"></div>
+                            <div class="houston-shape primary" style="width: 12px; height: 12px;"></div>
                         </button>
                     </div>
                 </div>
                 
                 <div class="text-center" style="margin-top: 3rem;">
                     <a href="#get-started" class="btn-primary" onclick="showPage('get-started')" style="font-size: 1.1rem; padding: 1.25rem 2.5rem;">
-                        <div class="houston-shape wealth" style="width: 16px; height: 16px;"></div>
+                        <div class="houston-shape primary" style="width: 16px; height: 16px;"></div>
                         Start Real Estate Investing
                     </a>
                 </div>
@@ -1411,19 +1398,19 @@
                 
                 <div class="stats-grid">
                     <div class="stat-item">
-                        <div class="stat-number" style="color: #8B5CF6;">200+</div>
+                        <div class="stat-number" style="color: #747474;">200+</div>
                         <div class="stat-label" style="color: #6b7280;">Families Helped</div>
                     </div>
                     <div class="stat-item">
-                        <div class="stat-number" style="color: #8B5CF6;">$15M+</div>
+                        <div class="stat-number" style="color: #747474;">$15M+</div>
                         <div class="stat-label" style="color: #6b7280;">DHAP Investments</div>
                     </div>
                     <div class="stat-item">
-                        <div class="stat-number" style="color: #8B5CF6;">19.2%</div>
+                        <div class="stat-number" style="color: #747474;">19.2%</div>
                         <div class="stat-label" style="color: #6b7280;">Average Returns</div>
                     </div>
                     <div class="stat-item">
-                        <div class="stat-number" style="color: #8B5CF6;">100%</div>
+                        <div class="stat-number" style="color: #747474;">100%</div>
                         <div class="stat-label" style="color: #6b7280;">Success Rate</div>
                     </div>
                 </div>
@@ -1858,7 +1845,7 @@
                     <!-- Left Column - Content -->
                     <div>
                         <div style="background: #f3f4f6; padding: 0.75rem 1.5rem; border-radius: 2rem; display: inline-block; margin-bottom: 2rem; font-weight: 600; color: #374151;">
-                            <div class="houston-shape technology" style="width: 16px; height: 16px; margin-right: 8px; display: inline-flex;"></div>
+                            <div class="houston-shape secondary" style="width: 16px; height: 16px; margin-right: 8px; display: inline-flex;"></div>
                             Executive Mobile Intelligence
                         </div>
                         
@@ -1873,11 +1860,11 @@
                         
                         <div style="display: flex; flex-direction: column; gap: 1rem; margin-bottom: 2rem;">
                             <a href="#" class="btn-primary" style="display: inline-flex; align-items: center; gap: 0.5rem; max-width: 280px;">
-                                <div class="houston-shape technology" style="width: 16px; height: 16px;"></div>
+                                <div class="houston-shape primary" style="width: 16px; height: 16px;"></div>
                                 Download for iOS
                             </a>
                             <a href="#" class="btn-secondary" style="display: inline-flex; align-items: center; gap: 0.5rem; max-width: 280px; color: black; border-color: black;">
-                                <div class="houston-shape technology" style="width: 16px; height: 16px;"></div>
+                                <div class="houston-shape secondary" style="width: 16px; height: 16px;"></div>
                                 Download for Android
                             </a>
                         </div>
@@ -1960,25 +1947,25 @@
                 <!-- App Features -->
                 <div class="grid md:grid-cols-4 gap-8 mb-16">
                     <div class="card" style="text-align: center;">
-                        <div class="houston-shape credibility" style="width: 48px; height: 48px; margin: 0 auto 1.25rem;"></div>
+                        <div class="houston-shape primary" style="width: 48px; height: 48px; margin: 0 auto 1.25rem;"></div>
                         <h3 style="font-size: 1.25rem; font-weight: bold; margin-bottom: 1rem;">Executive Dashboard</h3>
                         <p style="color: #6b7280; font-size: 0.9rem;">Real-time portfolio insights and performance metrics at your fingertips</p>
                     </div>
                     
                     <div class="card" style="text-align: center;">
-                        <div class="houston-shape wealth" style="width: 48px; height: 48px; margin: 0 auto 1.25rem;"></div>
+                        <div class="houston-shape secondary" style="width: 48px; height: 48px; margin: 0 auto 1.25rem;"></div>
                         <h3 style="font-size: 1.25rem; font-weight: bold; margin-bottom: 1rem;">Property Management</h3>
                         <p style="color: #6b7280; font-size: 0.9rem;">Monitor all 247 properties with AI-powered analysis and alerts</p>
                     </div>
                     
                     <div class="card" style="text-align: center;">
-                        <div class="houston-shape faith" style="width: 48px; height: 48px; margin: 0 auto 1.25rem;"></div>
+                        <div class="houston-shape tertiary" style="width: 48px; height: 48px; margin: 0 auto 1.25rem;"></div>
                         <h3 style="font-size: 1.25rem; font-weight: bold; margin-bottom: 1rem;">Member Portal</h3>
                         <p style="color: #6b7280; font-size: 0.9rem;">Access member resources, communications, and investment opportunities</p>
                     </div>
                     
                     <div class="card" style="text-align: center;">
-                        <div class="houston-shape credibility" style="width: 48px; height: 48px; margin: 0 auto 1.25rem;"></div>
+                        <div class="houston-shape primary" style="width: 48px; height: 48px; margin: 0 auto 1.25rem;"></div>
                         <h3 style="font-size: 1.25rem; font-weight: bold; margin-bottom: 1rem;">Compliance Monitor</h3>
                         <p style="color: #6b7280; font-size: 0.9rem;">Real-time compliance tracking and regulatory reporting</p>
                     </div>
@@ -1989,11 +1976,11 @@
                     <h2 style="font-size: 2rem; font-weight: bold; margin-bottom: 2rem;">Ready to Take Houston 100 Mobile?</h2>
                     <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-bottom: 2rem;">
                         <a href="#" class="btn-primary" style="font-size: 1.1rem; padding: 1rem 2rem;">
-                            <div class="houston-shape technology" style="width: 16px; height: 16px;"></div>
+                            <div class="houston-shape primary" style="width: 16px; height: 16px;"></div>
                             Download for iOS
                         </a>
                         <a href="#" class="btn-secondary" style="font-size: 1.1rem; padding: 1rem 2rem; color: black; border-color: black;">
-                            <div class="houston-shape technology" style="width: 16px; height: 16px;"></div>
+                            <div class="houston-shape secondary" style="width: 16px; height: 16px;"></div>
                             Download for Android
                         </a>
                     </div>
@@ -2250,7 +2237,7 @@
                 <p>Start your faith-based investment journey with Houston 100's proven strategies and F.A.I.T.H. Platform technology.</p>
                 <div class="footer-buttons">
                     <a href="#get-started" onclick="showPage('get-started')" class="btn-primary">
-                        <div class="houston-shape wealth" style="width: 16px; height: 16px;"></div>
+                        <div class="houston-shape primary" style="width: 16px; height: 16px;"></div>
                         Get Started
                     </a>
                     <a href="tel:+17133248100" class="btn-secondary">
@@ -2263,7 +2250,7 @@
             <div class="footer-grid">
                 <div class="footer-card">
                     <h3>
-                        <div class="houston-shape wealth"></div>
+                        <div class="houston-shape primary"></div>
                         Houston 100 Investments
                     </h3>
                     <p style="margin-bottom: 1rem; opacity: 0.8;">Real estate investments, DHAP program, and member services</p>
@@ -2276,7 +2263,7 @@
 
                 <div class="footer-card">
                     <h3>
-                        <div class="houston-shape technology"></div>
+                        <div class="houston-shape secondary"></div>
                         F.A.I.T.H. Platform Enterprise
                     </h3>
                     <p style="margin-bottom: 1rem; opacity: 0.8;">Enterprise AI technology licensing and solutions</p>
@@ -2289,7 +2276,7 @@
 
                 <div class="footer-card">
                     <h3>
-                        <div class="houston-shape faith"></div>
+                        <div class="houston-shape tertiary"></div>
                         DHAP Program
                     </h3>
                     <p style="margin-bottom: 1rem; opacity: 0.8;">Distressed homeowner assistance and investor information</p>
@@ -2302,7 +2289,7 @@
 
                 <div class="footer-card">
                     <h3>
-                        <div class="houston-shape faith"></div>
+                        <div class="houston-shape secondary"></div>
                         Keep it 100 Blog
                     </h3>
                     <p style="margin-bottom: 1rem; opacity: 0.8;">Market insights and investment intelligence</p>
