@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>F.A.I.T.H. Platform - AI-Powered Faith-Based Investment Intelligence | Houston 100</title>
+    <meta name="description" content="Revolutionary AI-powered investment platform for faith-based investing. Proven results with $900M+ AUM. Enterprise licensing available.">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- React and Dependencies -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    
+    <!-- Framer Motion -->
+    <script src="https://unpkg.com/framer-motion@10/dist/framer-motion.js"></script>
+    
+    <!-- Styles -->
+    <style>
+        :root {
+            --faith-black: #000000;
+            --faith-white: #ffffff;
+            --faith-gray: #747474;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            overflow-x: hidden;
+            background: var(--faith-white);
+        }
+        
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--faith-black) 0%, var(--faith-gray) 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 1s ease;
+        }
+        
+        .loading-screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .faith-logo {
+            font-size: 4rem;
+            font-weight: 900;
+            color: var(--faith-white);
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        
+        .loading-text {
+            color: var(--faith-white);
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        
+        .progress-bar {
+            width: 300px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 2px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: var(--faith-white);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        
+        .progress-text {
+            color: var(--faith-white);
+            font-size: 0.9rem;
+            text-align: center;
+        }
+        
+        .main-container {
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+        
+        .main-container.visible {
+            opacity: 1;
+        }
+        
+        .navigation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 2rem;
+        }
+        
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .nav-logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--faith-white);
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+        
+        .nav-link {
+            color: var(--faith-white);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            background: var(--faith-white);
+            color: var(--faith-black);
+        }
+        
+        .page-section {
+            min-height: 100vh;
+            padding: 6rem 2rem 2rem;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .btn-primary {
+            background: var(--faith-black);
+            color: var(--faith-white);
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background: var(--faith-gray);
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: var(--faith-black);
+            padding: 1rem 2rem;
+            border: 2px solid var(--faith-black);
+            border-radius: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-secondary:hover {
+            background: var(--faith-black);
+            color: var(--faith-white);
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .grid {
+            display: grid;
+            gap: 2rem;
+        }
+        
+        .grid-2 {
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        }
+        
+        .grid-3 {
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        }
+        
+        .grid-4 {
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        }
+        
+        .card {
+            background: var(--faith-white);
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e5e7eb;
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .text-center {
+            text-align: center;
+        }
+        
+        .mb-2 { margin-bottom: 1rem; }
+        .mb-4 { margin-bottom: 2rem; }
+        .mb-6 { margin-bottom: 3rem; }
+        .mb-8 { margin-bottom: 4rem; }
+        
+        .hero {
+            background: linear-gradient(135deg, var(--faith-black) 0%, var(--faith-gray) 100%);
+            color: var(--faith-white);
+            padding: 8rem 0;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+        }
+        
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .grid-2, .grid-3, .grid-4 {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loadingScreen" class="loading-screen">
+        <div class="faith-logo">F.A.I.T.H.</div>
+        <div class="loading-text">Initializing AI-Powered Investment Intelligence</div>
+        <div class="progress-bar">
+            <div id="progressFill" class="progress-fill"></div>
+        </div>
+        <div id="progressText" class="progress-text">Loading platform components...</div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navigation">
+        <div class="nav-content">
+            <div class="nav-logo">F.A.I.T.H. Platform</div>
+            <ul class="nav-links">
+                <li><a href="#home" class="nav-link active" onclick="showPage('home')">Home</a></li>
+                <li><a href="#platform" class="nav-link" onclick="showPage('platform')">Platform</a></li>
+                <li><a href="#ai-engine" class="nav-link" onclick="showPage('ai-engine')">AI Engine</a></li>
+                <li><a href="#solutions" class="nav-link" onclick="showPage('solutions')">Solutions</a></li>
+                <li><a href="#pricing" class="nav-link" onclick="showPage('pricing')">Pricing</a></li>
+                <li><a href="#about" class="nav-link" onclick="showPage('about')">About</a></li>
+                <li><a href="#contact" class="nav-link" onclick="showPage('contact')">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div id="mainContainer" class="main-container">
+        
+        <!-- Home Page -->
+        <div id="page-home" class="page-section">
+            <div class="hero">
+                <div class="container">
+                    <h1>F.A.I.T.H. Platform</h1>
+                    <p>AI-Powered Investment Intelligence for Faith-Based Organizations</p>
+                    <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                        <a href="#platform" class="btn-primary" onclick="showPage('platform')">Explore Platform</a>
+                        <a href="#ai-engine" class="btn-secondary" onclick="showPage('ai-engine')" style="color: white; border-color: white;">Try AI Engine</a>
+                    </div>
+                    
+                    <div class="grid grid-4" style="margin-top: 4rem;">
+                        <div class="text-center">
+                            <div style="font-size: 3rem; font-weight: bold; margin-bottom: 0.5rem;">$900M+</div>
+                            <div style="color: #d1d5db;">Assets Under Management</div>
+                        </div>
+                        <div class="text-center">
+                            <div style="font-size: 3rem; font-weight: bold; margin-bottom: 0.5rem;">800+</div>
+                            <div style="color: #d1d5db;">Active Members</div>
+                        </div>
+                        <div class="text-center">
+                            <div style="font-size: 3rem; font-weight: bold; margin-bottom: 0.5rem;">25%+</div>
+                            <div style="color: #d1d5db;">Performance Improvement</div>
+                        </div>
+                        <div class="text-center">
+                            <div style="font-size: 3rem; font-weight: bold; margin-bottom: 0.5rem;">99.9%</div>
+                            <div style="color: #d1d5db;">Platform Uptime</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Platform Page -->
+        <div id="page-platform" class="page-section hidden">
+            <div class="container">
+                <div class="text-center mb-8">
+                    <h1 style="font-size: 3rem; font-weight: bold; margin-bottom: 1rem;">F.A.I.T.H. Platform Features</h1>
+                    <p style="font-size: 1.2rem; color: #6b7280;">Complete AI-powered investment intelligence ecosystem</p>
+                </div>
+                
+                <div class="grid grid-3">
+                    <div class="card">
+                        <h3 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 1rem;">🧠 AI Hub</h3>
+                        <p>5 AI components working together for comprehensive investment intelligence</p>
+                        <ul style="margin-top: 1rem; padding-left: 1rem;">
+                            <li>Financial AI - Portfolio optimization</li>
+                            <li>Analytics AI - Market intelligence</li>
+                            <li>Intelligence AI - Strategic insights</li>
+                            <li>Technology AI - System optimization</li>
+                            <li>Hub AI - Executive coordination</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="card">
+                        <h3 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 1rem;">🔗 Integrations</h3>
+                        <p>Seamless connection with all your existing business systems</p>
+                        <ul style="margin-top: 1rem; padding-left: 1rem;">
+                            <li>Airtable - Data management</li>
+                            <li>Google Sheets - Financial modeling</li>
+                            <li>Ontraport - Member communications</li>
+                            <li>Beehiiv - Newsletter automation</li>
+                            <li>Motion - Executive calendar</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="card">
+                        <h3 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 1rem;">📱 Mobile Apps</h3>
+                        <p>Complete mobile suite for on-the-go investment management</p>
+                        <ul style="margin-top: 1rem; padding-left: 1rem;">
+                            <li>Executive Dashboard</li>
+                            <li>Property Management</li>
+                            <li>Member Portal</li>
+                            <li>Compliance Monitor</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- AI Engine Page -->
+        <div id="page-ai-engine" class="page-section hidden">
+            <div class="container">
+                <div class="text-center mb-8">
+                    <h1 style="font-size: 3rem; font-weight: bold; margin-bottom: 1rem;">F.A.I.T.H. AI Engine</h1>
+                    <p style="font-size: 1.2rem; color: #6b7280;">Revolutionary A* algorithm for investment classification</p>
+                </div>
+                
+                <div id="investment-analyzer" class="card" style="max-width: 800px; margin: 0 auto;">
+                    <!-- AI Engine Demo will be loaded here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Solutions Page -->
+        <div id="page-solutions" class="page-section hidden">
+            <div class="container">
+                <div class="text-center mb-8">
+                    <h1 style="font-size: 3rem; font-weight: bold; margin-bottom: 1rem;">Enterprise Solutions</h1>
+                    <p style="font-size: 1.2rem; color: #6b7280;">Tailored for every type of faith-based organization</p>
+                </div>
+                
+                <div class="grid grid-2">
+                    <div class="card">
+                        <h3 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 1rem;">Investment Groups ($250M+ AUM)</h3>
+                        <p>Scale operations with AI-powered portfolio optimization</p>
+                        <div style="margin-top: 1rem;">
+                            <div><strong>Target AUM:</strong> $900M+</div>
+                            <div><strong>Members:</strong> 800+</div>
+                            <div><strong>Performance:</strong> +25.3%</div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h3 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 1rem;">Family Offices</h3>
+                        <p>Personalized wealth management for high-net-worth families</p>
+                        <div style="margin-top: 1rem;">
+                            <div><strong>Families:</strong> 45</div>
+                            <div><strong>AUM:</strong> $1.2B</div>
+                            <div><strong>Satisfaction:</strong> 98%</div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h3 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 1rem;">Institutional Funds</h3>
+                        <p>Enterprise-grade management for billion-dollar operations</p>
+                        <div style="margin-top: 1rem;">
+                            <div><strong>AUM:</strong> $2.8B</div>
+                            <div><strong>Institutions:</strong> 150+</div>
+                            <div><strong>Compliance:</strong> 100%</div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h3 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 1rem;">Property Management</h3>
+                        <p>AI-powered real estate optimization and fee retention</p>
+                        <div style="margin-top: 1rem;">
+                            <div><strong>Properties:</strong> 500+</div>
+                            <div><strong>Fee Retention:</strong> 8-12%</div>
+                            <div><strong>Efficiency:</strong> 75%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pricing Page -->
+        <div id="page-pricing" class="page-section hidden">
+            <div class="container">
+                <div class="text-center mb-8">
+                    <h1 style="font-size: 3rem; font-weight: bold; margin-bottom: 1rem;">Enterprise Pricing</h1>
+                    <p style="font-size: 1.2rem; color: #6b7280;">Flexible licensing options for organizations of all sizes</p>
+                </div>
+                
+                <div class="grid grid-3">
+                    <div class="card">
+                        <h3 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 1rem;">Growth Package</h3>
+                        <div style="font-size: 2rem; font-weight: bold; margin-bottom: 1rem;">$300K<span style="font-size: 1rem; font-weight: normal;">/annually</span></div>
+                        <p>Perfect for growing investment groups</p>
+                        <ul style="margin-top: 1rem; padding-left: 1rem;">
+                            <li>Up to $250M AUM</li>
+                            <li>Basic AI Hub</li>
+                            <li>Standard integrations</li>
+                            <li>Email support</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="card" style="border: 2px solid var(--faith-black);">
+                        <h3 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 1rem;">Professional Suite</h3>
+                        <div style="font-size: 2rem; font-weight: bold; margin-bottom: 1rem;">$650K<span style="font-size: 1rem; font-weight: normal;">/annually</span></div>
+                        <p>Most popular for established groups</p>
+                        <ul style="margin-top: 1rem; padding-left: 1rem;">
+                            <li>Up to $1B AUM</li>
+                            <li>Complete AI Hub</li>
+                            <li>All integrations</li>
+                            <li>Phone & email support</li>
+                            <li>Mobile apps included</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="card">
+                        <h3 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 1rem;">Enterprise Complete</h3>
+                        <div style="font-size: 2rem; font-weight: bold; margin-bottom: 1rem;">$1.4M<span style="font-size: 1rem; font-weight: normal;">/annually</span></div>
+                        <p>For institutional operations</p>
+                        <ul style="margin-top: 1rem; padding-left: 1rem;">
+                            <li>Unlimited AUM</li>
+                            <li>Custom AI models</li>
+                            <li>White-label options</li>
+                            <li>24/7 dedicated support</li>
+                            <li>Custom integrations</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- About Page -->
+        <div id="page-about" class="page-section hidden">
+            <div class="container">
+                <div class="text-center mb-8">
+                    <h1 style="font-size: 3rem; font-weight: bold; margin-bottom: 1rem;">Houston 100 Leadership</h1>
+                    <p style="font-size: 1.2rem; color: #6b7280;">Meet the visionary team behind F.A.I.T.H. Platform</p>
+                </div>
+                
+                <div class="grid grid-3">
+                    <div class="card text-center">
+                        <div style="width: 100px; height: 100px; background: linear-gradient(135deg, var(--faith-black), var(--faith-gray)); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; color: white; font-weight: bold; font-size: 2rem;">EB</div>
+                        <h3 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 0.5rem;">Effram Barrett</h3>
+                        <p style="color: #6b7280; margin-bottom: 1rem;">Chief Executive Officer</p>
+                        <p>Visionary leader who scaled Houston 100 to $900M+ AUM and created the revolutionary F.A.I.T.H. Platform.</p>
+                    </div>
+                    
+                    <div class="card text-center">
+                        <div style="width: 100px; height: 100px; background: linear-gradient(135deg, var(--faith-black), var(--faith-gray)); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; color: white; font-weight: bold; font-size: 2rem;">QW</div>
+                        <h3 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 0.5rem;">Quintin Ward</h3>
+                        <p style="color: #6b7280; margin-bottom: 1rem;">Chief Operating Officer</p>
+                        <p>Operational excellence leader who achieved 68% faster analysis times and scaled member services to 800+ members.</p>
+                    </div>
+                    
+                    <div class="card text-center">
+                        <div style="width: 100px; height: 100px; background: linear-gradient(135deg, var(--faith-black), var(--faith-gray)); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; color: white; font-weight: bold; font-size: 2rem;">WB</div>
+                        <h3 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 0.5rem;">William Brown</h3>
+                        <p style="color: #6b7280; margin-bottom: 1rem;">Chief Technology Officer</p>
+                        <p>Brilliant technologist who architected the F.A.I.T.H. AI Engine with 94% classification accuracy.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Page -->
+        <div id="page-contact" class="page-section hidden">
+            <div class="container">
+                <div class="text-center mb-8">
+                    <h1 style="font-size: 3rem; font-weight: bold; margin-bottom: 1rem;">Contact Houston 100</h1>
+                    <p style="font-size: 1.2rem; color: #6b7280;">Ready to transform your investment operations?</p>
+                </div>
+                
+                <div class="grid grid-2">
+                    <div class="card">
+                        <h3 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 1rem;">Enterprise Sales</h3>
+                        <p style="margin-bottom: 1rem;">Platform licensing and enterprise solutions</p>
+                        <div style="margin-bottom: 1rem;">
+                            <div><strong>📞 Phone:</strong> +1-713-FAITH-AI (324-8424)</div>
+                            <div><strong>📧 Email:</strong> enterprise@houston100investmentgroup.com</div>
+                            <div><strong>⏱️ Response:</strong> Within 4 hours</div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <h3 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 1rem;">Technical Demos</h3>
+                        <p style="margin-bottom: 1rem;">AI architecture and platform demonstrations</p>
+                        <div style="margin-bottom: 1rem;">
+                            <div><strong>📞 Phone:</strong> +1-713-324-8403</div>
+                            <div><strong>📧 Email:</strong> tech-demos@houston100investmentgroup.com</div>
+                            <div><strong>⏱️ Response:</strong> Within 2 hours</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card" style="margin-top: 2rem;">
+                    <h3 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 1rem;">Office Locations</h3>
+                    <div class="grid grid-2">
+                        <div>
+                            <h4 style="font-weight: bold; margin-bottom: 0.5rem;">Houston Headquarters</h4>
+                            <p>1000 F.A.I.T.H. Platform Drive<br>Houston, TX 77002</p>
+                        </div>
+                        <div>
+                            <h4 style="font-weight: bold; margin-bottom: 0.5rem;">Enterprise Solutions Center</h4>
+                            <p>500 Enterprise Boulevard<br>Houston, TX 77056</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/babel">
+        // Loading screen logic
+        const loadingSteps = [
+            { text: "Initializing F.A.I.T.H. Platform...", progress: 20 },
+            { text: "Loading AI components...", progress: 40 },
+            { text: "Connecting to data sources...", progress: 60 },
+            { text: "Preparing investment intelligence...", progress: 80 },
+            { text: "Platform ready!", progress: 100 }
+        ];
+
+        let currentStep = 0;
+        
+        function updateLoading() {
+            if (currentStep < loadingSteps.length) {
+                const step = loadingSteps[currentStep];
+                document.getElementById('progressText').textContent = step.text;
+                document.getElementById('progressFill').style.width = step.progress + '%';
+                currentStep++;
+                
+                if (currentStep < loadingSteps.length) {
+                    setTimeout(updateLoading, 800);
+                } else {
+                    setTimeout(hideLoading, 1000);
+                }
+            }
+        }
+        
+        function hideLoading() {
+            document.getElementById('loadingScreen').classList.add('hidden');
+            document.getElementById('mainContainer').classList.add('visible');
+            
+            // Initialize AI Engine demo
+            initializeAIEngine();
+        }
+        
+        // Page navigation
+        function showPage(pageId) {
+            // Hide all pages
+            const pages = document.querySelectorAll('.page-section');
+            pages.forEach(page => page.classList.add('hidden'));
+            
+            // Show selected page
+            document.getElementById('page-' + pageId).classList.remove('hidden');
+            
+            // Update navigation
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => link.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+        
+        // A* Investment Classification Algorithm Demo
+        function initializeAIEngine() {
+            const analyzerContainer = document.getElementById('investment-analyzer');
+            
+            const sampleInvestments = [
+                {
+                    id: 'faith-reit-1',
+                    name: 'Kingdom Community REIT',
+                    type: 'Real Estate',
+                    expectedReturn: 14.2,
+                    riskScore: 3,
+                    kingdomAlignment: 95,
+                    marketCap: '2.5B'
+                },
+                {
+                    id: 'tech-growth-2',
+                    name: 'TechGrowth Innovation Fund',
+                    type: 'Technology Stocks',
+                    expectedReturn: 18.5,
+                    riskScore: 7,
+                    kingdomAlignment: 65,
+                    marketCap: '15B'
+                },
+                {
+                    id: 'stable-bonds-3',
+                    name: 'Faith-Based Municipal Bonds',
+                    type: 'Government Bonds',
+                    expectedReturn: 6.8,
+                    riskScore: 2,
+                    kingdomAlignment: 90,
+                    marketCap: '500M'
+                }
+            ];
+            
+            function classifyInvestment(investment) {
+                // Simplified A* scoring algorithm
+                let score = 0;
+                
+                // Financial scoring (35% weight)
+                const financialScore = (investment.expectedReturn * 2) + ((10 - investment.riskScore) * 5);
+                score += financialScore * 0.35;
+                
+                // Kingdom alignment (30% weight)
+                score += investment.kingdomAlignment * 0.30;
+                
+                // Market factors (20% weight)
+                const marketScore = Math.min(100, Math.log10(parseFloat(investment.marketCap.replace('B', '000').replace('M', ''))) * 20);
+                score += marketScore * 0.20;
+                
+                // Compliance (15% weight)
+                score += 85 * 0.15; // Assuming good compliance
+                
+                if (score >= 85) return { tier: 1, label: 'Premier' };
+                if (score >= 70) return { tier: 2, label: 'Quality' };
+                if (score >= 55) return { tier: 3, label: 'Acceptable' };
+                return { tier: 'R', label: 'Rejected' };
+            }
+            
+            function renderAIEngine() {
+                return `
+                    <h3 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 1rem;">Investment Classification Demo</h3>
+                    <p style="margin-bottom: 2rem;">Select an investment to see our A* algorithm in action:</p>
+                    
+                    <div class="grid grid-3" style="margin-bottom: 2rem;">
+                        ${sampleInvestments.map((inv, index) => `
+                            <div class="card" style="cursor: pointer; padding: 1rem;" onclick="analyzeInvestment(${index})">
+                                <h4 style="font-weight: bold; margin-bottom: 0.5rem;">${inv.name}</h4>
+                                <p style="font-size: 0.9rem; color: #6b7280; margin-bottom: 1rem;">${inv.type}</p>
+                                <div style="font-size: 0.8rem;">
+                                    <div>Expected Return: ${inv.expectedReturn}%</div>
+                                    <div>Risk Score: ${inv.riskScore}/10</div>
+                                    <div>Market Cap: $${inv.marketCap}</div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    
+                    <div id="analysis-results" style="margin-top: 2rem;"></div>
+                `;
+            }
+            
+            window.analyzeInvestment = function(index) {
+                const investment = sampleInvestments[index];
+                const classification = classifyInvestment(investment);
+                const resultsContainer = document.getElementById('analysis-results');
+                
+                const tierColor = classification.tier === 1 ? '#10b981' : 
+                                 classification.tier === 2 ? '#3b82f6' : 
+                                 classification.tier === 3 ? '#f59e0b' : '#ef4444';
+                
+                resultsContainer.innerHTML = `
+                    <div class="card" style="background: linear-gradient(135deg, ${tierColor}20, ${tierColor}10); border: 2px solid ${tierColor};">
+                        <h4 style="font-size: 1.3rem; font-weight: bold; margin-bottom: 1rem; color: ${tierColor};">
+                            Analysis Complete: ${investment.name}
+                        </h4>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1rem;">
+                            <div style="text-align: center; padding: 1rem; background: white; border-radius: 0.5rem;">
+                                <div style="font-size: 2rem; font-weight: bold; color: ${tierColor};">Tier ${classification.tier}</div>
+                                <div style="color: #6b7280;">${classification.label}</div>
+                            </div>
+                            <div style="text-align: center; padding: 1rem; background: white; border-radius: 0.5rem;">
+                                <div style="font-size: 2rem; font-weight: bold;">${investment.expectedReturn}%</div>
+                                <div style="color: #6b7280;">Expected Return</div>
+                            </div>
+                            <div style="text-align: center; padding: 1rem; background: white; border-radius: 0.5rem;">
+                                <div style="font-size: 2rem; font-weight: bold;">${investment.kingdomAlignment}%</div>
+                                <div style="color: #6b7280;">Kingdom Alignment</div>
+                            </div>
+                        </div>
+                        <div style="background: white; padding: 1rem; border-radius: 0.5rem;">
+                            <h5 style="font-weight: bold; margin-bottom: 0.5rem;">F.A.I.T.H. AI Recommendation:</h5>
+                            <p>${classification.tier === 1 ? 'Excellent investment opportunity - recommended for all member tiers' :
+                                classification.tier === 2 ? 'Quality investment suitable for Foundation and Cornerstone members' :
+                                classification.tier === 3 ? 'Acceptable investment with limitations - suitable for Pillar members' :
+                                'Investment does not meet F.A.I.T.H. Platform standards'}</p>
+                        </div>
+                    </div>
+                `;
+            };
+            
+            analyzerContainer.innerHTML = renderAIEngine();
+        }
+        
+        // Start the application
+        setTimeout(updateLoading, 500);
+    </script>
+</body>
+</html>
