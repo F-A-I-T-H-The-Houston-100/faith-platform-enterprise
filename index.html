@@ -31,6 +31,77 @@
             overflow-x: hidden;
         }
 
+        /* Ensure all text elements are white */
+        h1, h2, h3, h4, h5, h6, p, span, div, li, a {
+            color: var(--houston-white);
+        }
+
+        /* Override specific elements that need different colors */
+        .btn-primary {
+            background: var(--houston-white);
+            color: var(--houston-black) !important;
+        }
+
+        .ai-chat-header {
+            background: linear-gradient(135deg, var(--houston-gray), var(--houston-white));
+            padding: 1rem;
+            color: var(--houston-black) !important;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .ai-chat-header h3 {
+            margin: 0;
+            font-weight: 600;
+            color: var(--houston-black) !important;
+        }
+
+        .message-avatar.ai {
+            background: linear-gradient(135deg, var(--houston-gray), var(--houston-white));
+            color: var(--houston-black) !important;
+        }
+
+        .tier-badge {
+            position: absolute;
+            top: -10px;
+            right: 20px;
+            background: var(--houston-gray);
+            color: var(--houston-white) !important;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .kingdom-score {
+            background: linear-gradient(135deg, var(--houston-gray), var(--houston-white));
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            margin-left: auto;
+            color: var(--houston-black) !important;
+        }
+
+        .principle-score.high {
+            background: linear-gradient(135deg, var(--houston-gray), var(--houston-white));
+            color: var(--houston-black) !important;
+        }
+
+        .principle-score.medium {
+            background: linear-gradient(135deg, var(--houston-white), var(--houston-gray));
+            color: var(--houston-black) !important;
+        }
+
+        .impact-score {
+            background: var(--houston-gray);
+            color: var(--houston-white) !important;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
         @keyframes gradientFlow {
             0%, 100% { background: var(--gradient-primary); }
             33% { background: var(--gradient-secondary); }
@@ -1088,8 +1159,13 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 3rem;
             color: var(--houston-white);
+            position: relative;
+        }
+
+        .property-image .dynamic-animation {
+            width: 64px;
+            height: 64px;
         }
 
         .property-content {
@@ -2628,7 +2704,11 @@
 
                 <div class="properties-grid">
                     <div class="property-card">
-                        <div class="property-image">🏠</div>
+                        <div class="property-image">
+                            <div class="dynamic-animation">
+                                <div class="wave-ripple"></div>
+                            </div>
+                        </div>
                         <div class="property-content">
                             <h3>Heights Community Center</h3>
                             <div class="property-price">$2.3M Investment</div>
@@ -2643,7 +2723,11 @@
                     </div>
 
                     <div class="property-card">
-                        <div class="property-image">🏢</div>
+                        <div class="property-image">
+                            <div class="dynamic-animation">
+                                <div class="energy-orb"></div>
+                            </div>
+                        </div>
                         <div class="property-content">
                             <h3>East End Business Incubator</h3>
                             <div class="property-price">$1.8M Investment</div>
@@ -2658,7 +2742,11 @@
                     </div>
 
                     <div class="property-card">
-                        <div class="property-image">🏘️</div>
+                        <div class="property-image">
+                            <div class="dynamic-animation">
+                                <div class="morphing-blob"></div>
+                            </div>
+                        </div>
                         <div class="property-content">
                             <h3>Third Ward Historic Renewal</h3>
                             <div class="property-price">$3.1M Investment</div>
@@ -2673,7 +2761,11 @@
                     </div>
 
                     <div class="property-card">
-                        <div class="property-image">🌱</div>
+                        <div class="property-image">
+                            <div class="dynamic-animation">
+                                <div class="spinning-diamond"></div>
+                            </div>
+                        </div>
                         <div class="property-content">
                             <h3>Montrose Ministry Campus</h3>
                             <div class="property-price">$4.2M Investment</div>
