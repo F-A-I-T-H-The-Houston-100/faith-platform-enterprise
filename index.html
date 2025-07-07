@@ -10,9 +10,9 @@
             --houston-black: #000000;
             --houston-white: #ffffff;
             --houston-gray: #747474;
-            --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            --gradient-tertiary: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --gradient-primary: linear-gradient(135deg, #000000 0%, #747474 50%, #ffffff 100%);
+            --gradient-secondary: linear-gradient(135deg, #747474 0%, #000000 50%, #747474 100%);
+            --gradient-tertiary: linear-gradient(135deg, #ffffff 0%, #747474 50%, #000000 100%);
         }
 
         * {
@@ -28,6 +28,7 @@
             color: var(--houston-white);
             line-height: 1.6;
             animation: gradientFlow 20s ease infinite;
+            overflow-x: hidden;
         }
 
         @keyframes gradientFlow {
@@ -45,30 +46,321 @@
             animation: subtleFloat 8s ease-in-out infinite;
         }
 
-        /* Houston Shape System */
-        .houston-shape {
+        /* Dynamic Animation Elements */
+        .dynamic-animation {
+            position: relative;
+            display: inline-block;
+            width: 32px;
+            height: 32px;
+        }
+
+        .pulse-ring {
+            width: 32px;
+            height: 32px;
+            border: 3px solid var(--houston-gray);
+            border-radius: 50%;
+            position: relative;
+            animation: pulseRing 2s ease-in-out infinite;
+        }
+
+        .pulse-ring::before {
+            content: '';
+            position: absolute;
+            top: -3px;
+            left: -3px;
+            width: 32px;
+            height: 32px;
+            border: 3px solid var(--houston-white);
+            border-radius: 50%;
+            animation: pulseRingInner 2s ease-in-out infinite 0.5s;
+            opacity: 0.7;
+        }
+
+        @keyframes pulseRing {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.7; }
+        }
+
+        @keyframes pulseRingInner {
+            0%, 100% { transform: scale(1); opacity: 0.7; }
+            50% { transform: scale(0.8); opacity: 1; }
+        }
+
+        .morphing-blob {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(45deg, var(--houston-black), var(--houston-gray));
+            border-radius: 50%;
+            animation: morphBlob 3s ease-in-out infinite;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .morphing-blob::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(45deg, var(--houston-white), var(--houston-gray));
+            border-radius: 50%;
+            z-index: -1;
+            animation: morphBlobOuter 3s ease-in-out infinite 1s;
+        }
+
+        @keyframes morphBlob {
+            0%, 100% { border-radius: 50%; transform: rotate(0deg); }
+            25% { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; transform: rotate(90deg); }
+            50% { border-radius: 70% 30% 30% 70% / 70% 70% 30% 30%; transform: rotate(180deg); }
+            75% { border-radius: 40% 60% 60% 40% / 60% 40% 60% 40%; transform: rotate(270deg); }
+        }
+
+        @keyframes morphBlobOuter {
+            0%, 100% { border-radius: 50%; transform: rotate(0deg) scale(1); opacity: 0.3; }
+            25% { border-radius: 60% 40% 40% 60% / 40% 60% 40% 60%; transform: rotate(-90deg) scale(1.1); opacity: 0.5; }
+            50% { border-radius: 30% 70% 70% 30% / 70% 30% 70% 30%; transform: rotate(-180deg) scale(0.9); opacity: 0.7; }
+            75% { border-radius: 70% 30% 30% 70% / 30% 70% 30% 70%; transform: rotate(-270deg) scale(1.05); opacity: 0.4; }
+        }
+
+        .particle-burst {
+            width: 32px;
+            height: 32px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .particle-burst::before,
+        .particle-burst::after {
+            content: '';
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: var(--houston-gray);
+            border-radius: 50%;
+            animation: particleBurst 2.5s ease-in-out infinite;
+        }
+
+        .particle-burst::before {
+            animation-delay: 0s;
+        }
+
+        .particle-burst::after {
+            animation-delay: 1.25s;
+            background: var(--houston-white);
+        }
+
+        @keyframes particleBurst {
+            0% { transform: scale(0) translate(0, 0); opacity: 1; }
+            25% { transform: scale(1) translate(-15px, -15px); opacity: 0.8; }
+            50% { transform: scale(0.8) translate(15px, -15px); opacity: 0.6; }
+            75% { transform: scale(1.2) translate(-15px, 15px); opacity: 0.4; }
+            100% { transform: scale(0) translate(15px, 15px); opacity: 0; }
+        }
+
+        .spinning-diamond {
             width: 24px;
             height: 24px;
-            clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: linear-gradient(45deg, var(--houston-white), var(--houston-gray));
+            transform: rotate(45deg);
+            position: relative;
+            animation: spinDiamond 4s linear infinite;
         }
 
-        .houston-shape.primary {
-            background: linear-gradient(135deg, var(--houston-black) 0%, #333333 100%);
+        .spinning-diamond::before {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(45deg, var(--houston-black), var(--houston-gray));
+            animation: spinDiamondInner 4s linear infinite reverse;
         }
 
-        .houston-shape.secondary {
-            background: linear-gradient(135deg, var(--houston-gray) 0%, #999999 100%);
+        @keyframes spinDiamond {
+            from { transform: rotate(45deg); }
+            to { transform: rotate(405deg); }
         }
 
-        .houston-shape.tertiary {
-            background: linear-gradient(135deg, var(--houston-white) 0%, #f5f5f5 100%);
-            border: 1px solid var(--houston-gray);
+        @keyframes spinDiamondInner {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(-360deg); }
         }
 
-        .houston-shape.small { width: 16px; height: 16px; }
-        .houston-shape.tiny { width: 12px; height: 12px; }
-        .houston-shape.large { width: 48px; height: 48px; }
+        .wave-ripple {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--houston-gray);
+            position: relative;
+            animation: waveRipple 3s ease-in-out infinite;
+        }
+
+        .wave-ripple::before,
+        .wave-ripple::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 2px solid var(--houston-white);
+            animation: rippleExpand 3s ease-in-out infinite;
+        }
+
+        .wave-ripple::after {
+            animation-delay: 1.5s;
+        }
+
+        @keyframes waveRipple {
+            0%, 100% { transform: scale(1); background: var(--houston-gray); }
+            50% { transform: scale(1.1); background: var(--houston-white); }
+        }
+
+        @keyframes rippleExpand {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(2.5); opacity: 0; }
+        }
+
+        .energy-orb {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--houston-white), var(--houston-gray));
+            position: relative;
+            animation: energyPulse 2s ease-in-out infinite;
+            box-shadow: 0 0 20px rgba(116, 116, 116, 0.5);
+        }
+
+        .energy-orb::before {
+            content: '';
+            position: absolute;
+            top: -4px;
+            left: -4px;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, transparent, var(--houston-white), transparent);
+            animation: energyRotate 3s linear infinite;
+            opacity: 0.6;
+        }
+
+        @keyframes energyPulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 20px rgba(116, 116, 116, 0.5); }
+            50% { transform: scale(1.15); box-shadow: 0 0 30px rgba(255, 255, 255, 0.8); }
+        }
+
+        @keyframes energyRotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .liquid-morph {
+            width: 32px;
+            height: 32px;
+            background: var(--houston-gray);
+            border-radius: 50%;
+            position: relative;
+            animation: liquidMorph 4s ease-in-out infinite;
+        }
+
+        @keyframes liquidMorph {
+            0%, 100% { 
+                border-radius: 50%;
+                background: var(--houston-gray);
+                transform: scale(1);
+            }
+            25% { 
+                border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+                background: var(--houston-white);
+                transform: scale(1.1);
+            }
+            50% { 
+                border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%;
+                background: var(--houston-black);
+                transform: scale(0.9);
+            }
+            75% { 
+                border-radius: 70% 30% 50% 50% / 30% 70% 50% 50%;
+                background: var(--houston-white);
+                transform: scale(1.05);
+            }
+        }
+
+        /* Hover Animations */
+        .dynamic-animation:hover .pulse-ring {
+            animation-duration: 0.8s;
+        }
+
+        .dynamic-animation:hover .morphing-blob {
+            animation-duration: 1.5s;
+        }
+
+        .dynamic-animation:hover .particle-burst::before,
+        .dynamic-animation:hover .particle-burst::after {
+            animation-duration: 1s;
+        }
+
+        .dynamic-animation:hover .spinning-diamond {
+            animation-duration: 1s;
+        }
+
+        .dynamic-animation:hover .wave-ripple {
+            animation-duration: 1.5s;
+        }
+
+        .dynamic-animation:hover .energy-orb {
+            animation-duration: 1s;
+        }
+
+        .dynamic-animation:hover .liquid-morph {
+            animation-duration: 2s;
+        }
+
+        /* Interactive Particle Background */
+        .particle-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            background: var(--houston-gray);
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: floatParticle 20s linear infinite;
+        }
+
+        .particle:nth-child(odd) {
+            background: var(--houston-white);
+            opacity: 0.2;
+        }
+
+        @keyframes floatParticle {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.3;
+            }
+            90% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
 
         /* Loading Screen */
         .loading-screen {
@@ -287,6 +579,8 @@
         .btn-primary:hover {
             transform: translateY(-2px);
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            background: var(--houston-gray);
+            color: var(--houston-white);
         }
 
         .btn-secondary {
@@ -744,7 +1038,7 @@
         }
 
         .impact-stats {
-            color: #4ade80;
+            color: var(--houston-gray);
             font-weight: 600;
             margin-bottom: 1rem;
         }
@@ -757,11 +1051,12 @@
         }
 
         .metric {
-            background: rgba(74, 222, 128, 0.2);
+            background: rgba(116, 116, 116, 0.2);
             padding: 0.25rem 0.75rem;
             border-radius: 15px;
             font-size: 0.85rem;
             font-weight: 500;
+            color: var(--houston-white);
         }
 
         /* Properties Grid */
@@ -789,7 +1084,7 @@
         .property-image {
             width: 100%;
             height: 200px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: var(--gradient-secondary);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -804,7 +1099,7 @@
         .property-price {
             font-size: 1.5rem;
             font-weight: 700;
-            color: #4ade80;
+            color: var(--houston-gray);
             margin-bottom: 0.5rem;
         }
 
@@ -816,10 +1111,11 @@
         }
 
         .property-detail {
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(116, 116, 116, 0.2);
             padding: 0.25rem 0.75rem;
             border-radius: 15px;
             font-size: 0.85rem;
+            color: var(--houston-white);
         }
 
         /* Get Started Steps */
@@ -1393,6 +1689,296 @@
             font-size: 0.9rem;
         }
 
+        /* AI Chat Agent Popup */
+        .ai-chat-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 10001;
+        }
+
+        .ai-chat-button {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--houston-gray), var(--houston-white));
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(116, 116, 116, 0.4);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: subtleFloat 8s ease-in-out infinite;
+        }
+
+        .ai-chat-button:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 12px 30px rgba(116, 116, 116, 0.6);
+        }
+
+        .ai-chat-button .dynamic-animation {
+            width: 32px;
+            height: 32px;
+        }
+
+        .ai-chat-popup {
+            position: absolute;
+            bottom: 80px;
+            right: 0;
+            width: 400px;
+            height: 600px;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px) scale(0.9);
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .ai-chat-popup.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0) scale(1);
+        }
+
+        .ai-chat-header {
+            background: linear-gradient(135deg, var(--houston-gray), var(--houston-white));
+            padding: 1rem;
+            color: var(--houston-black);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .ai-chat-header h3 {
+            margin: 0;
+            font-weight: 600;
+        }
+
+        .ai-chat-status {
+            margin-left: auto;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 0.25rem 0.5rem;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--houston-white);
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .ai-chat-messages {
+            height: 450px;
+            padding: 1rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .ai-chat-messages::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .ai-chat-messages::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+        }
+
+        .ai-chat-messages::-webkit-scrollbar-thumb {
+            background: rgba(116, 116, 116, 0.5);
+            border-radius: 3px;
+        }
+
+        .chat-message {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            animation: fadeInUp 0.3s ease;
+        }
+
+        .chat-message.user {
+            flex-direction: row-reverse;
+        }
+
+        .message-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .message-avatar.ai {
+            background: linear-gradient(135deg, var(--houston-gray), var(--houston-white));
+            color: var(--houston-black);
+        }
+
+        .message-avatar.user {
+            background: rgba(255, 255, 255, 0.2);
+            color: var(--houston-white);
+        }
+
+        .message-bubble {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 0.75rem 1rem;
+            max-width: 280px;
+            color: var(--houston-white);
+            line-height: 1.4;
+        }
+
+        .message-bubble.ai {
+            background: rgba(116, 116, 116, 0.1);
+            border-color: rgba(116, 116, 116, 0.3);
+        }
+
+        .message-bubble.user {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .message-time {
+            font-size: 0.7rem;
+            color: rgba(255, 255, 255, 0.5);
+            margin-top: 0.25rem;
+        }
+
+        .ai-chat-input-container {
+            padding: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .ai-chat-input-wrapper {
+            display: flex;
+            gap: 0.5rem;
+            align-items: flex-end;
+        }
+
+        .ai-chat-input {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 0.75rem 1rem;
+            color: var(--houston-white);
+            font-size: 0.9rem;
+            resize: none;
+            min-height: 20px;
+            max-height: 80px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .ai-chat-input:focus {
+            border-color: var(--houston-gray);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .ai-chat-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .ai-chat-send {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, var(--houston-gray), var(--houston-white));
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .ai-chat-send:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(116, 116, 116, 0.4);
+        }
+
+        .ai-chat-send:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: rgba(255, 255, 255, 0.7);
+            font-style: italic;
+        }
+
+        .typing-dots {
+            display: flex;
+            gap: 4px;
+        }
+
+        .typing-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--houston-gray);
+            border-radius: 50%;
+            animation: typingBounce 1.4s ease-in-out infinite;
+        }
+
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typingBounce {
+            0%, 80%, 100% { transform: translateY(0); opacity: 0.5; }
+            40% { transform: translateY(-10px); opacity: 1; }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .suggested-questions {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .suggested-question {
+            background: rgba(116, 116, 116, 0.1);
+            border: 1px solid rgba(116, 116, 116, 0.3);
+            border-radius: 15px;
+            padding: 0.5rem 0.75rem;
+            color: var(--houston-gray);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.85rem;
+            text-align: center;
+        }
+
+        .suggested-question:hover {
+            background: rgba(116, 116, 116, 0.2);
+            transform: translateY(-1px);
+            color: var(--houston-white);
+        }
+
         /* Responsive Design */
         @media (max-width: 768px) {
             .hero-content h1 {
@@ -1430,6 +2016,21 @@
             .page-header h1 {
                 font-size: 2rem;
             }
+
+            .ai-chat-popup {
+                width: 350px;
+                height: 500px;
+                bottom: 70px;
+                right: -10px;
+            }
+
+            .ai-chat-messages {
+                height: 350px;
+            }
+
+            .message-bubble {
+                max-width: 240px;
+            }
         }
     </style>
 </head>
@@ -1445,6 +2046,9 @@
         </div>
     </div>
 
+    <!-- Particle Background -->
+    <div class="particle-background" id="particle-background"></div>
+
     <!-- Navigation -->
     <nav class="main-nav" id="main-nav" style="display: none;">
         <div class="nav-container">
@@ -1452,72 +2056,102 @@
             <ul class="nav-links">
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle">
-                        <div class="houston-shape primary"></div>
+                        <div class="dynamic-animation">
+                            <div class="morphing-blob"></div>
+                        </div>
                         Platform
                     </a>
                     <div class="dropdown-menu">
                         <a href="#" class="dropdown-item" onclick="showPage('platform')">
-                            <div class="houston-shape primary"></div>
+                            <div class="dynamic-animation">
+                                <div class="energy-orb"></div>
+                            </div>
                             F.A.I.T.H. Platform
                         </a>
                         <a href="#" class="dropdown-item" onclick="showPage('ai-engine')">
-                            <div class="houston-shape secondary"></div>
+                            <div class="dynamic-animation">
+                                <div class="particle-burst"></div>
+                            </div>
                             Kingdom Impact AI
                         </a>
                         <a href="#" class="dropdown-item" onclick="showPage('mobile')">
-                            <div class="houston-shape tertiary"></div>
+                            <div class="dynamic-animation">
+                                <div class="liquid-morph"></div>
+                            </div>
                             Mobile Apps
                         </a>
                     </div>
                 </li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle">
-                        <div class="houston-shape secondary"></div>
+                        <div class="dynamic-animation">
+                            <div class="wave-ripple"></div>
+                        </div>
                         Investments
                     </a>
                     <div class="dropdown-menu">
                         <a href="#" class="dropdown-item" onclick="showPage('real-estate')">
-                            <div class="houston-shape primary"></div>
+                            <div class="dynamic-animation">
+                                <div class="spinning-diamond"></div>
+                            </div>
                             Real Estate Overview
                         </a>
                         <a href="#" class="dropdown-item" onclick="showPage('dhap')">
-                            <div class="houston-shape secondary"></div>
+                            <div class="dynamic-animation">
+                                <div class="wave-ripple"></div>
+                            </div>
                             DHAP Program
                         </a>
                         <a href="#" class="dropdown-item" onclick="showPage('portfolio')">
-                            <div class="houston-shape tertiary"></div>
+                            <div class="dynamic-animation">
+                                <div class="pulse-ring"></div>
+                            </div>
                             Portfolio Performance
                         </a>
                         <a href="#" class="dropdown-item" onclick="showPage('properties')">
-                            <div class="houston-shape primary"></div>
+                            <div class="dynamic-animation">
+                                <div class="energy-orb"></div>
+                            </div>
                             Property Showcase
                         </a>
                     </div>
                 </li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle">
-                        <div class="houston-shape tertiary"></div>
+                        <div class="dynamic-animation">
+                            <div class="spinning-diamond"></div>
+                        </div>
                         Company
                     </a>
                     <div class="dropdown-menu">
                         <a href="#" class="dropdown-item" onclick="showPage('get-started')">
-                            <div class="houston-shape primary"></div>
+                            <div class="dynamic-animation">
+                                <div class="morphing-blob"></div>
+                            </div>
                             Get Started
                         </a>
                         <a href="#" class="dropdown-item" onclick="showPage('solutions')">
-                            <div class="houston-shape secondary"></div>
+                            <div class="dynamic-animation">
+                                <div class="particle-burst"></div>
+                            </div>
                             Solutions
                         </a>
                         <a href="#" class="dropdown-item" onclick="showPage('pricing')">
-                            <div class="houston-shape tertiary"></div>
+                            <div class="dynamic-animation">
+                                <div class="liquid-morph"></div>
+                            </div>
                             Pricing
                         </a>
                         <a href="#" class="dropdown-item" onclick="showPage('about')">
-                            <div class="houston-shape primary"></div>
+                            <div class="dynamic-animation">
+                                <div class="energy-orb"></div>
+                            </div>
                             About
                         </a>
                         <a href="#" class="dropdown-item" onclick="showPage('blog')">
-                            <div class="houston-shape secondary"></div>
+                            <div class="dynamic-animation">
+                                <div class="wave-ripple"></div>
+                            </div>
                             Keep it 100 Blog
                         </a>
                     </div>
@@ -1538,11 +2172,15 @@
                         <p class="hero-description floating">The world's first artificial intelligence platform designed specifically for faith-based investors. Build wealth while advancing God's Kingdom through AI-powered investment intelligence that aligns with Biblical principles.</p>
                         <div class="hero-buttons floating">
                             <a href="#get-started" class="btn-primary" style="display: inline-flex; align-items: center; gap: 0.5rem; max-width: 280px;">
-                                <div class="houston-shape primary"></div>
+                                <div class="dynamic-animation">
+                                    <div class="energy-orb"></div>
+                                </div>
                                 Start Kingdom Building
                             </a>
                             <a href="#platform" class="btn-secondary" style="display: inline-flex; align-items: center; gap: 0.5rem; max-width: 280px; color: black; border-color: black;">
-                                <div class="houston-shape secondary"></div>
+                                <div class="dynamic-animation">
+                                    <div class="pulse-ring"></div>
+                                </div>
                                 Explore F.A.I.T.H. Platform
                             </a>
                         </div>
@@ -1554,7 +2192,9 @@
                     <div class="components-grid">
                         <div class="component-card">
                             <div class="component-icon">
-                                <div class="houston-shape primary"></div>
+                                <div class="dynamic-animation">
+                                    <div class="morphing-blob"></div>
+                                </div>
                             </div>
                             <h3>F.A.I.T.H. Platform</h3>
                             <p>AI-powered faith-based investment intelligence analyzing Biblical alignment and Kingdom impact potential</p>
@@ -1563,7 +2203,9 @@
 
                         <div class="component-card">
                             <div class="component-icon">
-                                <div class="houston-shape secondary"></div>
+                                <div class="dynamic-animation">
+                                    <div class="particle-burst"></div>
+                                </div>
                             </div>
                             <h3>Kingdom Impact AI</h3>
                             <p>Revolutionary AI engine that scores investments based on Biblical principles and community transformation</p>
@@ -1572,7 +2214,9 @@
 
                         <div class="component-card">
                             <div class="component-icon">
-                                <div class="houston-shape tertiary"></div>
+                                <div class="dynamic-animation">
+                                    <div class="spinning-diamond"></div>
+                                </div>
                             </div>
                             <h3>Real Estate Portfolio</h3>
                             <p>$45.2M faith-based real estate investments creating Kingdom impact and superior returns</p>
@@ -1581,7 +2225,9 @@
 
                         <div class="component-card">
                             <div class="component-icon">
-                                <div class="houston-shape primary"></div>
+                                <div class="dynamic-animation">
+                                    <div class="wave-ripple"></div>
+                                </div>
                             </div>
                             <h3>DHAP Program</h3>
                             <p>Divine Housing Assistance Program with AI-enhanced Kingdom impact measurement and tracking</p>
@@ -1590,7 +2236,9 @@
 
                         <div class="component-card">
                             <div class="component-icon">
-                                <div class="houston-shape secondary"></div>
+                                <div class="dynamic-animation">
+                                    <div class="liquid-morph"></div>
+                                </div>
                             </div>
                             <h3>Mobile Kingdom Tools</h3>
                             <p>AI-enhanced mobile apps for Kingdom investing on the go with real-time impact tracking</p>
@@ -1599,7 +2247,9 @@
 
                         <div class="component-card">
                             <div class="component-icon">
-                                <div class="houston-shape tertiary"></div>
+                                <div class="dynamic-animation">
+                                    <div class="energy-orb"></div>
+                                </div>
                             </div>
                             <h3>Keep it 100 Blog</h3>
                             <p>AI-enhanced Kingdom investing insights combining Biblical wisdom with cutting-edge technology</p>
@@ -1608,7 +2258,9 @@
 
                         <div class="component-card">
                             <div class="component-icon">
-                                <div class="houston-shape primary"></div>
+                                <div class="dynamic-animation">
+                                    <div class="pulse-ring"></div>
+                                </div>
                             </div>
                             <h3>Portfolio Performance</h3>
                             <p>Transparent performance analytics with AI-powered Kingdom ROI and Biblical impact metrics</p>
@@ -1617,7 +2269,9 @@
 
                         <div class="component-card">
                             <div class="component-icon">
-                                <div class="houston-shape secondary"></div>
+                                <div class="dynamic-animation">
+                                    <div class="morphing-blob"></div>
+                                </div>
                             </div>
                             <h3>Get Started</h3>
                             <p>Begin your AI-enhanced Kingdom investing journey with personalized consultation and strategy</p>
@@ -2267,22 +2921,22 @@
 
                 <div class="team-grid">
                     <div class="team-member">
-                        <div class="member-photo">ED</div>
-                        <h3>Effram Davis</h3>
+                        <div class="member-photo">EB</div>
+                        <h3>Effram Barrett</h3>
                         <div class="member-role">CEO & Visionary Leader</div>
                         <p>Effram combines 20+ years of real estate expertise with deep theological understanding to lead Houston 100's mission of AI-enhanced Kingdom investing. His vision for using technology to advance God's Kingdom has transformed how faith-based investors approach wealth building.</p>
                     </div>
 
                     <div class="team-member">
-                        <div class="member-photo">QB</div>
-                        <h3>Quintin Brown</h3>
+                        <div class="member-photo">QW</div>
+                        <h3>Quintin Ward</h3>
                         <div class="member-role">COO & Operations Excellence</div>
                         <p>Quintin brings operational excellence and financial oversight to Houston 100's growing portfolio. His expertise in scaling faith-based businesses ensures our AI platform delivers consistent results while maintaining Biblical integrity.</p>
                     </div>
 
                     <div class="team-member">
-                        <div class="member-photo">WR</div>
-                        <h3>William Rodriguez</h3>
+                        <div class="member-photo">WB</div>
+                        <h3>William Brown</h3>
                         <div class="member-role">CTO & AI Innovation</div>
                         <p>William leads the development of our revolutionary F.A.I.T.H. Platform, combining cutting-edge AI technology with Biblical wisdom. His technical vision enables Kingdom investors to make data-driven decisions aligned with their faith values.</p>
                     </div>
@@ -2556,6 +3210,78 @@
         </div>
     </footer>
 
+    <!-- AI Chat Agent Popup -->
+    <div class="ai-chat-container">
+        <button class="ai-chat-button" id="ai-chat-toggle">
+            <div class="dynamic-animation">
+                <div class="energy-orb"></div>
+            </div>
+        </button>
+        
+        <div class="ai-chat-popup" id="ai-chat-popup">
+            <div class="ai-chat-header">
+                <div class="dynamic-animation">
+                    <div class="pulse-ring"></div>
+                </div>
+                <h3>Faith AI Assistant</h3>
+                <div class="ai-chat-status">
+                    <div class="status-dot"></div>
+                    Online
+                </div>
+            </div>
+            
+            <div class="ai-chat-messages" id="ai-chat-messages">
+                <div class="chat-message">
+                    <div class="message-avatar ai">AI</div>
+                    <div class="message-content">
+                        <div class="message-bubble ai">
+                            👋 Welcome to Houston 100! I'm your Faith AI Assistant. I can help you with:
+                            <br><br>
+                            • Investment analysis & Kingdom impact scoring
+                            <br>• Portfolio performance & system health
+                            <br>• DHAP program information
+                            <br>• Faith-based investment guidance
+                            <br><br>
+                            How can I serve you today?
+                        </div>
+                        <div class="message-time">Just now</div>
+                    </div>
+                </div>
+                
+                <div class="suggested-questions">
+                    <div class="suggested-question" onclick="askSuggestedQuestion('What is our current portfolio performance?')">
+                        📊 What's our current portfolio performance?
+                    </div>
+                    <div class="suggested-question" onclick="askSuggestedQuestion('How does Kingdom impact scoring work?')">
+                        👑 How does Kingdom impact scoring work?
+                    </div>
+                    <div class="suggested-question" onclick="askSuggestedQuestion('What is the DHAP program?')">
+                        🏠 What is the DHAP program?
+                    </div>
+                    <div class="suggested-question" onclick="askSuggestedQuestion('Check system health status')">
+                        ⚡ Check system health status
+                    </div>
+                </div>
+            </div>
+            
+            <div class="ai-chat-input-container">
+                <div class="ai-chat-input-wrapper">
+                    <textarea 
+                        class="ai-chat-input" 
+                        id="ai-chat-input" 
+                        placeholder="Ask about investments, Kingdom impact, or system health..."
+                        rows="1"
+                    ></textarea>
+                    <button class="ai-chat-send" id="ai-chat-send">
+                        <div class="dynamic-animation">
+                            <div class="morphing-blob"></div>
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         // Loading screen
         window.addEventListener('load', function() {
@@ -2828,6 +3554,305 @@
             }
         }
 
+        // AI Chat Agent Functionality
+        class FaithAIAssistant {
+            constructor() {
+                this.isOpen = false;
+                this.isTyping = false;
+                this.conversationHistory = [];
+                
+                this.chatToggle = document.getElementById('ai-chat-toggle');
+                this.chatPopup = document.getElementById('ai-chat-popup');
+                this.chatMessages = document.getElementById('ai-chat-messages');
+                this.chatInput = document.getElementById('ai-chat-input');
+                this.chatSend = document.getElementById('ai-chat-send');
+                
+                this.initializeEventListeners();
+                this.initializeKnowledgeBase();
+            }
+            
+            initializeEventListeners() {
+                // Toggle chat popup
+                this.chatToggle.addEventListener('click', () => this.toggleChat());
+                
+                // Send message on button click
+                this.chatSend.addEventListener('click', () => this.sendMessage());
+                
+                // Send message on Enter key (Shift+Enter for new line)
+                this.chatInput.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        this.sendMessage();
+                    }
+                });
+                
+                // Auto-resize textarea
+                this.chatInput.addEventListener('input', () => this.autoResizeTextarea());
+                
+                // Close chat when clicking outside
+                document.addEventListener('click', (e) => {
+                    if (!this.chatToggle.contains(e.target) && !this.chatPopup.contains(e.target) && this.isOpen) {
+                        this.toggleChat();
+                    }
+                });
+            }
+            
+            initializeKnowledgeBase() {
+                this.knowledgeBase = {
+                    portfolio: {
+                        total_aum: "$45.2M",
+                        average_returns: "15.4%",
+                        active_properties: 247,
+                        lives_impacted: "1,200+",
+                        average_kingdom_score: "94/100",
+                        ytd_performance: "15.4%",
+                        recent_investments: [
+                            "Houston Heights Housing - $2.3M - Kingdom Score: 94/100",
+                            "East End Business Incubator - $1.8M - Kingdom Score: 89/100", 
+                            "Third Ward Renewal - $3.1M - Kingdom Score: 91/100"
+                        ]
+                    },
+                    system_health: {
+                        overall_status: "Excellent",
+                        uptime: "99.97%",
+                        response_time: "185ms",
+                        error_rate: "0.05%",
+                        ai_engines: {
+                            kingdom_impact_ai: "94.7% accuracy",
+                            investment_analysis_ai: "91.2% accuracy",
+                            portfolio_optimization_ai: "89.8% accuracy",
+                            risk_assessment_ai: "92.5% accuracy"
+                        }
+                    },
+                    dhap_program: {
+                        name: "Divine Housing Assistance Program",
+                        tiers: [
+                            "Steward Level - $25K minimum",
+                            "Builder Level - $100K minimum (Most Popular)",
+                            "Kingdom Level - $500K minimum"
+                        ],
+                        impact: "1,200+ families housed, 456 jobs created, 89 businesses launched"
+                    },
+                    kingdom_principles: [
+                        "Care for Poor (Proverbs 31:8-9)",
+                        "Creation Stewardship (Genesis 1:28)", 
+                        "Social Justice (Micah 6:8)",
+                        "Community Building (Acts 2:44-47)",
+                        "Economic Empowerment (Deuteronomy 15:7-11)"
+                    ]
+                };
+            }
+            
+            toggleChat() {
+                this.isOpen = !this.isOpen;
+                this.chatPopup.classList.toggle('active', this.isOpen);
+                
+                if (this.isOpen) {
+                    this.chatInput.focus();
+                    this.scrollToBottom();
+                }
+            }
+            
+            autoResizeTextarea() {
+                this.chatInput.style.height = 'auto';
+                this.chatInput.style.height = Math.min(this.chatInput.scrollHeight, 80) + 'px';
+            }
+            
+            sendMessage() {
+                const message = this.chatInput.value.trim();
+                if (!message || this.isTyping) return;
+                
+                // Add user message
+                this.addMessage(message, 'user');
+                this.chatInput.value = '';
+                this.autoResizeTextarea();
+                
+                // Show typing indicator
+                this.showTypingIndicator();
+                
+                // Generate AI response
+                setTimeout(() => {
+                    this.hideTypingIndicator();
+                    const response = this.generateAIResponse(message);
+                    this.addMessage(response, 'ai');
+                }, 1500 + Math.random() * 1000); // Realistic typing delay
+            }
+            
+            addMessage(content, sender) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `chat-message ${sender}`;
+                
+                const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                
+                messageDiv.innerHTML = `
+                    <div class="message-avatar ${sender}">${sender === 'ai' ? 'AI' : 'You'}</div>
+                    <div class="message-content">
+                        <div class="message-bubble ${sender}">${content}</div>
+                        <div class="message-time">${time}</div>
+                    </div>
+                `;
+                
+                // Remove suggested questions if they exist
+                const suggestedQuestions = this.chatMessages.querySelector('.suggested-questions');
+                if (suggestedQuestions && sender === 'user') {
+                    suggestedQuestions.remove();
+                }
+                
+                this.chatMessages.appendChild(messageDiv);
+                this.scrollToBottom();
+                
+                // Store in conversation history
+                this.conversationHistory.push({
+                    content,
+                    sender,
+                    timestamp: new Date().toISOString()
+                });
+            }
+            
+            showTypingIndicator() {
+                this.isTyping = true;
+                const typingDiv = document.createElement('div');
+                typingDiv.className = 'chat-message typing-indicator-message';
+                typingDiv.innerHTML = `
+                    <div class="message-avatar ai">AI</div>
+                    <div class="message-content">
+                        <div class="message-bubble ai">
+                            <div class="typing-indicator">
+                                <span>Faith AI is thinking</span>
+                                <div class="typing-dots">
+                                    <div class="typing-dot"></div>
+                                    <div class="typing-dot"></div>
+                                    <div class="typing-dot"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                this.chatMessages.appendChild(typingDiv);
+                this.scrollToBottom();
+            }
+            
+            hideTypingIndicator() {
+                this.isTyping = false;
+                const typingIndicator = this.chatMessages.querySelector('.typing-indicator-message');
+                if (typingIndicator) {
+                    typingIndicator.remove();
+                }
+            }
+            
+            generateAIResponse(userMessage) {
+                const message = userMessage.toLowerCase();
+                
+                // Portfolio performance queries
+                if (message.includes('portfolio') || message.includes('performance') || message.includes('returns')) {
+                    return `📊 <strong>Current Portfolio Performance:</strong><br><br>
+                    • Total AUM: <strong>${this.knowledgeBase.portfolio.total_aum}</strong><br>
+                    • Average Returns: <strong>${this.knowledgeBase.portfolio.average_returns}</strong><br>
+                    • Active Properties: <strong>${this.knowledgeBase.portfolio.active_properties}</strong><br>
+                    • Lives Impacted: <strong>${this.knowledgeBase.portfolio.lives_impacted}</strong><br>
+                    • Average Kingdom Score: <strong>${this.knowledgeBase.portfolio.average_kingdom_score}</strong><br><br>
+                    Our AI-enhanced portfolio combines Biblical stewardship with superior financial returns! 🙏`;
+                }
+                
+                // Kingdom impact queries
+                if (message.includes('kingdom') || message.includes('impact') || message.includes('scoring')) {
+                    return `👑 <strong>Kingdom Impact Scoring System:</strong><br><br>
+                    Our AI analyzes investments across 5 Biblical principles:<br><br>
+                    • <strong>Care for Poor</strong> (Proverbs 31:8-9)<br>
+                    • <strong>Creation Stewardship</strong> (Genesis 1:28)<br>
+                    • <strong>Social Justice</strong> (Micah 6:8)<br>
+                    • <strong>Community Building</strong> (Acts 2:44-47)<br>
+                    • <strong>Economic Empowerment</strong> (Deuteronomy 15:7-11)<br><br>
+                    Each investment receives a Kingdom Score (0-100) measuring both financial returns and Biblical alignment! ✨`;
+                }
+                
+                // DHAP program queries
+                if (message.includes('dhap') || message.includes('housing') || message.includes('program')) {
+                    return `🏠 <strong>Divine Housing Assistance Program (DHAP):</strong><br><br>
+                    <strong>Three Membership Tiers:</strong><br>
+                    • Steward Level - $25K minimum<br>
+                    • Builder Level - $100K minimum (Most Popular)<br>
+                    • Kingdom Level - $500K minimum<br><br>
+                    <strong>Impact to Date:</strong><br>
+                    • 1,200+ families housed<br>
+                    • 456 jobs created<br>
+                    • 89 Kingdom businesses launched<br><br>
+                    Join our community of Kingdom builders! 🌟`;
+                }
+                
+                // System health queries
+                if (message.includes('system') || message.includes('health') || message.includes('status') || message.includes('platform')) {
+                    return `⚡ <strong>F.A.I.T.H. Platform System Health:</strong><br><br>
+                    <strong>Overall Status:</strong> ${this.knowledgeBase.system_health.overall_status} ✅<br>
+                    • Uptime: ${this.knowledgeBase.system_health.uptime}<br>
+                    • Response Time: ${this.knowledgeBase.system_health.response_time}<br>
+                    • Error Rate: ${this.knowledgeBase.system_health.error_rate}<br><br>
+                    <strong>AI Engines Status:</strong><br>
+                    • Kingdom Impact AI: ${this.knowledgeBase.system_health.ai_engines.kingdom_impact_ai}<br>
+                    • Investment Analysis AI: ${this.knowledgeBase.system_health.ai_engines.investment_analysis_ai}<br><br>
+                    All systems operating at peak performance! 🚀`;
+                }
+                
+                // Investment analysis queries
+                if (message.includes('invest') || message.includes('analysis') || message.includes('opportunities')) {
+                    return `💰 <strong>AI-Enhanced Investment Analysis:</strong><br><br>
+                    Our F.A.I.T.H. Platform uses advanced AI to:<br><br>
+                    • Analyze Biblical alignment of investments<br>
+                    • Calculate Kingdom ROI potential<br>
+                    • Assess community transformation impact<br>
+                    • Optimize portfolio for faith + returns<br><br>
+                    <strong>Recent High-Impact Investments:</strong><br>
+                    • Houston Heights Housing - Kingdom Score: 94/100<br>
+                    • East End Business Incubator - Kingdom Score: 89/100<br><br>
+                    Ready to build wealth while advancing God's Kingdom? 🙏`;
+                }
+                
+                // Faith and Biblical queries
+                if (message.includes('faith') || message.includes('biblical') || message.includes('god') || message.includes('christian')) {
+                    return `🙏 <strong>Faith-Based Investment Philosophy:</strong><br><br>
+                    We believe that wealth building should honor God and serve others. Our AI technology enhances traditional Biblical stewardship by:<br><br>
+                    • Screening investments for Biblical alignment<br>
+                    • Measuring real Kingdom impact<br>
+                    • Optimizing for both spiritual and financial returns<br>
+                    • Creating generational wealth that transforms communities<br><br>
+                    <em>"By wisdom a house is built, and through understanding it is established; through knowledge its rooms are filled with rare and beautiful treasures."</em> - Proverbs 24:3-4 ✨`;
+                }
+                
+                // Greetings
+                if (message.includes('hello') || message.includes('hi') || message.includes('hey')) {
+                    return `👋 Hello! I'm your Faith AI Assistant for Houston 100. I'm here to help you with Kingdom-focused investing, portfolio performance, system health, and Biblical stewardship guidance. What would you like to know about our AI-enhanced faith-based investment platform?`;
+                }
+                
+                // Default response with helpful suggestions
+                return `🤖 I'd be happy to help you with information about Houston 100's AI-enhanced Kingdom investing platform!<br><br>
+                <strong>I can assist with:</strong><br>
+                • Portfolio performance & analytics<br>
+                • Kingdom impact scoring & Biblical alignment<br>
+                • DHAP program details & membership<br>
+                • System health & platform status<br>
+                • Investment opportunities & analysis<br>
+                • Faith-based stewardship guidance<br><br>
+                What specific area would you like to explore? Feel free to ask me anything about building wealth while advancing God's Kingdom! 🙏`;
+            }
+            
+            scrollToBottom() {
+                setTimeout(() => {
+                    this.chatMessages.scrollTop = this.chatMessages.scrollHeight;
+                }, 100);
+            }
+        }
+        
+        // Initialize AI Assistant when page loads
+        let faithAI;
+        
+        // Suggested questions functionality
+        function askSuggestedQuestion(question) {
+            if (faithAI) {
+                faithAI.chatInput.value = question;
+                faithAI.sendMessage();
+            }
+        }
+
         // Handle navigation clicks
         document.addEventListener('click', function(e) {
             if (e.target.tagName === 'A' && e.target.getAttribute('href') && e.target.getAttribute('href').startsWith('#')) {
@@ -2838,6 +3863,49 @@
                 }
             }
         });
+
+        // Initialize everything when the page loads
+        window.addEventListener('load', function() {
+            // Loading screen
+            setTimeout(function() {
+                document.getElementById('loading-screen').style.display = 'none';
+                document.getElementById('main-nav').style.display = 'block';
+                document.getElementById('main-content').style.display = 'block';
+                
+                // Initialize AI Assistant after loading screen
+                faithAI = new FaithAIAssistant();
+                
+                // Initialize particle background
+                createParticleBackground();
+            }, 3000);
+        });
+
+        // Create animated particle background
+        function createParticleBackground() {
+            const particleBackground = document.getElementById('particle-background');
+            const particleCount = 50;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                // Random size between 2px and 6px
+                const size = Math.random() * 4 + 2;
+                particle.style.width = size + 'px';
+                particle.style.height = size + 'px';
+                
+                // Random horizontal position
+                particle.style.left = Math.random() * 100 + '%';
+                
+                // Random animation delay
+                particle.style.animationDelay = Math.random() * 20 + 's';
+                
+                // Random animation duration
+                particle.style.animationDuration = (Math.random() * 10 + 15) + 's';
+                
+                particleBackground.appendChild(particle);
+            }
+        }
     </script>
 </body>
 </html>
