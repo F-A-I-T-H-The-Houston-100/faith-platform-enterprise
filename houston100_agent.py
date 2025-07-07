@@ -1,663 +1,3907 @@
-#!/usr/bin/env python3
-"""
-Houston 100 AI Investment Agent
-Built with Griptape Framework for Production Deployment
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Houston 100 - AI-Enhanced Kingdom Investing | Faith-Based Investment Intelligence</title>
+    <meta name="description" content="Houston 100 Investment Group - The world's first AI-enhanced faith-based investment platform. Kingdom-focused investing powered by cutting-edge artificial intelligence for superior returns and Biblical impact.">
+    <style>
+        :root {
+            --houston-black: #000000;
+            --houston-white: #ffffff;
+            --houston-gray: #747474;
+            --gradient-primary: linear-gradient(135deg, #000000 0%, #747474 50%, #ffffff 100%);
+            --gradient-secondary: linear-gradient(135deg, #747474 0%, #000000 50%, #747474 100%);
+            --gradient-tertiary: linear-gradient(135deg, #ffffff 0%, #747474 50%, #000000 100%);
+        }
 
-This agent handles:
-- Investment portfolio analysis and recommendations
-- System health monitoring and alerts
-- Kingdom impact scoring and reporting
-- Faith-based investment guidance
-- Real-time market intelligence
-"""
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-import os
-import json
-import datetime
-from typing import Dict, List, Any, Optional
-from dataclasses import dataclass
-from decimal import Decimal
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: var(--gradient-primary);
+            background-attachment: fixed;
+            color: var(--houston-white);
+            line-height: 1.6;
+            animation: gradientFlow 20s ease infinite;
+            overflow-x: hidden;
+        }
 
-# Griptape Framework Imports
-from griptape.structures import Agent, Pipeline, Workflow
-from griptape.tools import (
-    WebScrapingTool,
-    SqlTool,
-    CalculatorTool,
-    DateTimeTool,
-    EmailTool,
-    RestApiTool
-)
-from griptape.memory import TaskMemory, ConversationMemory
-from griptape.rules import Rule, Ruleset
-from griptape.artifacts import TextArtifact
-from griptape.drivers import OpenAiChatPromptDriver, PineconeVectorStoreDriver
-from griptape.engines import VectorQueryEngine, PromptSummaryEngine
-from griptape.loaders import WebLoader, SqlLoader, JsonLoader
+        @keyframes gradientFlow {
+            0%, 100% { background: var(--gradient-primary); }
+            33% { background: var(--gradient-secondary); }
+            66% { background: var(--gradient-tertiary); }
+        }
 
-# Configuration
-@dataclass
-class Houston100Config:
-    """Configuration for Houston 100 AI Agent"""
-    
-    # System Configuration
-    AGENT_NAME: str = "Faith AI Assistant"
-    AGENT_VERSION: str = "1.0.0"
-    ENVIRONMENT: str = "production"
-    
-    # Investment Portfolio Data
-    TOTAL_AUM: Decimal = Decimal("45200000")  # $45.2M
-    AVERAGE_RETURNS: float = 15.4  # 15.4%
-    ACTIVE_PROPERTIES: int = 247
-    LIVES_IMPACTED: int = 1200
-    AVERAGE_KINGDOM_SCORE: int = 94
-    
-    # System Health Thresholds
-    UPTIME_THRESHOLD: float = 99.9  # 99.9%
-    RESPONSE_TIME_THRESHOLD: int = 200  # 200ms
-    ERROR_RATE_THRESHOLD: float = 0.1  # 0.1%
-    
-    # AI Model Configuration
-    MODEL_NAME: str = "gpt-4"
-    MAX_TOKENS: int = 2048
-    TEMPERATURE: float = 0.7
-    
-    # Security & Compliance
-    ENCRYPTION_ENABLED: bool = True
-    AUDIT_LOGGING: bool = True
-    SOC2_COMPLIANCE: bool = True
+        @keyframes subtleFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+        }
 
-class KingdomInvestmentTool:
-    """Custom tool for Kingdom investment analysis"""
-    
-    def __init__(self, config: Houston100Config):
-        self.config = config
-        self.kingdom_principles = {
-            "care_for_poor": {"weight": 0.25, "biblical_ref": "Proverbs 31:8-9"},
-            "creation_stewardship": {"weight": 0.20, "biblical_ref": "Genesis 1:28"},
-            "social_justice": {"weight": 0.20, "biblical_ref": "Micah 6:8"},
-            "community_building": {"weight": 0.20, "biblical_ref": "Acts 2:44-47"},
-            "economic_empowerment": {"weight": 0.15, "biblical_ref": "Deuteronomy 15:7-11"}
+        .floating {
+            animation: subtleFloat 8s ease-in-out infinite;
         }
-    
-    def analyze_investment(self, investment_data: Dict[str, Any]) -> Dict[str, Any]:
-        """Analyze investment for Kingdom impact and financial returns"""
-        
-        # Calculate Kingdom Impact Score
-        kingdom_score = self._calculate_kingdom_score(investment_data)
-        
-        # Financial Analysis
-        financial_metrics = self._analyze_financial_metrics(investment_data)
-        
-        # Risk Assessment
-        risk_assessment = self._assess_risk(investment_data)
-        
-        # Biblical Alignment
-        biblical_alignment = self._assess_biblical_alignment(investment_data)
-        
-        return {
-            "investment_id": investment_data.get("id"),
-            "name": investment_data.get("name"),
-            "kingdom_score": kingdom_score,
-            "financial_metrics": financial_metrics,
-            "risk_assessment": risk_assessment,
-            "biblical_alignment": biblical_alignment,
-            "recommendation": self._generate_recommendation(kingdom_score, financial_metrics, risk_assessment),
-            "analysis_timestamp": datetime.datetime.now().isoformat()
-        }
-    
-    def _calculate_kingdom_score(self, investment_data: Dict[str, Any]) -> int:
-        """Calculate Kingdom Impact Score (0-100)"""
-        total_score = 0
-        
-        for principle, config in self.kingdom_principles.items():
-            principle_score = investment_data.get(f"{principle}_score", 0)
-            weighted_score = principle_score * config["weight"]
-            total_score += weighted_score
-        
-        return min(100, max(0, int(total_score)))
-    
-    def _analyze_financial_metrics(self, investment_data: Dict[str, Any]) -> Dict[str, Any]:
-        """Analyze financial performance metrics"""
-        return {
-            "projected_irr": investment_data.get("projected_irr", 0),
-            "cash_flow_projection": investment_data.get("cash_flow_projection", []),
-            "risk_adjusted_return": investment_data.get("risk_adjusted_return", 0),
-            "liquidity_timeline": investment_data.get("liquidity_timeline", "N/A"),
-            "total_investment": investment_data.get("total_investment", 0)
-        }
-    
-    def _assess_risk(self, investment_data: Dict[str, Any]) -> Dict[str, str]:
-        """Assess investment risk levels"""
-        return {
-            "market_risk": investment_data.get("market_risk", "Medium"),
-            "credit_risk": investment_data.get("credit_risk", "Low"),
-            "liquidity_risk": investment_data.get("liquidity_risk", "Medium"),
-            "operational_risk": investment_data.get("operational_risk", "Low"),
-            "overall_risk": investment_data.get("overall_risk", "Medium")
-        }
-    
-    def _assess_biblical_alignment(self, investment_data: Dict[str, Any]) -> Dict[str, Any]:
-        """Assess how well investment aligns with Biblical principles"""
-        alignments = []
-        
-        for principle, config in self.kingdom_principles.items():
-            score = investment_data.get(f"{principle}_score", 0)
-            alignments.append({
-                "principle": principle.replace("_", " ").title(),
-                "score": score,
-                "biblical_reference": config["biblical_ref"],
-                "alignment_level": "High" if score >= 80 else "Medium" if score >= 60 else "Low"
-            })
-        
-        return {
-            "principle_alignments": alignments,
-            "overall_biblical_alignment": "High" if self._calculate_kingdom_score(investment_data) >= 80 else "Medium"
-        }
-    
-    def _generate_recommendation(self, kingdom_score: int, financial_metrics: Dict, risk_assessment: Dict) -> str:
-        """Generate investment recommendation"""
-        if kingdom_score >= 90 and financial_metrics.get("projected_irr", 0) >= 10:
-            return "STRONG BUY - Excellent Kingdom impact with strong financial returns"
-        elif kingdom_score >= 80 and financial_metrics.get("projected_irr", 0) >= 8:
-            return "BUY - Good Kingdom impact with solid financial returns"
-        elif kingdom_score >= 70 and financial_metrics.get("projected_irr", 0) >= 6:
-            return "CONSIDER - Moderate Kingdom impact with acceptable returns"
-        elif kingdom_score < 50:
-            return "AVOID - Poor Kingdom alignment regardless of financial metrics"
-        else:
-            return "HOLD - Requires further analysis before recommendation"
 
-class SystemHealthMonitor:
-    """Monitor F.A.I.T.H. Platform system health"""
-    
-    def __init__(self, config: Houston100Config):
-        self.config = config
-        self.alerts = []
-    
-    def check_system_health(self) -> Dict[str, Any]:
-        """Comprehensive system health check"""
-        
-        # Platform Performance
-        platform_metrics = self._check_platform_performance()
-        
-        # AI Engine Status
-        ai_engine_status = self._check_ai_engine_status()
-        
-        # Database Health
-        database_health = self._check_database_health()
-        
-        # Security Status
-        security_status = self._check_security_status()
-        
-        # Integration Health
-        integration_health = self._check_integration_health()
-        
-        # Generate Overall Health Score
-        overall_health = self._calculate_overall_health(
-            platform_metrics, ai_engine_status, database_health, 
-            security_status, integration_health
-        )
-        
-        return {
-            "timestamp": datetime.datetime.now().isoformat(),
-            "overall_health_score": overall_health,
-            "platform_metrics": platform_metrics,
-            "ai_engine_status": ai_engine_status,
-            "database_health": database_health,
-            "security_status": security_status,
-            "integration_health": integration_health,
-            "alerts": self.alerts,
-            "recommendations": self._generate_health_recommendations()
+        /* Dynamic Animation Elements */
+        .dynamic-animation {
+            position: relative;
+            display: inline-block;
+            width: 32px;
+            height: 32px;
         }
-    
-    def _check_platform_performance(self) -> Dict[str, Any]:
-        """Check F.A.I.T.H. Platform performance metrics"""
-        # Simulate checking actual platform metrics
-        uptime = 99.97  # 99.97%
-        response_time = 185  # 185ms
-        error_rate = 0.05  # 0.05%
-        
-        if uptime < self.config.UPTIME_THRESHOLD:
-            self.alerts.append(f"Platform uptime below threshold: {uptime}%")
-        
-        if response_time > self.config.RESPONSE_TIME_THRESHOLD:
-            self.alerts.append(f"Response time above threshold: {response_time}ms")
-        
-        if error_rate > self.config.ERROR_RATE_THRESHOLD:
-            self.alerts.append(f"Error rate above threshold: {error_rate}%")
-        
-        return {
-            "uptime_percentage": uptime,
-            "average_response_time_ms": response_time,
-            "error_rate_percentage": error_rate,
-            "active_users": 1247,
-            "api_requests_per_hour": 15420,
-            "status": "Healthy" if not self.alerts else "Warning"
+
+        .pulse-ring {
+            width: 32px;
+            height: 32px;
+            border: 3px solid var(--houston-gray);
+            border-radius: 50%;
+            position: relative;
+            animation: pulseRing 2s ease-in-out infinite;
         }
-    
-    def _check_ai_engine_status(self) -> Dict[str, Any]:
-        """Check AI engine health and performance"""
-        return {
-            "kingdom_impact_ai": {
-                "status": "Online",
-                "accuracy_score": 94.7,
-                "processing_speed": "Fast",
-                "last_update": "2025-01-07T10:30:00Z"
-            },
-            "investment_analysis_ai": {
-                "status": "Online",
-                "accuracy_score": 91.2,
-                "processing_speed": "Fast",
-                "last_update": "2025-01-07T10:30:00Z"
-            },
-            "portfolio_optimization_ai": {
-                "status": "Online",
-                "accuracy_score": 89.8,
-                "processing_speed": "Medium",
-                "last_update": "2025-01-07T10:25:00Z"
-            },
-            "risk_assessment_ai": {
-                "status": "Online",
-                "accuracy_score": 92.5,
-                "processing_speed": "Fast",
-                "last_update": "2025-01-07T10:30:00Z"
+
+        .pulse-ring::before {
+            content: '';
+            position: absolute;
+            top: -3px;
+            left: -3px;
+            width: 32px;
+            height: 32px;
+            border: 3px solid var(--houston-white);
+            border-radius: 50%;
+            animation: pulseRingInner 2s ease-in-out infinite 0.5s;
+            opacity: 0.7;
+        }
+
+        @keyframes pulseRing {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.7; }
+        }
+
+        @keyframes pulseRingInner {
+            0%, 100% { transform: scale(1); opacity: 0.7; }
+            50% { transform: scale(0.8); opacity: 1; }
+        }
+
+        .morphing-blob {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(45deg, var(--houston-black), var(--houston-gray));
+            border-radius: 50%;
+            animation: morphBlob 3s ease-in-out infinite;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .morphing-blob::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(45deg, var(--houston-white), var(--houston-gray));
+            border-radius: 50%;
+            z-index: -1;
+            animation: morphBlobOuter 3s ease-in-out infinite 1s;
+        }
+
+        @keyframes morphBlob {
+            0%, 100% { border-radius: 50%; transform: rotate(0deg); }
+            25% { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; transform: rotate(90deg); }
+            50% { border-radius: 70% 30% 30% 70% / 70% 70% 30% 30%; transform: rotate(180deg); }
+            75% { border-radius: 40% 60% 60% 40% / 60% 40% 60% 40%; transform: rotate(270deg); }
+        }
+
+        @keyframes morphBlobOuter {
+            0%, 100% { border-radius: 50%; transform: rotate(0deg) scale(1); opacity: 0.3; }
+            25% { border-radius: 60% 40% 40% 60% / 40% 60% 40% 60%; transform: rotate(-90deg) scale(1.1); opacity: 0.5; }
+            50% { border-radius: 30% 70% 70% 30% / 70% 30% 70% 30%; transform: rotate(-180deg) scale(0.9); opacity: 0.7; }
+            75% { border-radius: 70% 30% 30% 70% / 30% 70% 30% 70%; transform: rotate(-270deg) scale(1.05); opacity: 0.4; }
+        }
+
+        .particle-burst {
+            width: 32px;
+            height: 32px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .particle-burst::before,
+        .particle-burst::after {
+            content: '';
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: var(--houston-gray);
+            border-radius: 50%;
+            animation: particleBurst 2.5s ease-in-out infinite;
+        }
+
+        .particle-burst::before {
+            animation-delay: 0s;
+        }
+
+        .particle-burst::after {
+            animation-delay: 1.25s;
+            background: var(--houston-white);
+        }
+
+        @keyframes particleBurst {
+            0% { transform: scale(0) translate(0, 0); opacity: 1; }
+            25% { transform: scale(1) translate(-15px, -15px); opacity: 0.8; }
+            50% { transform: scale(0.8) translate(15px, -15px); opacity: 0.6; }
+            75% { transform: scale(1.2) translate(-15px, 15px); opacity: 0.4; }
+            100% { transform: scale(0) translate(15px, 15px); opacity: 0; }
+        }
+
+        .spinning-diamond {
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(45deg, var(--houston-white), var(--houston-gray));
+            transform: rotate(45deg);
+            position: relative;
+            animation: spinDiamond 4s linear infinite;
+        }
+
+        .spinning-diamond::before {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(45deg, var(--houston-black), var(--houston-gray));
+            animation: spinDiamondInner 4s linear infinite reverse;
+        }
+
+        @keyframes spinDiamond {
+            from { transform: rotate(45deg); }
+            to { transform: rotate(405deg); }
+        }
+
+        @keyframes spinDiamondInner {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(-360deg); }
+        }
+
+        .wave-ripple {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--houston-gray);
+            position: relative;
+            animation: waveRipple 3s ease-in-out infinite;
+        }
+
+        .wave-ripple::before,
+        .wave-ripple::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 2px solid var(--houston-white);
+            animation: rippleExpand 3s ease-in-out infinite;
+        }
+
+        .wave-ripple::after {
+            animation-delay: 1.5s;
+        }
+
+        @keyframes waveRipple {
+            0%, 100% { transform: scale(1); background: var(--houston-gray); }
+            50% { transform: scale(1.1); background: var(--houston-white); }
+        }
+
+        @keyframes rippleExpand {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(2.5); opacity: 0; }
+        }
+
+        .energy-orb {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--houston-white), var(--houston-gray));
+            position: relative;
+            animation: energyPulse 2s ease-in-out infinite;
+            box-shadow: 0 0 20px rgba(116, 116, 116, 0.5);
+        }
+
+        .energy-orb::before {
+            content: '';
+            position: absolute;
+            top: -4px;
+            left: -4px;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, transparent, var(--houston-white), transparent);
+            animation: energyRotate 3s linear infinite;
+            opacity: 0.6;
+        }
+
+        @keyframes energyPulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 20px rgba(116, 116, 116, 0.5); }
+            50% { transform: scale(1.15); box-shadow: 0 0 30px rgba(255, 255, 255, 0.8); }
+        }
+
+        @keyframes energyRotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .liquid-morph {
+            width: 32px;
+            height: 32px;
+            background: var(--houston-gray);
+            border-radius: 50%;
+            position: relative;
+            animation: liquidMorph 4s ease-in-out infinite;
+        }
+
+        @keyframes liquidMorph {
+            0%, 100% { 
+                border-radius: 50%;
+                background: var(--houston-gray);
+                transform: scale(1);
+            }
+            25% { 
+                border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+                background: var(--houston-white);
+                transform: scale(1.1);
+            }
+            50% { 
+                border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%;
+                background: var(--houston-black);
+                transform: scale(0.9);
+            }
+            75% { 
+                border-radius: 70% 30% 50% 50% / 30% 70% 50% 50%;
+                background: var(--houston-white);
+                transform: scale(1.05);
             }
         }
-    
-    def _check_database_health(self) -> Dict[str, Any]:
-        """Check database performance and integrity"""
-        return {
-            "primary_database": {
-                "status": "Healthy",
-                "connection_pool_utilization": 45,
-                "query_performance": "Optimal",
-                "backup_status": "Current"
-            },
-            "investment_data_store": {
-                "status": "Healthy",
-                "total_records": 247000,
-                "data_integrity": "100%",
-                "last_backup": "2025-01-07T06:00:00Z"
-            },
-            "kingdom_impact_database": {
-                "status": "Healthy",
-                "total_records": 89500,
-                "data_integrity": "100%",
-                "last_backup": "2025-01-07T06:00:00Z"
+
+        /* Hover Animations */
+        .dynamic-animation:hover .pulse-ring {
+            animation-duration: 0.8s;
+        }
+
+        .dynamic-animation:hover .morphing-blob {
+            animation-duration: 1.5s;
+        }
+
+        .dynamic-animation:hover .particle-burst::before,
+        .dynamic-animation:hover .particle-burst::after {
+            animation-duration: 1s;
+        }
+
+        .dynamic-animation:hover .spinning-diamond {
+            animation-duration: 1s;
+        }
+
+        .dynamic-animation:hover .wave-ripple {
+            animation-duration: 1.5s;
+        }
+
+        .dynamic-animation:hover .energy-orb {
+            animation-duration: 1s;
+        }
+
+        .dynamic-animation:hover .liquid-morph {
+            animation-duration: 2s;
+        }
+
+        /* Interactive Particle Background */
+        .particle-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            background: var(--houston-gray);
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: floatParticle 20s linear infinite;
+        }
+
+        .particle:nth-child(odd) {
+            background: var(--houston-white);
+            opacity: 0.2;
+        }
+
+        @keyframes floatParticle {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.3;
+            }
+            90% {
+                opacity: 0.3;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
             }
         }
-    
-    def _check_security_status(self) -> Dict[str, Any]:
-        """Check security and compliance status"""
-        return {
-            "encryption_status": "Active",
-            "ssl_certificates": "Valid",
-            "firewall_status": "Active",
-            "intrusion_detection": "Active",
-            "compliance_status": {
-                "soc2_type2": "Compliant",
-                "gdpr": "Compliant",
-                "ccpa": "Compliant"
-            },
-            "security_scan_results": {
-                "last_scan": "2025-01-07T02:00:00Z",
-                "vulnerabilities_found": 0,
-                "status": "Secure"
+
+        /* Loading Screen */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-primary);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            animation: gradientFlow 20s ease infinite;
+        }
+
+        .houston-logo {
+            font-size: 4.5rem;
+            font-weight: 800;
+            color: var(--houston-white);
+            margin-bottom: 0.5rem;
+            text-align: center;
+            letter-spacing: -0.03em;
+            animation: subtleFloat 8s ease-in-out infinite;
+        }
+
+        .houston-subtitle {
+            font-size: 1.5rem;
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 2rem;
+            text-align: center;
+            letter-spacing: 0.05em;
+            animation: subtleFloat 8s ease-in-out infinite 0.2s;
+        }
+
+        .loading-dots {
+            display: flex;
+            gap: 8px;
+            margin-top: 2rem;
+        }
+
+        .loading-dot {
+            width: 12px;
+            height: 12px;
+            background: var(--houston-white);
+            border-radius: 50%;
+            animation: loadingPulse 1.5s ease-in-out infinite;
+        }
+
+        .loading-dot:nth-child(2) { animation-delay: 0.2s; }
+        .loading-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes loadingPulse {
+            0%, 100% { opacity: 0.3; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        /* Navigation */
+        .main-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 1000;
+            padding: 1rem 2rem;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--houston-white);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-toggle {
+            color: var(--houston-white);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .dropdown-toggle:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1rem 0;
+            min-width: 250px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+        }
+
+        .dropdown:hover .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-item {
+            display: block;
+            color: var(--houston-white);
+            text-decoration: none;
+            padding: 0.75rem 1.5rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .dropdown-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Main Content */
+        .main-content {
+            display: none;
+        }
+
+        .main-content.active {
+            display: block;
+        }
+
+        .page {
+            display: none;
+            min-height: 100vh;
+            padding: 8rem 2rem 4rem;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 6rem 0;
+        }
+
+        .hero-content h1 {
+            font-size: 4.5rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.03em;
+        }
+
+        .hero-description {
+            font-size: 1.25rem;
+            color: rgba(255, 255, 255, 0.9);
+            max-width: 700px;
+            margin: 0 auto 3rem;
+            line-height: 1.7;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary, .btn-secondary {
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .btn-primary {
+            background: var(--houston-white);
+            color: var(--houston-black);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--houston-white);
+            border-color: var(--houston-white);
+        }
+
+        .btn-secondary:hover {
+            background: var(--houston-white);
+            color: var(--houston-black);
+        }
+
+        /* Page Headers */
+        .page-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .page-header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .page-subtitle {
+            font-size: 1.5rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 1rem;
+        }
+
+        .page-description {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.7);
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+
+        /* Component Cards */
+        .components-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .component-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .component-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .component-icon {
+            margin-bottom: 1rem;
+        }
+
+        .component-card h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .component-card p {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .component-link {
+            color: var(--houston-white);
+            text-decoration: none;
+            font-weight: 500;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.3s ease;
+        }
+
+        .component-link:hover {
+            border-bottom-color: var(--houston-white);
+        }
+
+        /* Features Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .feature-icon {
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card p {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .feature-link {
+            color: var(--houston-white);
+            text-decoration: none;
+            font-weight: 500;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.3s ease;
+        }
+
+        .feature-link:hover {
+            border-bottom-color: var(--houston-white);
+        }
+
+        /* AI Demo */
+        .ai-demo-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 3rem;
+            margin-bottom: 4rem;
+        }
+
+        .investments-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .investment-card {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .investment-card:hover {
+            transform: translateY(-3px);
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .investment-card h3 {
+            margin: 1rem 0 0.5rem;
+            font-weight: 600;
+        }
+
+        .investment-card p {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 1rem;
+        }
+
+        .investment-type {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .ai-analysis-output {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 2rem;
+            min-height: 300px;
+        }
+
+        .analysis-placeholder {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .analysis-placeholder h3 {
+            margin: 1rem 0;
+            color: var(--houston-white);
+        }
+
+        .ai-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            justify-content: center;
+            margin-top: 1.5rem;
+        }
+
+        .ai-badge {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+        }
+
+        .analysis-loading {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .loading-animation {
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.1); }
+        }
+
+        .analysis-result {
+            color: var(--houston-white);
+        }
+
+        .analysis-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .kingdom-score {
+            background: linear-gradient(135deg, #4ade80, #22c55e);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            margin-left: auto;
+        }
+
+        .biblical-alignment h4 {
+            margin-bottom: 1rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .principle-scores {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .principle-score {
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .principle-score.high {
+            background: linear-gradient(135deg, #4ade80, #22c55e);
+        }
+
+        .principle-score.medium {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+        }
+
+        .kingdom-impact h4 {
+            margin: 1.5rem 0 1rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .kingdom-impact p {
+            margin-bottom: 0.75rem;
+            line-height: 1.6;
+        }
+
+        .ai-recommendation {
+            background: rgba(34, 197, 94, 0.2);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        /* Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin: 4rem 0;
+        }
+
+        .stat-card {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--houston-gray);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 500;
+        }
+
+        /* DHAP Tiers */
+        .dhap-tiers {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 4rem 0;
+        }
+
+        .tier-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .tier-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .tier-card.featured {
+            border-color: #4ade80;
+            box-shadow: 0 0 30px rgba(74, 222, 128, 0.3);
+        }
+
+        .tier-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .tier-badge {
+            position: absolute;
+            top: -10px;
+            right: 20px;
+            background: #4ade80;
+            color: var(--houston-black);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .tier-price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #4ade80;
+            margin: 0.5rem 0;
+        }
+
+        .tier-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .tier-features li {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .tier-features li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #4ade80;
+            font-weight: bold;
+        }
+
+        .tier-button {
+            display: block;
+            text-align: center;
+            background: #4ade80;
+            color: var(--houston-black);
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .tier-button:hover {
+            background: #22c55e;
+            transform: translateY(-2px);
+        }
+
+        /* Impact Stories */
+        .kingdom-impact-stories {
+            margin: 4rem 0;
+        }
+
+        .kingdom-impact-stories h2 {
+            text-align: center;
+            margin-bottom: 3rem;
+            font-size: 2.5rem;
+        }
+
+        .impact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .impact-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .impact-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .impact-stats {
+            color: #4ade80;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .impact-metrics {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .metric {
+            background: rgba(74, 222, 128, 0.2);
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        /* Properties Grid */
+        .properties-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+            margin: 4rem 0;
+        }
+
+        .property-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .property-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .property-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: var(--houston-white);
+        }
+
+        .property-content {
+            padding: 2rem;
+        }
+
+        .property-price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #4ade80;
+            margin-bottom: 0.5rem;
+        }
+
+        .property-details {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .property-detail {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.85rem;
+        }
+
+        /* Get Started Steps */
+        .steps-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 4rem 0;
+        }
+
+        .step-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .step-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .step-number {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #4ade80;
+            color: var(--houston-black);
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        /* Mobile Apps */
+        .mobile-showcase {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            margin: 4rem 0;
+        }
+
+        .mobile-features {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .mobile-phone {
+            display: flex;
+            justify-content: center;
+        }
+
+        .phone-frame {
+            width: 280px;
+            height: 560px;
+            background: linear-gradient(135deg, #333, #555);
+            border-radius: 30px;
+            padding: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .phone-screen {
+            width: 100%;
+            height: 100%;
+            background: var(--houston-black);
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .app-interface {
+            padding: 1.5rem;
+            color: var(--houston-white);
+        }
+
+        .app-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .impact-score {
+            background: #4ade80;
+            color: var(--houston-black);
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .portfolio-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            display: block;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #4ade80;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .kingdom-metrics h4 {
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .impact-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+            font-size: 0.8rem;
+        }
+
+        .download-section {
+            text-align: center;
+            margin-top: 4rem;
+        }
+
+        .download-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .download-btn {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            text-decoration: none;
+            color: var(--houston-white);
+            transition: all 0.3s ease;
+        }
+
+        .download-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .download-text {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .download-label {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .download-store {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        /* Blog */
+        .blog-filters {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin: 2rem 0 4rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--houston-white);
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: #4ade80;
+            color: var(--houston-black);
+            border-color: #4ade80;
+        }
+
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin: 4rem 0;
+        }
+
+        .blog-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .blog-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .blog-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .blog-category {
+            background: rgba(74, 222, 128, 0.2);
+            color: #4ade80;
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .blog-date {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.85rem;
+            margin-left: auto;
+        }
+
+        .blog-card h3 {
+            margin-bottom: 1rem;
+            font-size: 1.25rem;
+            line-height: 1.4;
+        }
+
+        .blog-card p {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .blog-link {
+            color: #4ade80;
+            text-decoration: none;
+            font-weight: 500;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.3s ease;
+        }
+
+        .blog-link:hover {
+            border-bottom-color: #4ade80;
+        }
+
+        .blog-detail {
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+
+        .blog-detail h2 {
+            margin: 2rem 0 1rem;
+            color: #4ade80;
+        }
+
+        .blog-detail h3 {
+            margin: 1.5rem 0 0.75rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .blog-back-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--houston-white);
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .blog-back-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Team */
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 4rem 0;
+        }
+
+        .team-member {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .team-member:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .member-photo {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            margin: 0 auto 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: var(--houston-white);
+        }
+
+        .member-role {
+            color: #4ade80;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        /* Mission Statement */
+        .mission-statement {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 3rem;
+            margin: 4rem 0;
+            text-align: center;
+        }
+
+        .mission-statement h2 {
+            margin: 2rem 0 1.5rem;
+            font-size: 2rem;
+            color: #4ade80;
+        }
+
+        .mission-statement p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Pricing */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin: 4rem 0;
+        }
+
+        .pricing-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .pricing-card.featured {
+            border-color: #4ade80;
+            box-shadow: 0 0 30px rgba(74, 222, 128, 0.3);
+        }
+
+        .pricing-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .pricing-price {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #4ade80;
+            margin: 0.5rem 0;
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .pricing-features li {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .pricing-features li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #4ade80;
+            font-weight: bold;
+        }
+
+        .pricing-button {
+            display: block;
+            text-align: center;
+            background: #4ade80;
+            color: var(--houston-black);
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .pricing-button:hover {
+            background: #22c55e;
+            transform: translateY(-2px);
+        }
+
+        /* Footer */
+        .footer {
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 4rem 2rem 2rem;
+            margin-top: 6rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-section {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .footer-section h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #4ade80;
+        }
+
+        .footer-verse {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            font-style: italic;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .footer-verse span {
+            display: block;
+            margin-top: 0.5rem;
+            font-weight: 600;
+            color: #4ade80;
+        }
+
+        .footer-contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .contact-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .contact-card:hover {
+            transform: translateY(-3px);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .contact-card h4 {
+            margin: 1rem 0 0.5rem;
+            color: var(--houston-white);
+        }
+
+        .contact-card p {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 1rem;
+        }
+
+        .contact-link {
+            color: #4ade80;
+            text-decoration: none;
+            font-weight: 500;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.3s ease;
+        }
+
+        .contact-link:hover {
+            border-bottom-color: #4ade80;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: #4ade80;
+        }
+
+        .footer-bottom p {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.9rem;
+        }
+
+        /* AI Chat Agent Popup */
+        .ai-chat-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 10001;
+        }
+
+        .ai-chat-button {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--houston-gray), var(--houston-white));
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(116, 116, 116, 0.4);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: subtleFloat 8s ease-in-out infinite;
+        }
+
+        .ai-chat-button:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 12px 30px rgba(116, 116, 116, 0.6);
+        }
+
+        .ai-chat-button .dynamic-animation {
+            width: 32px;
+            height: 32px;
+        }
+
+        .ai-chat-popup {
+            position: absolute;
+            bottom: 80px;
+            right: 0;
+            width: 400px;
+            height: 600px;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px) scale(0.9);
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .ai-chat-popup.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0) scale(1);
+        }
+
+        .ai-chat-header {
+            background: linear-gradient(135deg, var(--houston-gray), var(--houston-white));
+            padding: 1rem;
+            color: var(--houston-black);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .ai-chat-header h3 {
+            margin: 0;
+            font-weight: 600;
+        }
+
+        .ai-chat-status {
+            margin-left: auto;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 0.25rem 0.5rem;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--houston-white);
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .ai-chat-messages {
+            height: 450px;
+            padding: 1rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .ai-chat-messages::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .ai-chat-messages::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+        }
+
+        .ai-chat-messages::-webkit-scrollbar-thumb {
+            background: rgba(74, 222, 128, 0.5);
+            border-radius: 3px;
+        }
+
+        .chat-message {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            animation: fadeInUp 0.3s ease;
+        }
+
+        .chat-message.user {
+            flex-direction: row-reverse;
+        }
+
+        .message-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .message-avatar.ai {
+            background: linear-gradient(135deg, var(--houston-gray), var(--houston-white));
+            color: var(--houston-black);
+        }
+
+        .message-avatar.user {
+            background: rgba(255, 255, 255, 0.2);
+            color: var(--houston-white);
+        }
+
+        .message-bubble {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 0.75rem 1rem;
+            max-width: 280px;
+            color: var(--houston-white);
+            line-height: 1.4;
+        }
+
+        .message-bubble.ai {
+            background: rgba(116, 116, 116, 0.1);
+            border-color: rgba(116, 116, 116, 0.3);
+        }
+
+        .message-bubble.user {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .message-time {
+            font-size: 0.7rem;
+            color: rgba(255, 255, 255, 0.5);
+            margin-top: 0.25rem;
+        }
+
+        .ai-chat-input-container {
+            padding: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .ai-chat-input-wrapper {
+            display: flex;
+            gap: 0.5rem;
+            align-items: flex-end;
+        }
+
+        .ai-chat-input {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 0.75rem 1rem;
+            color: var(--houston-white);
+            font-size: 0.9rem;
+            resize: none;
+            min-height: 20px;
+            max-height: 80px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .ai-chat-input:focus {
+            border-color: #4ade80;
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .ai-chat-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .ai-chat-send {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, var(--houston-gray), var(--houston-white));
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .ai-chat-send:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(116, 116, 116, 0.4);
+        }
+
+        .ai-chat-send:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: rgba(255, 255, 255, 0.7);
+            font-style: italic;
+        }
+
+        .typing-dots {
+            display: flex;
+            gap: 4px;
+        }
+
+        .typing-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--houston-gray);
+            border-radius: 50%;
+            animation: typingBounce 1.4s ease-in-out infinite;
+        }
+
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typingBounce {
+            0%, 80%, 100% { transform: translateY(0); opacity: 0.5; }
+            40% { transform: translateY(-10px); opacity: 1; }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .suggested-questions {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .suggested-question {
+            background: rgba(116, 116, 116, 0.1);
+            border: 1px solid rgba(116, 116, 116, 0.3);
+            border-radius: 15px;
+            padding: 0.5rem 0.75rem;
+            color: var(--houston-gray);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.85rem;
+            text-align: center;
+        }
+
+        .suggested-question:hover {
+            background: rgba(116, 116, 116, 0.2);
+            transform: translateY(-1px);
+            color: var(--houston-white);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero-content h1 {
+                font-size: 3rem;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-showcase {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .phone-frame {
+                width: 240px;
+                height: 480px;
+            }
+
+            .components-grid,
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .houston-logo {
+                font-size: 3rem;
+            }
+
+            .page-header h1 {
+                font-size: 2rem;
+            }
+
+            .ai-chat-popup {
+                width: 350px;
+                height: 500px;
+                bottom: 70px;
+                right: -10px;
+            }
+
+            .ai-chat-messages {
+                height: 350px;
+            }
+
+            .message-bubble {
+                max-width: 240px;
             }
         }
-    
-    def _check_integration_health(self) -> Dict[str, Any]:
-        """Check external integration health"""
-        return {
-            "airtable_integration": {
-                "status": "Connected",
-                "last_sync": "2025-01-07T10:15:00Z",
-                "sync_success_rate": 99.8
-            },
-            "google_sheets_integration": {
-                "status": "Connected",
-                "last_sync": "2025-01-07T10:10:00Z",
-                "sync_success_rate": 99.9
-            },
-            "ontraport_integration": {
-                "status": "Connected",
-                "last_sync": "2025-01-07T10:05:00Z",
-                "sync_success_rate": 99.7
-            },
-            "beehiiv_integration": {
-                "status": "Connected",
-                "last_sync": "2025-01-07T09:45:00Z",
-                "sync_success_rate": 99.6
-            },
-            "motion_integration": {
-                "status": "Connected",
-                "last_sync": "2025-01-07T10:20:00Z",
-                "sync_success_rate": 99.9
-            }
-        }
-    
-    def _calculate_overall_health(self, *health_metrics) -> int:
-        """Calculate overall system health score"""
-        # Simplified health calculation
-        total_score = 0
-        components = 0
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loading-screen">
+        <h1 class="houston-logo">The Houston 100</h1>
+        <p class="houston-subtitle">AI-Enhanced Kingdom Investing</p>
+        <div class="loading-dots">
+            <div class="loading-dot"></div>
+            <div class="loading-dot"></div>
+            <div class="loading-dot"></div>
+        </div>
+    </div>
+
+    <!-- Particle Background -->
+    <div class="particle-background" id="particle-background"></div>
+
+    <!-- Navigation -->
+    <nav class="main-nav" id="main-nav" style="display: none;">
+        <div class="nav-container">
+            <a href="#" class="logo" onclick="showPage('home')">Houston 100</a>
+            <ul class="nav-links">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle">
+                        <div class="dynamic-animation">
+                            <div class="morphing-blob"></div>
+                        </div>
+                        Platform
+                    </a>
+                    <div class="dropdown-menu">
+                        <a href="#" class="dropdown-item" onclick="showPage('platform')">
+                            <div class="dynamic-animation">
+                                <div class="energy-orb"></div>
+                            </div>
+                            F.A.I.T.H. Platform
+                        </a>
+                        <a href="#" class="dropdown-item" onclick="showPage('ai-engine')">
+                            <div class="dynamic-animation">
+                                <div class="particle-burst"></div>
+                            </div>
+                            Kingdom Impact AI
+                        </a>
+                        <a href="#" class="dropdown-item" onclick="showPage('mobile')">
+                            <div class="dynamic-animation">
+                                <div class="liquid-morph"></div>
+                            </div>
+                            Mobile Apps
+                        </a>
+                    </div>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle">
+                        <div class="dynamic-animation">
+                            <div class="wave-ripple"></div>
+                        </div>
+                        Investments
+                    </a>
+                    <div class="dropdown-menu">
+                        <a href="#" class="dropdown-item" onclick="showPage('real-estate')">
+                            <div class="dynamic-animation">
+                                <div class="spinning-diamond"></div>
+                            </div>
+                            Real Estate Overview
+                        </a>
+                        <a href="#" class="dropdown-item" onclick="showPage('dhap')">
+                            <div class="dynamic-animation">
+                                <div class="wave-ripple"></div>
+                            </div>
+                            DHAP Program
+                        </a>
+                        <a href="#" class="dropdown-item" onclick="showPage('portfolio')">
+                            <div class="dynamic-animation">
+                                <div class="pulse-ring"></div>
+                            </div>
+                            Portfolio Performance
+                        </a>
+                        <a href="#" class="dropdown-item" onclick="showPage('properties')">
+                            <div class="dynamic-animation">
+                                <div class="energy-orb"></div>
+                            </div>
+                            Property Showcase
+                        </a>
+                    </div>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle">
+                        <div class="dynamic-animation">
+                            <div class="spinning-diamond"></div>
+                        </div>
+                        Company
+                    </a>
+                    <div class="dropdown-menu">
+                        <a href="#" class="dropdown-item" onclick="showPage('get-started')">
+                            <div class="dynamic-animation">
+                                <div class="morphing-blob"></div>
+                            </div>
+                            Get Started
+                        </a>
+                        <a href="#" class="dropdown-item" onclick="showPage('solutions')">
+                            <div class="dynamic-animation">
+                                <div class="particle-burst"></div>
+                            </div>
+                            Solutions
+                        </a>
+                        <a href="#" class="dropdown-item" onclick="showPage('pricing')">
+                            <div class="dynamic-animation">
+                                <div class="liquid-morph"></div>
+                            </div>
+                            Pricing
+                        </a>
+                        <a href="#" class="dropdown-item" onclick="showPage('about')">
+                            <div class="dynamic-animation">
+                                <div class="energy-orb"></div>
+                            </div>
+                            About
+                        </a>
+                        <a href="#" class="dropdown-item" onclick="showPage('blog')">
+                            <div class="dynamic-animation">
+                                <div class="wave-ripple"></div>
+                            </div>
+                            Keep it 100 Blog
+                        </a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content" id="main-content">
+        <!-- Home Page -->
+        <div id="home" class="page active">
+            <div class="container">
+                <section class="hero">
+                    <div class="hero-content">
+                        <h1 class="houston-logo floating">The Houston 100</h1>
+                        <p class="houston-subtitle floating">AI-Enhanced Kingdom Investing</p>
+                        <p class="hero-description floating">The world's first artificial intelligence platform designed specifically for faith-based investors. Build wealth while advancing God's Kingdom through AI-powered investment intelligence that aligns with Biblical principles.</p>
+                        <div class="hero-buttons floating">
+                            <a href="#get-started" class="btn-primary" style="display: inline-flex; align-items: center; gap: 0.5rem; max-width: 280px;">
+                                <div class="dynamic-animation">
+                                    <div class="energy-orb"></div>
+                                </div>
+                                Start Kingdom Building
+                            </a>
+                            <a href="#platform" class="btn-secondary" style="display: inline-flex; align-items: center; gap: 0.5rem; max-width: 280px; color: black; border-color: black;">
+                                <div class="dynamic-animation">
+                                    <div class="pulse-ring"></div>
+                                </div>
+                                Explore F.A.I.T.H. Platform
+                            </a>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="components-showcase">
+                    <h2 style="text-align: center; margin-bottom: 3rem; font-size: 2.5rem;">Complete Kingdom Investment Ecosystem</h2>
+                    <div class="components-grid">
+                        <div class="component-card">
+                            <div class="component-icon">
+                                <div class="dynamic-animation">
+                                    <div class="morphing-blob"></div>
+                                </div>
+                            </div>
+                            <h3>F.A.I.T.H. Platform</h3>
+                            <p>AI-powered faith-based investment intelligence analyzing Biblical alignment and Kingdom impact potential</p>
+                            <a href="#platform" class="component-link" onclick="showPage('platform')">Explore Platform →</a>
+                        </div>
+
+                        <div class="component-card">
+                            <div class="component-icon">
+                                <div class="dynamic-animation">
+                                    <div class="particle-burst"></div>
+                                </div>
+                            </div>
+                            <h3>Kingdom Impact AI</h3>
+                            <p>Revolutionary AI engine that scores investments based on Biblical principles and community transformation</p>
+                            <a href="#ai-engine" class="component-link" onclick="showPage('ai-engine')">Try AI Demo →</a>
+                        </div>
+
+                        <div class="component-card">
+                            <div class="component-icon">
+                                <div class="dynamic-animation">
+                                    <div class="spinning-diamond"></div>
+                                </div>
+                            </div>
+                            <h3>Real Estate Portfolio</h3>
+                            <p>$45.2M faith-based real estate investments creating Kingdom impact and superior returns</p>
+                            <a href="#real-estate" class="component-link" onclick="showPage('real-estate')">View Portfolio →</a>
+                        </div>
+
+                        <div class="component-card">
+                            <div class="component-icon">
+                                <div class="dynamic-animation">
+                                    <div class="wave-ripple"></div>
+                                </div>
+                            </div>
+                            <h3>DHAP Program</h3>
+                            <p>Divine Housing Assistance Program with AI-enhanced Kingdom impact measurement and tracking</p>
+                            <a href="#dhap" class="component-link" onclick="showPage('dhap')">Join DHAP →</a>
+                        </div>
+
+                        <div class="component-card">
+                            <div class="component-icon">
+                                <div class="dynamic-animation">
+                                    <div class="liquid-morph"></div>
+                                </div>
+                            </div>
+                            <h3>Mobile Kingdom Tools</h3>
+                            <p>AI-enhanced mobile apps for Kingdom investing on the go with real-time impact tracking</p>
+                            <a href="#mobile" class="component-link" onclick="showPage('mobile')">Download Apps →</a>
+                        </div>
+
+                        <div class="component-card">
+                            <div class="component-icon">
+                                <div class="dynamic-animation">
+                                    <div class="energy-orb"></div>
+                                </div>
+                            </div>
+                            <h3>Keep it 100 Blog</h3>
+                            <p>AI-enhanced Kingdom investing insights combining Biblical wisdom with cutting-edge technology</p>
+                            <a href="#blog" class="component-link" onclick="showPage('blog')">Read Insights →</a>
+                        </div>
+
+                        <div class="component-card">
+                            <div class="component-icon">
+                                <div class="dynamic-animation">
+                                    <div class="pulse-ring"></div>
+                                </div>
+                            </div>
+                            <h3>Portfolio Performance</h3>
+                            <p>Transparent performance analytics with AI-powered Kingdom ROI and Biblical impact metrics</p>
+                            <a href="#portfolio" class="component-link" onclick="showPage('portfolio')">View Performance →</a>
+                        </div>
+
+                        <div class="component-card">
+                            <div class="component-icon">
+                                <div class="dynamic-animation">
+                                    <div class="morphing-blob"></div>
+                                </div>
+                            </div>
+                            <h3>Get Started</h3>
+                            <p>Begin your AI-enhanced Kingdom investing journey with personalized consultation and strategy</p>
+                            <a href="#get-started" class="component-link" onclick="showPage('get-started')">Start Today →</a>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <!-- F.A.I.T.H. Platform Page -->
+        <div id="platform" class="page">
+            <div class="container">
+                <div class="page-header">
+                    <h1>F.A.I.T.H. Platform</h1>
+                    <p class="page-subtitle">Faith-Aligned Investment Tracking Hub</p>
+                    <p class="page-description">Revolutionary AI technology designed specifically for Kingdom-focused investors. Our artificial intelligence analyzes investments through a Biblical lens, measuring both financial returns and Kingdom impact to help you build wealth while advancing God's purposes.</p>
+                </div>
+
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <div class="houston-shape primary"></div>
+                        </div>
+                        <h3>Kingdom Impact AI</h3>
+                        <p>Advanced AI analyzes companies and investments for alignment with Biblical principles, automatically scoring Kingdom impact potential and community transformation opportunities.</p>
+                        <a href="#ai-engine" class="feature-link">Explore AI Intelligence →</a>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <div class="houston-shape secondary"></div>
+                        </div>
+                        <h3>Faith-Based Analytics</h3>
+                        <p>AI-powered market intelligence that evaluates opportunities through both financial metrics and Biblical stewardship principles, ensuring your investments honor God while generating returns.</p>
+                        <a href="#real-estate" class="feature-link">View Portfolio →</a>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <div class="houston-shape tertiary"></div>
+                        </div>
+                        <h3>Stewardship Optimization</h3>
+                        <p>Intelligent algorithms optimize your portfolio for maximum Kingdom impact, automatically rebalancing investments to align with your faith values while pursuing superior returns.</p>
+                        <a href="#dhap" class="feature-link">Join DHAP →</a>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <div class="houston-shape primary"></div>
+                        </div>
+                        <h3>AI-Enhanced Due Diligence</h3>
+                        <p>Cutting-edge technology accelerates investment analysis by 68%, combining traditional financial metrics with faith-based evaluation criteria for comprehensive decision-making.</p>
+                        <a href="#portfolio" class="feature-link">See Performance →</a>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <div class="houston-shape secondary"></div>
+                        </div>
+                        <h3>Community Impact Tracking</h3>
+                        <p>Real-time measurement and prediction of how your investments transform communities, with AI-powered reporting on Kingdom advancement and societal impact.</p>
+                        <a href="#get-started" class="feature-link">Get Started →</a>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <div class="houston-shape tertiary"></div>
+                        </div>
+                        <h3>Biblical Wealth Building</h3>
+                        <p>AI strategies designed around Biblical principles of stewardship, helping you build generational wealth while honoring God through every investment decision.</p>
+                        <a href="#pricing" class="feature-link">View Plans →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- AI Engine Demo Page -->
+        <div id="ai-engine" class="page">
+            <div class="container">
+                <div class="page-header">
+                    <h1>Kingdom Impact AI Engine</h1>
+                    <p class="page-subtitle">Biblical Investment Intelligence</p>
+                    <p class="page-description">Experience how our AI analyzes investments through a faith-based lens, evaluating both financial potential and Kingdom impact. Click any investment below to see our AI's real-time Biblical alignment analysis.</p>
+                </div>
+
+                <div class="ai-demo-container">
+                    <div class="investments-grid">
+                        <div class="investment-card" onclick="analyzeInvestment('affordable-housing')">
+                            <div class="houston-shape primary"></div>
+                            <h3>Affordable Housing Project</h3>
+                            <p>$2.8M mixed-use development</p>
+                            <span class="investment-type">Community Impact</span>
+                        </div>
+                        
+                        <div class="investment-card" onclick="analyzeInvestment('solar-energy')">
+                            <div class="houston-shape secondary"></div>
+                            <h3>Solar Energy Initiative</h3>
+                            <p>$4.2M renewable energy fund</p>
+                            <span class="investment-type">Stewardship Focus</span>
+                        </div>
+                        
+                        <div class="investment-card" onclick="analyzeInvestment('micro-lending')">
+                            <div class="houston-shape tertiary"></div>
+                            <h3>Micro-Lending Platform</h3>
+                            <p>$1.5M financial inclusion program</p>
+                            <span class="investment-type">Kingdom Building</span>
+                        </div>
+                        
+                        <div class="investment-card" onclick="analyzeInvestment('education-tech')">
+                            <div class="houston-shape primary"></div>
+                            <h3>Faith-Based EdTech</h3>
+                            <p>$3.1M educational platform</p>
+                            <span class="investment-type">Kingdom Values</span>
+                        </div>
+                    </div>
+
+                    <div class="ai-analysis-output" id="ai-output">
+                        <div class="analysis-placeholder">
+                            <div class="houston-shape secondary"></div>
+                            <h3>Kingdom Impact AI Ready</h3>
+                            <p>Select an investment above to see our AI analyze Biblical alignment, community impact potential, and Kingdom building opportunities in real-time.</p>
+                            <div class="ai-features">
+                                <span class="ai-badge">Biblical Principles ✓</span>
+                                <span class="ai-badge">Community Impact ✓</span>
+                                <span class="ai-badge">Kingdom ROI ✓</span>
+                                <span class="ai-badge">Stewardship Score ✓</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Real Estate Page -->
+        <div id="real-estate" class="page">
+            <div class="container">
+                <div class="page-header">
+                    <h1>AI-Enhanced Real Estate Portfolio</h1>
+                    <p class="page-subtitle">Kingdom-Focused Property Investments</p>
+                    <p class="page-description">Our $45.2M real estate portfolio combines AI-powered market intelligence with Biblical stewardship principles, creating superior returns while transforming communities through strategic property investments.</p>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number">$45.2M</div>
+                        <div class="stat-label">Total Portfolio Value</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">15.4%</div>
+                        <div class="stat-label">Average Annual Returns</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">247</div>
+                        <div class="stat-label">Properties Managed</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">1,200+</div>
+                        <div class="stat-label">Lives Impacted</div>
+                    </div>
+                </div>
+
+                <div style="text-align: center; margin: 4rem 0;">
+                    <h2 style="margin-bottom: 2rem;">AI-Guided Investment Strategy</h2>
+                    <div style="display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap;">
+                        <a href="#dhap" class="btn-primary" onclick="showPage('dhap')" style="display: inline-flex; align-items: center; gap: 0.5rem;">
+                            <div class="houston-shape primary"></div>
+                            Join DHAP Program
+                        </a>
+                        <a href="#properties" class="btn-secondary" onclick="showPage('properties')" style="display: inline-flex; align-items: center; gap: 0.5rem; color: black; border-color: black;">
+                            <div class="houston-shape secondary"></div>
+                            View Properties
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DHAP Program Page -->
+        <div id="dhap" class="page">
+            <div class="container">
+                <div class="page-header">
+                    <h1>DHAP Program</h1>
+                    <p class="page-subtitle">Divine Housing Assistance Program</p>
+                    <p class="page-description">Faith-based real estate investment with AI-enhanced Kingdom impact measurement. Join our community of Kingdom builders creating generational wealth while transforming lives through strategic property investments guided by Biblical principles.</p>
+                </div>
+
+                <div class="dhap-tiers">
+                    <div class="tier-card">
+                        <div class="tier-header">
+                            <div class="houston-shape primary"></div>
+                            <h3>Steward Level</h3>
+                            <div class="tier-price">$25,000 minimum</div>
+                        </div>
+                        <ul class="tier-features">
+                            <li>AI-powered Kingdom impact scoring for each investment</li>
+                            <li>Quarterly financial and ministry impact reports</li>
+                            <li>Access to faith-based property opportunities</li>
+                            <li>Biblical stewardship education and training</li>
+                            <li>Community prayer and fellowship events</li>
+                            <li>Digital access to F.A.I.T.H. Platform insights</li>
+                        </ul>
+                        <a href="#get-started" class="tier-button">Begin Stewardship Journey</a>
+                    </div>
+
+                    <div class="tier-card featured">
+                        <div class="tier-header">
+                            <div class="houston-shape secondary"></div>
+                            <h3>Builder Level</h3>
+                            <div class="tier-price">$100,000 minimum</div>
+                            <span class="tier-badge">Most Popular</span>
+                        </div>
+                        <ul class="tier-features">
+                            <li>Advanced AI analysis of Kingdom ROI potential</li>
+                            <li>Priority access to high-impact investment opportunities</li>
+                            <li>Monthly strategy calls with Houston 100 leadership</li>
+                            <li>Personalized wealth building and Kingdom plans</li>
+                            <li>Exclusive access to property development projects</li>
+                            <li>AI-enhanced due diligence on all investments</li>
+                            <li>Direct community impact tracking and reporting</li>
+                        </ul>
+                        <a href="#get-started" class="tier-button">Build Kingdom Wealth</a>
+                    </div>
+
+                    <div class="tier-card">
+                        <div class="tier-header">
+                            <div class="houston-shape tertiary"></div>
+                            <h3>Kingdom Level</h3>
+                            <div class="tier-price">$500,000 minimum</div>
+                        </div>
+                        <ul class="tier-features">
+                            <li>Full F.A.I.T.H. Platform AI intelligence access</li>
+                            <li>Co-investment opportunities with Houston 100</li>
+                            <li>Direct involvement in property acquisition decisions</li>
+                            <li>Annual Kingdom impact strategy retreat</li>
+                            <li>Personal AI-powered investment dashboard</li>
+                            <li>Legacy and generational wealth planning</li>
+                            <li>Leadership in community transformation initiatives</li>
+                        </ul>
+                        <a href="#get-started" class="tier-button">Lead Kingdom Impact</a>
+                    </div>
+                </div>
+
+                <div class="kingdom-impact-stories">
+                    <h2>AI-Verified Kingdom Impact Stories</h2>
+                    <div class="impact-grid">
+                        <div class="impact-card">
+                            <div class="houston-shape primary"></div>
+                            <h3>Houston Heights Transformation</h3>
+                            <p class="impact-stats">$2.3M Investment • AI Kingdom Score: 94/100</p>
+                            <p>Our AI-guided investment in affordable housing created 35 family units while establishing a community center that serves 200+ children weekly. The algorithm predicted and measured a 78% improvement in neighborhood stability.</p>
+                            <div class="impact-metrics">
+                                <span class="metric">35 Families Housed</span>
+                                <span class="metric">200+ Children Served</span>
+                                <span class="metric">78% Stability Increase</span>
+                            </div>
+                        </div>
+
+                        <div class="impact-card">
+                            <div class="houston-shape secondary"></div>
+                            <h3>East End Ministry Hub</h3>
+                            <p class="impact-stats">$1.8M Investment • AI Kingdom Score: 89/100</p>
+                            <p>Converting a vacant commercial building into a faith-based business incubator. Our AI system tracked the creation of 12 Kingdom businesses, generating 45 jobs and $850K in local economic impact.</p>
+                            <div class="impact-metrics">
+                                <span class="metric">12 Kingdom Businesses</span>
+                                <span class="metric">45 Jobs Created</span>
+                                <span class="metric">$850K Economic Impact</span>
+                            </div>
+                        </div>
+
+                        <div class="impact-card">
+                            <div class="houston-shape tertiary"></div>
+                            <h3>Third Ward Renewal</h3>
+                            <p class="impact-stats">$3.1M Investment • AI Kingdom Score: 91/100</p>
+                            <p>AI-optimized mixed-use development that preserved historic character while creating affordable housing and commercial spaces for faith-based businesses. The project achieved 15% IRR while measurably reducing crime by 32%.</p>
+                            <div class="impact-metrics">
+                                <span class="metric">48 Housing Units</span>
+                                <span class="metric">8 Faith Businesses</span>
+                                <span class="metric">32% Crime Reduction</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Portfolio Performance Page -->
+        <div id="portfolio" class="page">
+            <div class="container">
+                <div class="page-header">
+                    <h1>Portfolio Performance</h1>
+                    <p class="page-subtitle">AI-Enhanced Kingdom Returns</p>
+                    <p class="page-description">Transparent performance analytics powered by artificial intelligence, measuring both financial returns and Kingdom impact. Our AI systems track every investment's Biblical alignment and community transformation potential.</p>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number">15.4%</div>
+                        <div class="stat-label">Average Annual Returns</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">94/100</div>
+                        <div class="stat-label">Average Kingdom Score</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">$12.8M</div>
+                        <div class="stat-label">Community Investment</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">1,200+</div>
+                        <div class="stat-label">Lives Transformed</div>
+                    </div>
+                </div>
+
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <div class="houston-shape primary"></div>
+                        </div>
+                        <h3>AI-Powered Performance Tracking</h3>
+                        <p>Real-time portfolio analytics enhanced by artificial intelligence, measuring traditional financial metrics alongside Kingdom impact scores and Biblical alignment indicators.</p>
+                        <a href="#get-started" class="feature-link">Access Dashboard →</a>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <div class="houston-shape secondary"></div>
+                        </div>
+                        <h3>Kingdom ROI Analysis</h3>
+                        <p>Revolutionary AI metrics that calculate return on Kingdom investment, tracking community transformation, souls reached, and Biblical stewardship effectiveness across all properties.</p>
+                        <a href="#dhap" class="feature-link">Join DHAP →</a>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <div class="houston-shape tertiary"></div>
+                        </div>
+                        <h3>Transparent Reporting</h3>
+                        <p>AI-generated quarterly reports combining financial performance with Kingdom impact stories, providing complete transparency on how your investments honor God and serve others.</p>
+                        <a href="#properties" class="feature-link">View Properties →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Property Showcase Page -->
+        <div id="properties" class="page">
+            <div class="container">
+                <div class="page-header">
+                    <h1>Property Showcase</h1>
+                    <p class="page-subtitle">AI-Selected Kingdom Impact Properties</p>
+                    <p class="page-description">Explore our carefully curated portfolio of properties selected through AI analysis for maximum Kingdom impact and superior returns. Each investment aligns with Biblical principles while creating lasting community transformation.</p>
+                </div>
+
+                <div class="properties-grid">
+                    <div class="property-card">
+                        <div class="property-image">🏠</div>
+                        <div class="property-content">
+                            <h3>Heights Community Center</h3>
+                            <div class="property-price">$2.3M Investment</div>
+                            <p>AI Kingdom Score: 94/100 • 15% IRR</p>
+                            <div class="property-details">
+                                <span class="property-detail">35 Families Housed</span>
+                                <span class="property-detail">Community Ministry</span>
+                                <span class="property-detail">200+ Children Served</span>
+                            </div>
+                            <p>Mixed-use development providing affordable housing while establishing a community center that serves local families through after-school programs, job training, and faith-based initiatives.</p>
+                        </div>
+                    </div>
+
+                    <div class="property-card">
+                        <div class="property-image">🏢</div>
+                        <div class="property-content">
+                            <h3>East End Business Incubator</h3>
+                            <div class="property-price">$1.8M Investment</div>
+                            <p>AI Kingdom Score: 89/100 • 12% IRR</p>
+                            <div class="property-details">
+                                <span class="property-detail">12 Businesses Launched</span>
+                                <span class="property-detail">Faith-Based Hub</span>
+                                <span class="property-detail">45 Jobs Created</span>
+                            </div>
+                            <p>Converted commercial space now housing 12 Kingdom businesses, providing entrepreneurship training, business mentorship, and economic development in underserved communities.</p>
+                        </div>
+                    </div>
+
+                    <div class="property-card">
+                        <div class="property-image">🏘️</div>
+                        <div class="property-content">
+                            <h3>Third Ward Historic Renewal</h3>
+                            <div class="property-price">$3.1M Investment</div>
+                            <p>AI Kingdom Score: 91/100 • 18% IRR</p>
+                            <div class="property-details">
+                                <span class="property-detail">Historic Preservation</span>
+                                <span class="property-detail">48 Housing Units</span>
+                                <span class="property-detail">8 Faith Businesses</span>
+                            </div>
+                            <p>Historic preservation project creating mixed-use development with affordable housing and commercial spaces specifically designated for faith-based businesses and ministries.</p>
+                        </div>
+                    </div>
+
+                    <div class="property-card">
+                        <div class="property-image">🌱</div>
+                        <div class="property-content">
+                            <h3>Montrose Ministry Campus</h3>
+                            <div class="property-price">$4.2M Investment</div>
+                            <p>AI Kingdom Score: 96/100 • 14% IRR</p>
+                            <div class="property-details">
+                                <span class="property-detail">Multi-Church Campus</span>
+                                <span class="property-detail">Conference Center</span>
+                                <span class="property-detail">Kingdom Training</span>
+                            </div>
+                            <p>Multi-purpose campus serving as headquarters for church planting network, leadership training center, and conference facility, generating both rental income and Kingdom impact.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="text-align: center; margin: 4rem 0;">
+                    <h2 style="margin-bottom: 2rem;">Ready to Join Our Kingdom Impact Portfolio?</h2>
+                    <a href="#get-started" class="btn-primary" onclick="showPage('get-started')" style="display: inline-flex; align-items: center; gap: 0.5rem;">
+                        <div class="houston-shape primary"></div>
+                        Start Your Kingdom Investment Journey
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Get Started Page -->
+        <div id="get-started" class="page">
+            <div class="container">
+                <div class="page-header">
+                    <h1>Start Your AI-Enhanced Kingdom Investment Journey</h1>
+                    <p class="page-subtitle">Build Wealth While Advancing God's Kingdom</p>
+                    <p class="page-description">Join Houston 100's revolutionary approach to faith-based investing, where cutting-edge AI technology helps you identify, analyze, and optimize investments that align with Biblical principles while generating superior returns.</p>
+                </div>
+
+                <div class="steps-container">
+                    <div class="step-card">
+                        <div class="step-number">1</div>
+                        <div class="houston-shape primary"></div>
+                        <h3>Discovery Consultation</h3>
+                        <p>Schedule a personalized consultation where our team learns about your investment goals, faith values, and Kingdom impact aspirations. Our AI will analyze your preferences to create a custom investment profile.</p>
+                    </div>
+
+                    <div class="step-card">
+                        <div class="step-number">2</div>
+                        <div class="houston-shape secondary"></div>
+                        <h3>AI-Powered Portfolio Design</h3>
+                        <p>Our F.A.I.T.H. Platform creates a personalized investment strategy using artificial intelligence to match opportunities with your Biblical values, risk tolerance, and Kingdom impact goals.</p>
+                    </div>
+
+                    <div class="step-card">
+                        <div class="step-number">3</div>
+                        <div class="houston-shape tertiary"></div>
+                        <h3>DHAP Program Selection</h3>
+                        <p>Choose your appropriate DHAP tier (Steward, Builder, or Kingdom Level) based on your investment capacity and desired level of involvement in our Kingdom building initiatives.</p>
+                    </div>
+
+                    <div class="step-card">
+                        <div class="step-number">4</div>
+                        <div class="houston-shape primary"></div>
+                        <h3>Begin Kingdom Building</h3>
+                        <p>Start building wealth while advancing God's Kingdom through AI-enhanced investments that create both financial returns and measurable community transformation.</p>
+                    </div>
+                </div>
+
+                <div style="text-align: center; margin: 4rem 0;">
+                    <h2 style="margin-bottom: 2rem;">Ready to Begin?</h2>
+                    <p style="margin-bottom: 2rem; color: rgba(255, 255, 255, 0.8);">Schedule your free Kingdom investment consultation today</p>
+                    <div style="display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap;">
+                        <a href="mailto:consultation@houston100.com" class="btn-primary" style="display: inline-flex; align-items: center; gap: 0.5rem;">
+                            <div class="houston-shape primary"></div>
+                            Schedule Consultation
+                        </a>
+                        <a href="#dhap" class="btn-secondary" onclick="showPage('dhap')" style="display: inline-flex; align-items: center; gap: 0.5rem; color: black; border-color: black;">
+                            <div class="houston-shape secondary"></div>
+                            Explore DHAP Program
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Solutions Page -->
+        <div id="solutions" class="page">
+            <div class="container">
+                <div class="page-header">
+                    <h1>Enterprise AI Solutions</h1>
+                    <p class="page-subtitle">Faith-Based Investment Technology for Organizations</p>
+                    <p class="page-description">Empower your organization with our AI-enhanced faith-based investment platform. From churches to investment groups, our F.A.I.T.H. Platform helps organizations align their investments with Biblical principles while maximizing Kingdom impact.</p>
+                </div>
+
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <div class="houston-shape primary"></div>
+                        </div>
+                        <h3>Churches & Ministries</h3>
+                        <p>AI-powered endowment management that aligns church investments with Biblical values, providing transparent Kingdom impact reporting and sustainable funding for ministry growth.</p>
+                        <a href="#pricing" class="feature-link">View Church Solutions →</a>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <div class="houston-shape secondary"></div>
+                        </div>
+                        <h3>Investment Groups</h3>
+                        <p>Complete F.A.I.T.H. Platform licensing for faith-based investment groups, including AI analytics, Kingdom scoring, and white-label customization for your member base.</p>
+                        <a href="#pricing" class="feature-link">Explore Licensing →</a>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <div class="houston-shape tertiary"></div>
+                        </div>
+                        <h3>Financial Advisors</h3>
+                        <p>AI-enhanced tools for financial advisors serving faith-based clients, with automated Biblical screening, Kingdom impact reporting, and client education resources.</p>
+                        <a href="#pricing" class="feature-link">Advisor Platform →</a>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <div class="houston-shape primary"></div>
+                        </div>
+                        <h3>Christian Universities</h3>
+                        <p>Educational licensing for business schools and finance departments, providing students with hands-on experience in AI-enhanced faith-based investment analysis.</p>
+                        <a href="#pricing" class="feature-link">Educational Licensing →</a>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <div class="houston-shape secondary"></div>
+                        </div>
+                        <h3>Family Offices</h3>
+                        <p>Private wealth management enhanced by AI technology, helping high-net-worth families steward generational wealth through Kingdom-aligned investment strategies.</p>
+                        <a href="#pricing" class="feature-link">Family Office Solutions →</a>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <div class="houston-shape tertiary"></div>
+                        </div>
+                        <h3>Non-Profit Organizations</h3>
+                        <p>Endowment optimization for Christian non-profits, ensuring investment portfolios support organizational mission while generating sustainable funding for Kingdom work.</p>
+                        <a href="#pricing" class="feature-link">Non-Profit Solutions →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pricing Page -->
+        <div id="pricing" class="page">
+            <div class="container">
+                <div class="page-header">
+                    <h1>F.A.I.T.H. Platform Pricing</h1>
+                    <p class="page-subtitle">AI-Enhanced Kingdom Investment Solutions</p>
+                    <p class="page-description">Choose the right AI-powered faith-based investment solution for your needs. From individual investors to enterprise organizations, our F.A.I.T.H. Platform scales to serve Kingdom builders at every level.</p>
+                </div>
+
+                <div class="pricing-grid">
+                    <div class="pricing-card">
+                        <div class="pricing-header">
+                            <div class="houston-shape primary"></div>
+                            <h3>Growth Package</h3>
+                            <div class="pricing-price">$300K+/year</div>
+                        </div>
+                        <ul class="pricing-features">
+                            <li>Kingdom Impact AI + Biblical Analytics AI</li>
+                            <li>Faith-based investment screening and scoring</li>
+                            <li>10K+ API requests/hour with co-branding allowed</li>
+                            <li>Email support with 24-hour response time</li>
+                            <li>Basic integrations and setup assistance</li>
+                            <li>Standard security and compliance features</li>
+                            <li>Kingdom impact reporting and analytics</li>
+                        </ul>
+                        <a href="#get-started" class="pricing-button">Start Kingdom Growth</a>
+                    </div>
+
+                    <div class="pricing-card featured">
+                        <div class="pricing-header">
+                            <div class="houston-shape secondary"></div>
+                            <h3>Professional Suite</h3>
+                            <div class="pricing-price">$650K+/year</div>
+                            <span class="tier-badge">Most Popular</span>
+                        </div>
+                        <ul class="pricing-features">
+                            <li>Choose 3 AI components + core F.A.I.T.H. Platform</li>
+                            <li>Advanced Kingdom ROI analysis and optimization</li>
+                            <li>50K+ API requests/hour with standard branding</li>
+                            <li>Business hours support with 4-hour response</li>
+                            <li>Standard integrations and configuration included</li>
+                            <li>Enhanced compliance assistance and documentation</li>
+                            <li>White-label mobile app customization</li>
+                        </ul>
+                        <a href="#get-started" class="pricing-button">Choose Professional</a>
+                    </div>
+
+                    <div class="pricing-card">
+                        <div class="pricing-header">
+                            <div class="houston-shape tertiary"></div>
+                            <h3>Enterprise Complete</h3>
+                            <div class="pricing-price">$1.4M+/year</div>
+                        </div>
+                        <ul class="pricing-features">
+                            <li>Complete F.A.I.T.H. AI Hub (all 5 AI columns)</li>
+                            <li>Unlimited API access and white-label branding</li>
+                            <li>24/7 dedicated support with 1-hour response</li>
+                            <li>Custom integrations and development included</li>
+                            <li>SOC 2 Type II compliance and audit support</li>
+                            <li>Private cloud deployment and dedicated infrastructure</li>
+                            <li>Revenue sharing opportunities for your clients</li>
+                        </ul>
+                        <a href="#get-started" class="pricing-button">Go Enterprise</a>
+                    </div>
+                </div>
+
+                <div style="text-align: center; margin: 4rem 0;">
+                    <h2 style="margin-bottom: 2rem;">White-Label Kingdom Investment Platform</h2>
+                    <p style="margin-bottom: 2rem; color: rgba(255, 255, 255, 0.8);">Transform your organization with complete F.A.I.T.H. Platform capabilities</p>
+                    <div style="display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap;">
+                        <a href="mailto:enterprise@houston100.com" class="btn-primary" style="display: inline-flex; align-items: center; gap: 0.5rem;">
+                            <div class="houston-shape primary"></div>
+                            Request Enterprise Demo
+                        </a>
+                        <a href="#get-started" class="btn-secondary" onclick="showPage('get-started')" style="display: inline-flex; align-items: center; gap: 0.5rem; color: black; border-color: black;">
+                            <div class="houston-shape secondary"></div>
+                            Schedule Consultation
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- About Page -->
+        <div id="about" class="page">
+            <div class="container">
+                <div class="page-header">
+                    <h1>About Houston 100</h1>
+                    <p class="page-subtitle">Pioneering AI-Enhanced Kingdom Investing</p>
+                    <p class="page-description">Meet the visionary leadership team combining decades of faith-based investment experience with cutting-edge artificial intelligence to revolutionize Kingdom investing for the digital age.</p>
+                </div>
+
+                <div class="mission-statement">
+                    <div class="houston-shape primary large"></div>
+                    <h2>Our Mission: Faith + AI = Kingdom Transformation</h2>
+                    <p>Houston 100 Investment Group exists to revolutionize faith-based investing through the power of artificial intelligence. We believe that when Biblical principles meet cutting-edge technology, we can build generational wealth while advancing God's Kingdom more effectively than ever before. Our F.A.I.T.H. Platform represents the world's first AI system designed specifically for Kingdom-focused investors, analyzing opportunities through both financial metrics and Biblical alignment.</p>
+                </div>
+
+                <div class="team-grid">
+                    <div class="team-member">
+                        <div class="member-photo">EB</div>
+                        <h3>Effram Barrett</h3>
+                        <div class="member-role">CEO & Visionary Leader</div>
+                        <p>Effram combines 20+ years of real estate expertise with deep theological understanding to lead Houston 100's mission of AI-enhanced Kingdom investing. His vision for using technology to advance God's Kingdom has transformed how faith-based investors approach wealth building.</p>
+                    </div>
+
+                    <div class="team-member">
+                        <div class="member-photo">QW</div>
+                        <h3>Quintin Ward</h3>
+                        <div class="member-role">COO & Operations Excellence</div>
+                        <p>Quintin brings operational excellence and financial oversight to Houston 100's growing portfolio. His expertise in scaling faith-based businesses ensures our AI platform delivers consistent results while maintaining Biblical integrity.</p>
+                    </div>
+
+                    <div class="team-member">
+                        <div class="member-photo">WB</div>
+                        <h3>William Brown</h3>
+                        <div class="member-role">CTO & AI Innovation</div>
+                        <p>William leads the development of our revolutionary F.A.I.T.H. Platform, combining cutting-edge AI technology with Biblical wisdom. His technical vision enables Kingdom investors to make data-driven decisions aligned with their faith values.</p>
+                    </div>
+                </div>
+
+                <div style="text-align: center; margin: 4rem 0;">
+                    <h2 style="margin-bottom: 2rem;">Join Our Kingdom Building Mission</h2>
+                    <a href="#get-started" class="btn-primary" onclick="showPage('get-started')" style="display: inline-flex; align-items: center; gap: 0.5rem;">
+                        <div class="houston-shape primary"></div>
+                        Start Your Journey Today
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Apps Page -->
+        <div id="mobile" class="page">
+            <div class="container">
+                <div class="page-header">
+                    <h1>Kingdom Investing Mobile Suite</h1>
+                    <p class="page-subtitle">AI-Enhanced Faith-Based Investing On The Go</p>
+                    <p class="page-description">Experience the power of AI-enhanced Kingdom investing wherever you are. Our mobile apps bring Biblical investment intelligence, real-time Kingdom impact tracking, and faith-based portfolio management to your fingertips.</p>
+                </div>
+
+                <div class="mobile-showcase">
+                    <div class="mobile-content">
+                        <div class="mobile-features">
+                            <div class="feature-item">
+                                <div class="houston-shape primary"></div>
+                                <h3>Kingdom Impact Dashboard</h3>
+                                <p>Real-time AI analysis of your portfolio's Biblical alignment and community impact. Track how your investments advance God's Kingdom with live metrics and Kingdom ROI calculations.</p>
+                            </div>
+
+                            <div class="feature-item">
+                                <div class="houston-shape secondary"></div>
+                                <h3>Faith-Based Investment Alerts</h3>
+                                <p>Receive instant notifications about Kingdom investment opportunities that align with your Biblical values. Our AI filters investments based on your faith criteria and impact preferences.</p>
+                            </div>
+
+                            <div class="feature-item">
+                                <div class="houston-shape tertiary"></div>
+                                <h3>Biblical Stewardship Tools</h3>
+                                <p>AI-powered wealth building strategies designed around Biblical principles. Get personalized recommendations for optimizing your portfolio for both Kingdom impact and financial returns.</p>
+                            </div>
+
+                            <div class="feature-item">
+                                <div class="houston-shape primary"></div>
+                                <h3>Community Impact Tracker</h3>
+                                <p>See exactly how your investments transform communities in real-time. Track lives changed, families housed, jobs created, and Kingdom businesses launched through your stewardship.</p>
+                            </div>
+                        </div>
+
+                        <div class="mobile-phone">
+                            <div class="phone-frame">
+                                <div class="phone-screen">
+                                    <div class="app-interface">
+                                        <div class="app-header">
+                                            <div class="houston-shape primary small"></div>
+                                            <span>Kingdom Portfolio</span>
+                                            <div class="impact-score">Kingdom Score: 92</div>
+                                        </div>
+                                        <div class="portfolio-stats">
+                                            <div class="stat-item">
+                                                <span class="stat-value">$425K</span>
+                                                <span class="stat-label">Portfolio Value</span>
+                                            </div>
+                                            <div class="stat-item">
+                                                <span class="stat-value">+12.4%</span>
+                                                <span class="stat-label">YTD Returns</span>
+                                            </div>
+                                            <div class="stat-item">
+                                                <span class="stat-value">156</span>
+                                                <span class="stat-label">Lives Impacted</span>
+                                            </div>
+                                        </div>
+                                        <div class="kingdom-metrics">
+                                            <h4>Kingdom Impact This Month</h4>
+                                            <div class="impact-item">
+                                                <div class="houston-shape secondary tiny"></div>
+                                                <span>8 Families Housed</span>
+                                            </div>
+                                            <div class="impact-item">
+                                                <div class="houston-shape tertiary tiny"></div>
+                                                <span>3 Kingdom Businesses Funded</span>
+                                            </div>
+                                            <div class="impact-item">
+                                                <div class="houston-shape primary tiny"></div>
+                                                <span>$45K Community Investment</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="download-section">
+                        <h2>Download Your Kingdom Investing Tools</h2>
+                        <p>Join thousands of faith-based investors using AI-enhanced mobile tools to build wealth while advancing God's Kingdom.</p>
+                        
+                        <div class="download-buttons">
+                            <a href="#" class="download-btn ios" style="display: inline-flex; align-items: center; gap: 0.75rem;">
+                                <div class="houston-shape primary"></div>
+                                <div class="download-text">
+                                    <span class="download-label">Download on the</span>
+                                    <span class="download-store">App Store</span>
+                                </div>
+                            </a>
+                            <a href="#" class="download-btn android" style="display: inline-flex; align-items: center; gap: 0.75rem;">
+                                <div class="houston-shape secondary"></div>
+                                <div class="download-text">
+                                    <span class="download-label">Get it on</span>
+                                    <span class="download-store">Google Play</span>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Keep it 100 Blog Page -->
+        <div id="blog" class="page">
+            <div class="container">
+                <div class="page-header">
+                    <h1>Keep it 100 Blog</h1>
+                    <p class="page-subtitle">AI-Enhanced Kingdom Investing Insights</p>
+                    <p class="page-description">Discover how artificial intelligence is revolutionizing faith-based investing. Our blog combines Biblical wisdom with cutting-edge AI insights to help you build wealth while advancing God's Kingdom.</p>
+                </div>
+
+                <div class="blog-filters">
+                    <a href="#" class="filter-btn active" onclick="filterBlog('all')">All Posts</a>
+                    <a href="#" class="filter-btn" onclick="filterBlog('kingdom')">AI & Kingdom Impact</a>
+                    <a href="#" class="filter-btn" onclick="filterBlog('wealth')">Faith-Based Tech</a>
+                    <a href="#" class="filter-btn" onclick="filterBlog('stewardship')">AI Stewardship</a>
+                </div>
+
+                <div class="blog-grid" id="blog-grid">
+                    <article class="blog-card kingdom">
+                        <div class="blog-header">
+                            <div class="houston-shape primary"></div>
+                            <span class="blog-category">AI & Kingdom Impact</span>
+                            <span class="blog-date">January 15, 2025</span>
+                        </div>
+                        <h3>How AI is Revolutionizing Biblical Investment Analysis</h3>
+                        <p>Discover how artificial intelligence is transforming faith-based investing by analyzing companies for Biblical alignment, measuring Kingdom impact, and optimizing portfolios for both spiritual and financial returns.</p>
+                        <a href="#" class="blog-link" onclick="showBlogDetail('ai-biblical-analysis')">Read Full Article →</a>
+                    </article>
+
+                    <article class="blog-card wealth">
+                        <div class="blog-header">
+                            <div class="houston-shape secondary"></div>
+                            <span class="blog-category">Faith-Based Tech</span>
+                            <span class="blog-date">January 10, 2025</span>
+                        </div>
+                        <h3>AI-Powered Kingdom Impact Scoring: A New Era</h3>
+                        <p>Learn how our F.A.I.T.H. Platform uses advanced algorithms to score investments based on their Kingdom building potential, community transformation impact, and alignment with Biblical principles.</p>
+                        <a href="#" class="blog-link" onclick="showBlogDetail('kingdom-impact-scoring')">Read Full Article →</a>
+                    </article>
+
+                    <article class="blog-card stewardship">
+                        <div class="blog-header">
+                            <div class="houston-shape tertiary"></div>
+                            <span class="blog-category">AI Stewardship</span>
+                            <span class="blog-date">January 5, 2025</span>
+                        </div>
+                        <h3>Biblical Wealth Building in the Age of AI</h3>
+                        <p>Exploring how artificial intelligence enhances traditional Biblical stewardship principles, helping faith-based investors build generational wealth while staying true to Kingdom values.</p>
+                        <a href="#" class="blog-link" onclick="showBlogDetail('ai-wealth-building')">Read Full Article →</a>
+                    </article>
+
+                    <article class="blog-card kingdom">
+                        <div class="blog-header">
+                            <div class="houston-shape primary"></div>
+                            <span class="blog-category">AI & Kingdom Impact</span>
+                            <span class="blog-date">December 28, 2024</span>
+                        </div>
+                        <h3>Machine Learning for Kingdom Portfolio Optimization</h3>
+                        <p>Deep dive into how machine learning algorithms help optimize faith-based investment portfolios, balancing maximum returns with Biblical alignment and community impact metrics.</p>
+                        <a href="#" class="blog-link" onclick="showBlogDetail('ml-portfolio-optimization')">Read Full Article →</a>
+                    </article>
+
+                    <article class="blog-card wealth">
+                        <div class="blog-header">
+                            <div class="houston-shape secondary"></div>
+                            <span class="blog-category">Faith-Based Tech</span>
+                            <span class="blog-date">December 20, 2024</span>
+                        </div>
+                        <h3>The Future of Faith-Based Fintech</h3>
+                        <p>Examining how financial technology is being revolutionized by faith-based principles, creating new opportunities for Kingdom-focused investors to leverage technology for God's glory.</p>
+                        <a href="#" class="blog-link" onclick="showBlogDetail('faith-fintech-future')">Read Full Article →</a>
+                    </article>
+
+                    <article class="blog-card stewardship">
+                        <div class="blog-header">
+                            <div class="houston-shape tertiary"></div>
+                            <span class="blog-category">AI Stewardship</span>
+                            <span class="blog-date">December 15, 2024</span>
+                        </div>
+                        <h3>AI Ethics Through a Biblical Lens</h3>
+                        <p>Exploring how Biblical principles guide ethical AI development in financial services, ensuring that artificial intelligence serves Kingdom purposes while maintaining moral integrity.</p>
+                        <a href="#" class="blog-link" onclick="showBlogDetail('ai-ethics-biblical')">Read Full Article →</a>
+                    </article>
+                </div>
+            </div>
+        </div>
+
+        <!-- Blog Detail View -->
+        <div id="blog-detail" class="page">
+            <div class="container">
+                <div class="blog-detail" id="blog-detail-content">
+                    <!-- Blog content will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Houston 100 Investment Group</h3>
+                    <p>The world's first AI-enhanced faith-based investment platform. Combining Biblical principles with cutting-edge artificial intelligence to build wealth while advancing God's Kingdom.</p>
+                    <div class="footer-verse">
+                        <p><em>"By wisdom a house is built, and through understanding it is established; through knowledge its rooms are filled with rare and beautiful treasures."</em></p>
+                        <span>— Proverbs 24:3-4</span>
+                    </div>
+                </div>
+
+                <div class="footer-contact-grid">
+                    <div class="contact-card">
+                        <div class="houston-shape primary"></div>
+                        <h4>Kingdom Investment Consultation</h4>
+                        <p>Start your AI-enhanced Kingdom investing journey</p>
+                        <a href="#get-started" class="contact-link">Schedule Discovery Call</a>
+                    </div>
+
+                    <div class="contact-card">
+                        <div class="houston-shape secondary"></div>
+                        <h4>F.A.I.T.H. Platform Demo</h4>
+                        <p>Experience Biblical investment intelligence</p>
+                        <a href="#platform" class="contact-link">Request Demo</a>
+                    </div>
+
+                    <div class="contact-card">
+                        <div class="houston-shape tertiary"></div>
+                        <h4>AI Technology Partnership</h4>
+                        <p>Enterprise AI licensing opportunities</p>
+                        <a href="mailto:enterprise@houston100.com" class="contact-link">Contact Enterprise</a>
+                    </div>
+
+                    <div class="contact-card">
+                        <div class="houston-shape secondary"></div>
+                        <h4>Kingdom Builder Support</h4>
+                        <p>Dedicated support for DHAP members</p>
+                        <a href="mailto:support@houston100.com" class="contact-link">Get Support</a>
+                    </div>
+                </div>
+
+                <div class="footer-bottom">
+                    <div class="footer-links">
+                        <a href="#privacy">Privacy Policy</a>
+                        <a href="#terms">Terms of Service</a>
+                        <a href="#security">AI Security</a>
+                        <a href="#compliance">Faith-Based Compliance</a>
+                    </div>
+                    <p>&copy; 2025 Houston 100 Investment Group LLC. All rights reserved. | AI-Enhanced Kingdom Investing</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- AI Chat Agent Popup -->
+    <div class="ai-chat-container">
+        <button class="ai-chat-button" id="ai-chat-toggle">
+            <div class="dynamic-animation">
+                <div class="energy-orb"></div>
+            </div>
+        </button>
         
-        for metrics in health_metrics:
-            if isinstance(metrics, dict):
-                # Extract health indicators and calculate score
-                component_score = 95  # Base score
-                if "error_rate_percentage" in metrics:
-                    component_score -= metrics["error_rate_percentage"] * 10
-                if "uptime_percentage" in metrics:
-                    component_score = min(component_score, metrics["uptime_percentage"])
+        <div class="ai-chat-popup" id="ai-chat-popup">
+            <div class="ai-chat-header">
+                <div class="dynamic-animation">
+                    <div class="pulse-ring"></div>
+                </div>
+                <h3>Faith AI Assistant</h3>
+                <div class="ai-chat-status">
+                    <div class="status-dot"></div>
+                    Online
+                </div>
+            </div>
+            
+            <div class="ai-chat-messages" id="ai-chat-messages">
+                <div class="chat-message">
+                    <div class="message-avatar ai">AI</div>
+                    <div class="message-content">
+                        <div class="message-bubble ai">
+                            👋 Welcome to Houston 100! I'm your Faith AI Assistant. I can help you with:
+                            <br><br>
+                            • Investment analysis & Kingdom impact scoring
+                            <br>• Portfolio performance & system health
+                            <br>• DHAP program information
+                            <br>• Faith-based investment guidance
+                            <br><br>
+                            How can I serve you today?
+                        </div>
+                        <div class="message-time">Just now</div>
+                    </div>
+                </div>
                 
-                total_score += component_score
-                components += 1
-        
-        return int(total_score / components) if components > 0 else 100
-    
-    def _generate_health_recommendations(self) -> List[str]:
-        """Generate system health recommendations"""
-        recommendations = []
-        
-        if self.alerts:
-            recommendations.append("Address current system alerts to maintain optimal performance")
-        
-        recommendations.extend([
-            "Continue monitoring response times during peak hours",
-            "Schedule regular security audits to maintain compliance",
-            "Consider scaling infrastructure based on user growth",
-            "Implement automated failover for critical components"
-        ])
-        
-        return recommendations
+                <div class="suggested-questions">
+                    <div class="suggested-question" onclick="askSuggestedQuestion('What is our current portfolio performance?')">
+                        📊 What's our current portfolio performance?
+                    </div>
+                    <div class="suggested-question" onclick="askSuggestedQuestion('How does Kingdom impact scoring work?')">
+                        👑 How does Kingdom impact scoring work?
+                    </div>
+                    <div class="suggested-question" onclick="askSuggestedQuestion('What is the DHAP program?')">
+                        🏠 What is the DHAP program?
+                    </div>
+                    <div class="suggested-question" onclick="askSuggestedQuestion('Check system health status')">
+                        ⚡ Check system health status
+                    </div>
+                </div>
+            </div>
+            
+            <div class="ai-chat-input-container">
+                <div class="ai-chat-input-wrapper">
+                    <textarea 
+                        class="ai-chat-input" 
+                        id="ai-chat-input" 
+                        placeholder="Ask about investments, Kingdom impact, or system health..."
+                        rows="1"
+                    ></textarea>
+                    <button class="ai-chat-send" id="ai-chat-send">
+                        <div class="dynamic-animation">
+                            <div class="morphing-blob"></div>
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-class Houston100Agent:
-    """Main AI Agent for Houston 100 Investment Platform"""
-    
-    def __init__(self):
-        self.config = Houston100Config()
-        self.kingdom_tool = KingdomInvestmentTool(self.config)
-        self.health_monitor = SystemHealthMonitor(self.config)
-        
-        # Initialize Griptape Agent
-        self.agent = Agent(
-            prompt_driver=OpenAiChatPromptDriver(
-                model=self.config.MODEL_NAME,
-                temperature=self.config.TEMPERATURE,
-                max_tokens=self.config.MAX_TOKENS
-            ),
-            memory=TaskMemory(),
-            conversation_memory=ConversationMemory(),
-            tools=[
-                self._create_investment_tool(),
-                self._create_system_health_tool(),
-                self._create_portfolio_tool(),
-                self._create_kingdom_impact_tool(),
-                CalculatorTool(),
-                DateTimeTool(),
-                WebScrapingTool(),
-                EmailTool()
-            ],
-            rules=[
-                Rule("Always maintain Biblical principles in investment recommendations"),
-                Rule("Provide clear explanations for Kingdom impact scores"),
-                Rule("Alert immediately on system health issues"),
-                Rule("Maintain professional and faith-based communication tone"),
-                Rule("Protect sensitive financial information"),
-                Rule("Provide actionable investment insights")
-            ]
-        )
-    
-    def _create_investment_tool(self):
-        """Create custom investment analysis tool"""
-        def analyze_investment(investment_data: str) -> str:
-            """Analyze investment for Kingdom impact and financial returns"""
-            try:
-                data = json.loads(investment_data)
-                analysis = self.kingdom_tool.analyze_investment(data)
-                return json.dumps(analysis, indent=2)
-            except Exception as e:
-                return f"Error analyzing investment: {str(e)}"
-        
-        return analyze_investment
-    
-    def _create_system_health_tool(self):
-        """Create system health monitoring tool"""
-        def check_system_health() -> str:
-            """Check overall system health and performance"""
-            try:
-                health_report = self.health_monitor.check_system_health()
-                return json.dumps(health_report, indent=2)
-            except Exception as e:
-                return f"Error checking system health: {str(e)}"
-        
-        return check_system_health
-    
-    def _create_portfolio_tool(self):
-        """Create portfolio analysis tool"""
-        def analyze_portfolio() -> str:
-            """Analyze current investment portfolio performance"""
-            portfolio_data = {
-                "total_aum": float(self.config.TOTAL_AUM),
-                "average_returns": self.config.AVERAGE_RETURNS,
-                "active_properties": self.config.ACTIVE_PROPERTIES,
-                "lives_impacted": self.config.LIVES_IMPACTED,
-                "average_kingdom_score": self.config.AVERAGE_KINGDOM_SCORE,
-                "portfolio_breakdown": {
-                    "affordable_housing": {"allocation": 35, "returns": 12.8, "kingdom_score": 95},
-                    "community_development": {"allocation": 25, "returns": 18.2, "kingdom_score": 89},
-                    "faith_based_businesses": {"allocation": 20, "returns": 14.7, "kingdom_score": 92},
-                    "sustainable_energy": {"allocation": 15, "returns": 16.3, "kingdom_score": 87},
-                    "education_initiatives": {"allocation": 5, "returns": 11.5, "kingdom_score": 94}
-                },
-                "recent_performance": {
-                    "ytd_returns": 15.4,
-                    "1_year_returns": 14.8,
-                    "3_year_returns": 16.2,
-                    "5_year_returns": 15.9
+    <script>
+        // Loading screen
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                document.getElementById('loading-screen').style.display = 'none';
+                document.getElementById('main-nav').style.display = 'block';
+                document.getElementById('main-content').style.display = 'block';
+            }, 3000);
+        });
+
+        // Page navigation
+        function showPage(pageId) {
+            // Hide all pages
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => page.classList.remove('active'));
+            
+            // Show selected page
+            document.getElementById(pageId).classList.add('active');
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+
+        // AI Investment Analysis
+        function analyzeInvestment(type) {
+            const output = document.getElementById('ai-output');
+            
+            // Show loading state
+            output.innerHTML = `
+                <div class="analysis-loading">
+                    <div class="houston-shape primary loading-animation"></div>
+                    <h3>Kingdom Impact AI Analyzing...</h3>
+                    <p>Evaluating Biblical alignment and Kingdom impact potential...</p>
+                </div>
+            `;
+            
+            // Simulate AI analysis
+            setTimeout(() => {
+                let analysis = '';
+                
+                switch(type) {
+                    case 'affordable-housing':
+                        analysis = `
+                            <div class="analysis-result">
+                                <div class="analysis-header">
+                                    <div class="houston-shape primary"></div>
+                                    <h3>Affordable Housing Project Analysis</h3>
+                                    <span class="kingdom-score">Kingdom Impact: 95/100</span>
+                                </div>
+                                <div class="biblical-alignment">
+                                    <h4>Biblical Principles Analysis</h4>
+                                    <div class="principle-scores">
+                                        <span class="principle-score high">Care for Poor: 98%</span>
+                                        <span class="principle-score high">Community Building: 94%</span>
+                                        <span class="principle-score high">Social Justice: 92%</span>
+                                        <span class="principle-score high">Stewardship: 89%</span>
+                                    </div>
+                                </div>
+                                <div class="kingdom-impact">
+                                    <h4>Kingdom Impact Metrics</h4>
+                                    <p><strong>Community Transformation:</strong> High - Provides stable housing for 45 families, reducing homelessness by 12% in target area</p>
+                                    <p><strong>Kingdom Building:</strong> Creates opportunity for church partnerships and community ministry expansion</p>
+                                    <p><strong>Financial Returns:</strong> 8.5% IRR projected over 7 years with strong social impact multiplier</p>
+                                    <p><strong>Biblical Alignment:</strong> Directly supports Proverbs 31:8-9 and James 1:27 mandates</p>
+                                </div>
+                                <div class="ai-recommendation">
+                                    <strong>AI Recommendation:</strong> INVEST - High Kingdom impact with solid returns. Aligns perfectly with Biblical stewardship principles.
+                                </div>
+                            </div>
+                        `;
+                        break;
+                    case 'solar-energy':
+                        analysis = `
+                            <div class="analysis-result">
+                                <div class="analysis-header">
+                                    <div class="houston-shape secondary"></div>
+                                    <h3>Solar Energy Initiative Analysis</h3>
+                                    <span class="kingdom-score">Kingdom Impact: 87/100</span>
+                                </div>
+                                <div class="biblical-alignment">
+                                    <h4>Biblical Principles Analysis</h4>
+                                    <div class="principle-scores">
+                                        <span class="principle-score high">Creation Care: 96%</span>
+                                        <span class="principle-score high">Stewardship: 91%</span>
+                                        <span class="principle-score medium">Community Impact: 78%</span>
+                                        <span class="principle-score high">Generational Thinking: 94%</span>
+                                    </div>
+                                </div>
+                                <div class="kingdom-impact">
+                                    <h4>Kingdom Impact Metrics</h4>
+                                    <p><strong>Creation Stewardship:</strong> Excellent - Reduces carbon footprint by 2,400 tons annually</p>
+                                    <p><strong>Kingdom Building:</strong> Supports churches and ministries through reduced energy costs</p>
+                                    <p><strong>Financial Returns:</strong> 12.3% IRR with government incentives and long-term contracts</p>
+                                    <p><strong>Biblical Alignment:</strong> Honors Genesis 1:28 creation mandate and responsible stewardship</p>
+                                </div>
+                                <div class="ai-recommendation">
+                                    <strong>AI Recommendation:</strong> INVEST - Strong returns with clear creation care alignment. Supports long-term Kingdom thinking.
+                                </div>
+                            </div>
+                        `;
+                        break;
+                    case 'micro-lending':
+                        analysis = `
+                            <div class="analysis-result">
+                                <div class="analysis-header">
+                                    <div class="houston-shape tertiary"></div>
+                                    <h3>Micro-Lending Platform Analysis</h3>
+                                    <span class="kingdom-score">Kingdom Impact: 93/100</span>
+                                </div>
+                                <div class="biblical-alignment">
+                                    <h4>Biblical Principles Analysis</h4>
+                                    <div class="principle-scores">
+                                        <span class="principle-score high">Justice & Equity: 97%</span>
+                                        <span class="principle-score high">Empowerment: 95%</span>
+                                        <span class="principle-score high">Community Building: 88%</span>
+                                        <span class="principle-score high">Economic Freedom: 92%</span>
+                                    </div>
+                                </div>
+                                <div class="kingdom-impact">
+                                    <h4>Kingdom Impact Metrics</h4>
+                                    <p><strong>Economic Empowerment:</strong> High - Enables 300+ entrepreneurs to start faith-based businesses</p>
+                                    <p><strong>Kingdom Building:</strong> Direct pathway for Gospel-centered business mentorship</p>
+                                    <p><strong>Financial Returns:</strong> 9.8% IRR with high social impact and low default rates</p>
+                                    <p><strong>Biblical Alignment:</strong> Embodies Deuteronomy 15:7-11 and Proverbs 22:7 principles</p>
+                                </div>
+                                <div class="ai-recommendation">
+                                    <strong>AI Recommendation:</strong> HIGHLY RECOMMENDED - Exceptional Kingdom impact with solid returns. Creates disciples through business.
+                                </div>
+                            </div>
+                        `;
+                        break;
+                    case 'education-tech':
+                        analysis = `
+                            <div class="analysis-result">
+                                <div class="analysis-header">
+                                    <div class="houston-shape primary"></div>
+                                    <h3>Faith-Based EdTech Analysis</h3>
+                                    <span class="kingdom-score">Kingdom Impact: 91/100</span>
+                                </div>
+                                <div class="biblical-alignment">
+                                    <h4>Biblical Principles Analysis</h4>
+                                    <div class="principle-scores">
+                                        <span class="principle-score high">Discipleship: 96%</span>
+                                        <span class="principle-score high">Education: 94%</span>
+                                        <span class="principle-score high">Next Generation: 98%</span>
+                                        <span class="principle-score medium">Market Reach: 76%</span>
+                                    </div>
+                                </div>
+                                <div class="kingdom-impact">
+                                    <h4>Kingdom Impact Metrics</h4>
+                                    <p><strong>Discipleship Impact:</strong> Excellent - Reaches 10,000+ students with Biblical worldview education</p>
+                                    <p><strong>Kingdom Building:</strong> Trains next generation of Kingdom leaders and entrepreneurs</p>
+                                    <p><strong>Financial Returns:</strong> 15.2% IRR with high scalability and recurring revenue model</p>
+                                    <p><strong>Biblical Alignment:</strong> Fulfills Deuteronomy 6:6-9 and Proverbs 22:6 mandates</p>
+                                </div>
+                                <div class="ai-recommendation">
+                                    <strong>AI Recommendation:</strong> STRONG BUY - High growth potential with exceptional Kingdom impact on next generation.
+                                </div>
+                            </div>
+                        `;
+                        break;
                 }
-            }
-            return json.dumps(portfolio_data, indent=2)
-        
-        return analyze_portfolio
-    
-    def _create_kingdom_impact_tool(self):
-        """Create Kingdom impact analysis tool"""
-        def analyze_kingdom_impact() -> str:
-            """Analyze Kingdom impact across all investments"""
-            impact_data = {
-                "total_kingdom_impact": {
-                    "families_housed": 1200,
-                    "jobs_created": 456,
-                    "businesses_launched": 89,
-                    "communities_transformed": 23,
-                    "churches_supported": 67
+                
+                output.innerHTML = analysis;
+            }, 2000);
+        }
+
+        // Blog filtering
+        function filterBlog(category) {
+            const cards = document.querySelectorAll('.blog-card');
+            const buttons = document.querySelectorAll('.filter-btn');
+            
+            // Update button states
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Filter cards
+            cards.forEach(card => {
+                if (category === 'all' || card.classList.contains(category)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // Blog detail view
+        function showBlogDetail(articleId) {
+            const blogDetails = {
+                'ai-biblical-analysis': {
+                    title: 'How AI is Revolutionizing Biblical Investment Analysis',
+                    category: 'AI & Kingdom Impact',
+                    date: 'January 15, 2025',
+                    content: `
+                        <h2>The Dawn of AI-Enhanced Kingdom Investing</h2>
+                        <p>In the rapidly evolving landscape of financial technology, artificial intelligence has emerged as a powerful tool for investment analysis. But what happens when we combine this cutting-edge technology with Biblical principles? The result is revolutionary: AI-enhanced Kingdom investing that transforms how faith-based investors approach wealth building.</p>
+                        
+                        <h3>Biblical Principles Meet Modern Technology</h3>
+                        <p>Our F.A.I.T.H. Platform represents the world's first AI system designed specifically to analyze investments through a Biblical lens. Unlike traditional investment platforms that focus solely on financial metrics, our AI evaluates opportunities based on their alignment with Kingdom principles, community impact potential, and long-term stewardship value.</p>
+                        
+                        <h3>How AI Analyzes Biblical Alignment</h3>
+                        <p>The Kingdom Impact AI engine uses sophisticated algorithms to evaluate investments across multiple Biblical criteria including care for the poor, creation stewardship, social justice, community building, and economic empowerment. This comprehensive analysis provides investors with a Kingdom Score that measures both spiritual and financial returns.</p>
+                        
+                        <h3>Real-World Impact</h3>
+                        <p>Through our AI-enhanced approach, Houston 100 has achieved remarkable results: 15.4% average annual returns while maintaining a 94/100 average Kingdom Score across our portfolio. Our investments have housed 1,200+ families, created hundreds of jobs, and launched dozens of Kingdom businesses.</p>
+                        
+                        <h3>The Future of Faith-Based Investing</h3>
+                        <p>As artificial intelligence continues to evolve, we believe the integration of AI with Biblical principles will become the gold standard for faith-based investing. This technology doesn't replace human wisdom or spiritual discernment—it enhances them, providing data-driven insights that help Kingdom investors make more informed decisions.</p>
+                    `
                 },
-                "recent_impact_stories": [
-                    {
-                        "project": "Houston Heights Housing",
-                        "investment": 2300000,
-                        "kingdom_score": 94,
-                        "impact": "35 families housed, community center serving 200+ children"
-                    },
-                    {
-                        "project": "East End Business Incubator",
-                        "investment": 1800000,
-                        "kingdom_score": 89,
-                        "impact": "12 Kingdom businesses launched, 45 jobs created"
-                    },
-                    {
-                        "project": "Third Ward Renewal",
-                        "investment": 3100000,
-                        "kingdom_score": 91,
-                        "impact": "48 housing units, 8 faith-based businesses, 32% crime reduction"
+                'kingdom-impact-scoring': {
+                    title: 'AI-Powered Kingdom Impact Scoring: A New Era',
+                    category: 'Faith-Based Tech',
+                    date: 'January 10, 2025',
+                    content: `
+                        <h2>Introducing Kingdom Impact Scoring</h2>
+                        <p>Traditional investment analysis focuses on financial metrics like ROI, risk assessment, and market performance. While these factors remain important, faith-based investors need additional criteria that align with Biblical values. Our AI-powered Kingdom Impact Scoring system fills this gap by providing comprehensive analysis of how investments advance God's Kingdom.</p>
+                        
+                        <h3>The Science Behind Kingdom Scoring</h3>
+                        <p>Our AI algorithms analyze investments across five key Biblical principles: Care for the Poor (Proverbs 31:8-9), Creation Stewardship (Genesis 1:28), Social Justice (Micah 6:8), Community Building (Acts 2:44-47), and Economic Empowerment (Deuteronomy 15:7-11). Each investment receives a score from 1-100 based on its alignment with these principles.</p>
+                        
+                        <h3>Real-Time Impact Measurement</h3>
+                        <p>The F.A.I.T.H. Platform continuously monitors and updates Kingdom Impact Scores based on real-world outcomes. This dynamic scoring system ensures that investors have current data on how their investments are performing both financially and spiritually.</p>
+                        
+                        <h3>Case Study: Affordable Housing Project</h3>
+                        <p>Our recent affordable housing project in Houston Heights received a Kingdom Score of 95/100, with high marks for community building (94%), care for the poor (98%), and social justice (92%). The project has housed 35 families while generating 8.5% IRR for investors.</p>
+                        
+                        <h3>The Future of Kingdom Metrics</h3>
+                        <p>As our AI continues to learn and improve, we're developing even more sophisticated metrics for measuring Kingdom impact, including long-term community transformation, generational wealth building, and spiritual influence. The goal is to provide investors with complete transparency on how their investments serve God's purposes.</p>
+                    `
+                },
+                'ai-wealth-building': {
+                    title: 'Biblical Wealth Building in the Age of AI',
+                    category: 'AI Stewardship',
+                    date: 'January 5, 2025',
+                    content: `
+                        <h2>Timeless Principles, Modern Technology</h2>
+                        <p>The Bible contains profound wisdom about wealth building and stewardship that has guided faithful investors for millennia. Today, artificial intelligence offers new tools to apply these timeless principles more effectively than ever before. The combination of Biblical wisdom and AI technology creates unprecedented opportunities for Kingdom-focused wealth building.</p>
+                        
+                        <h3>Biblical Stewardship Principles</h3>
+                        <p>Scripture teaches us that all wealth belongs to God (Psalm 24:1) and that we are called to be faithful stewards of the resources entrusted to us. This includes principles of diversification (Ecclesiastes 11:2), diligent planning (Proverbs 21:5), and using wealth to serve others (1 Timothy 6:17-19).</p>
+                        
+                        <h3>AI-Enhanced Stewardship</h3>
+                        <p>Our F.A.I.T.H. Platform uses artificial intelligence to help investors apply Biblical stewardship principles more effectively. The AI analyzes market conditions, identifies opportunities that align with Kingdom values, and optimizes portfolio allocation to maximize both financial returns and spiritual impact.</p>
+                        
+                        <h3>Generational Wealth Building</h3>
+                        <p>One of the most powerful aspects of AI-enhanced Biblical investing is its ability to model long-term outcomes. Our algorithms can project how current investment decisions will impact not only immediate returns but also generational wealth building and Kingdom legacy.</p>
+                        
+                        <h3>Practical Applications</h3>
+                        <p>AI-powered Biblical wealth building includes automated Kingdom impact scoring, real-time portfolio optimization based on faith criteria, predictive modeling for community transformation, and personalized investment recommendations that align with individual Kingdom calling.</p>
+                        
+                        <h3>The Kingdom Investor's Advantage</h3>
+                        <p>By combining Biblical principles with AI technology, Kingdom investors gain a significant advantage: the ability to build wealth that honors God while serving others. This approach doesn't require choosing between financial success and spiritual integrity—it enables both through intelligent, value-aligned investing.</p>
+                    `
+                }
+            };
+            
+            const article = blogDetails[articleId];
+            if (article) {
+                document.getElementById('blog-detail-content').innerHTML = `
+                    <a href="#" class="blog-back-btn" onclick="showPage('blog')">← Back to Blog</a>
+                    <div class="blog-header">
+                        <span class="blog-category">${article.category}</span>
+                        <span class="blog-date">${article.date}</span>
+                    </div>
+                    <h1>${article.title}</h1>
+                    ${article.content}
+                `;
+                showPage('blog-detail');
+            }
+        }
+
+        // AI Chat Agent Functionality
+        class FaithAIAssistant {
+            constructor() {
+                this.isOpen = false;
+                this.isTyping = false;
+                this.conversationHistory = [];
+                
+                this.chatToggle = document.getElementById('ai-chat-toggle');
+                this.chatPopup = document.getElementById('ai-chat-popup');
+                this.chatMessages = document.getElementById('ai-chat-messages');
+                this.chatInput = document.getElementById('ai-chat-input');
+                this.chatSend = document.getElementById('ai-chat-send');
+                
+                this.initializeEventListeners();
+                this.initializeKnowledgeBase();
+            }
+            
+            initializeEventListeners() {
+                // Toggle chat popup
+                this.chatToggle.addEventListener('click', () => this.toggleChat());
+                
+                // Send message on button click
+                this.chatSend.addEventListener('click', () => this.sendMessage());
+                
+                // Send message on Enter key (Shift+Enter for new line)
+                this.chatInput.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        this.sendMessage();
                     }
-                ],
-                "biblical_alignment_metrics": {
-                    "care_for_poor": 92,
-                    "creation_stewardship": 88,
-                    "social_justice": 90,
-                    "community_building": 95,
-                    "economic_empowerment": 87
+                });
+                
+                // Auto-resize textarea
+                this.chatInput.addEventListener('input', () => this.autoResizeTextarea());
+                
+                // Close chat when clicking outside
+                document.addEventListener('click', (e) => {
+                    if (!this.chatToggle.contains(e.target) && !this.chatPopup.contains(e.target) && this.isOpen) {
+                        this.toggleChat();
+                    }
+                });
+            }
+            
+            initializeKnowledgeBase() {
+                this.knowledgeBase = {
+                    portfolio: {
+                        total_aum: "$45.2M",
+                        average_returns: "15.4%",
+                        active_properties: 247,
+                        lives_impacted: "1,200+",
+                        average_kingdom_score: "94/100",
+                        ytd_performance: "15.4%",
+                        recent_investments: [
+                            "Houston Heights Housing - $2.3M - Kingdom Score: 94/100",
+                            "East End Business Incubator - $1.8M - Kingdom Score: 89/100", 
+                            "Third Ward Renewal - $3.1M - Kingdom Score: 91/100"
+                        ]
+                    },
+                    system_health: {
+                        overall_status: "Excellent",
+                        uptime: "99.97%",
+                        response_time: "185ms",
+                        error_rate: "0.05%",
+                        ai_engines: {
+                            kingdom_impact_ai: "94.7% accuracy",
+                            investment_analysis_ai: "91.2% accuracy",
+                            portfolio_optimization_ai: "89.8% accuracy",
+                            risk_assessment_ai: "92.5% accuracy"
+                        }
+                    },
+                    dhap_program: {
+                        name: "Divine Housing Assistance Program",
+                        tiers: [
+                            "Steward Level - $25K minimum",
+                            "Builder Level - $100K minimum (Most Popular)",
+                            "Kingdom Level - $500K minimum"
+                        ],
+                        impact: "1,200+ families housed, 456 jobs created, 89 businesses launched"
+                    },
+                    kingdom_principles: [
+                        "Care for Poor (Proverbs 31:8-9)",
+                        "Creation Stewardship (Genesis 1:28)", 
+                        "Social Justice (Micah 6:8)",
+                        "Community Building (Acts 2:44-47)",
+                        "Economic Empowerment (Deuteronomy 15:7-11)"
+                    ]
+                };
+            }
+            
+            toggleChat() {
+                this.isOpen = !this.isOpen;
+                this.chatPopup.classList.toggle('active', this.isOpen);
+                
+                if (this.isOpen) {
+                    this.chatInput.focus();
+                    this.scrollToBottom();
                 }
             }
-            return json.dumps(impact_data, indent=2)
-        
-        return analyze_kingdom_impact
-    
-    def run(self, user_input: str) -> str:
-        """Process user input and return AI response"""
-        try:
-            # Add context about Houston 100 and F.A.I.T.H. Platform
-            context = f"""
-            You are the Faith AI Assistant for Houston 100 Investment Group, the world's first 
-            AI-enhanced faith-based investment platform. You help with:
             
-            1. Investment Analysis - Analyzing opportunities for Kingdom impact and financial returns
-            2. System Health Monitoring - Checking F.A.I.T.H. Platform performance
-            3. Portfolio Management - Reviewing current investments and performance
-            4. Kingdom Impact Assessment - Measuring community transformation and Biblical alignment
+            autoResizeTextarea() {
+                this.chatInput.style.height = 'auto';
+                this.chatInput.style.height = Math.min(this.chatInput.scrollHeight, 80) + 'px';
+            }
             
-            Current Portfolio Status:
-            - Total AUM: $45.2M
-            - Average Returns: 15.4%
-            - Active Properties: 247
-            - Lives Impacted: 1,200+
-            - Average Kingdom Score: 94/100
+            sendMessage() {
+                const message = this.chatInput.value.trim();
+                if (!message || this.isTyping) return;
+                
+                // Add user message
+                this.addMessage(message, 'user');
+                this.chatInput.value = '';
+                this.autoResizeTextarea();
+                
+                // Show typing indicator
+                this.showTypingIndicator();
+                
+                // Generate AI response
+                setTimeout(() => {
+                    this.hideTypingIndicator();
+                    const response = this.generateAIResponse(message);
+                    this.addMessage(response, 'ai');
+                }, 1500 + Math.random() * 1000); // Realistic typing delay
+            }
             
-            User Query: {user_input}
-            """
+            addMessage(content, sender) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `chat-message ${sender}`;
+                
+                const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                
+                messageDiv.innerHTML = `
+                    <div class="message-avatar ${sender}">${sender === 'ai' ? 'AI' : 'You'}</div>
+                    <div class="message-content">
+                        <div class="message-bubble ${sender}">${content}</div>
+                        <div class="message-time">${time}</div>
+                    </div>
+                `;
+                
+                // Remove suggested questions if they exist
+                const suggestedQuestions = this.chatMessages.querySelector('.suggested-questions');
+                if (suggestedQuestions && sender === 'user') {
+                    suggestedQuestions.remove();
+                }
+                
+                this.chatMessages.appendChild(messageDiv);
+                this.scrollToBottom();
+                
+                // Store in conversation history
+                this.conversationHistory.push({
+                    content,
+                    sender,
+                    timestamp: new Date().toISOString()
+                });
+            }
             
-            result = self.agent.run(context)
-            return result.output_task.output.value
+            showTypingIndicator() {
+                this.isTyping = true;
+                const typingDiv = document.createElement('div');
+                typingDiv.className = 'chat-message typing-indicator-message';
+                typingDiv.innerHTML = `
+                    <div class="message-avatar ai">AI</div>
+                    <div class="message-content">
+                        <div class="message-bubble ai">
+                            <div class="typing-indicator">
+                                <span>Faith AI is thinking</span>
+                                <div class="typing-dots">
+                                    <div class="typing-dot"></div>
+                                    <div class="typing-dot"></div>
+                                    <div class="typing-dot"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                this.chatMessages.appendChild(typingDiv);
+                this.scrollToBottom();
+            }
             
-        except Exception as e:
-            return f"I apologize, but I encountered an error processing your request: {str(e)}. Please try again or contact support if the issue persists."
-
-# Production Deployment Configuration
-class ProductionDeployment:
-    """Production deployment configuration for Houston 100 AI Agent"""
-    
-    def __init__(self):
-        self.config = {
-            "environment": "production",
-            "scaling": {
-                "min_instances": 2,
-                "max_instances": 10,
-                "target_utilization": 70
-            },
-            "monitoring": {
-                "health_check_interval": 30,
-                "metrics_collection": True,
-                "alerting_enabled": True
-            },
-            "security": {
-                "encryption_at_rest": True,
-                "encryption_in_transit": True,
-                "access_control": "RBAC",
-                "audit_logging": True
-            },
-            "compliance": {
-                "soc2_type2": True,
-                "gdpr_compliant": True,
-                "ccpa_compliant": True
+            hideTypingIndicator() {
+                this.isTyping = false;
+                const typingIndicator = this.chatMessages.querySelector('.typing-indicator-message');
+                if (typingIndicator) {
+                    typingIndicator.remove();
+                }
+            }
+            
+            generateAIResponse(userMessage) {
+                const message = userMessage.toLowerCase();
+                
+                // Portfolio performance queries
+                if (message.includes('portfolio') || message.includes('performance') || message.includes('returns')) {
+                    return `📊 <strong>Current Portfolio Performance:</strong><br><br>
+                    • Total AUM: <strong>${this.knowledgeBase.portfolio.total_aum}</strong><br>
+                    • Average Returns: <strong>${this.knowledgeBase.portfolio.average_returns}</strong><br>
+                    • Active Properties: <strong>${this.knowledgeBase.portfolio.active_properties}</strong><br>
+                    • Lives Impacted: <strong>${this.knowledgeBase.portfolio.lives_impacted}</strong><br>
+                    • Average Kingdom Score: <strong>${this.knowledgeBase.portfolio.average_kingdom_score}</strong><br><br>
+                    Our AI-enhanced portfolio combines Biblical stewardship with superior financial returns! 🙏`;
+                }
+                
+                // Kingdom impact queries
+                if (message.includes('kingdom') || message.includes('impact') || message.includes('scoring')) {
+                    return `👑 <strong>Kingdom Impact Scoring System:</strong><br><br>
+                    Our AI analyzes investments across 5 Biblical principles:<br><br>
+                    • <strong>Care for Poor</strong> (Proverbs 31:8-9)<br>
+                    • <strong>Creation Stewardship</strong> (Genesis 1:28)<br>
+                    • <strong>Social Justice</strong> (Micah 6:8)<br>
+                    • <strong>Community Building</strong> (Acts 2:44-47)<br>
+                    • <strong>Economic Empowerment</strong> (Deuteronomy 15:7-11)<br><br>
+                    Each investment receives a Kingdom Score (0-100) measuring both financial returns and Biblical alignment! ✨`;
+                }
+                
+                // DHAP program queries
+                if (message.includes('dhap') || message.includes('housing') || message.includes('program')) {
+                    return `🏠 <strong>Divine Housing Assistance Program (DHAP):</strong><br><br>
+                    <strong>Three Membership Tiers:</strong><br>
+                    • Steward Level - $25K minimum<br>
+                    • Builder Level - $100K minimum (Most Popular)<br>
+                    • Kingdom Level - $500K minimum<br><br>
+                    <strong>Impact to Date:</strong><br>
+                    • 1,200+ families housed<br>
+                    • 456 jobs created<br>
+                    • 89 Kingdom businesses launched<br><br>
+                    Join our community of Kingdom builders! 🌟`;
+                }
+                
+                // System health queries
+                if (message.includes('system') || message.includes('health') || message.includes('status') || message.includes('platform')) {
+                    return `⚡ <strong>F.A.I.T.H. Platform System Health:</strong><br><br>
+                    <strong>Overall Status:</strong> ${this.knowledgeBase.system_health.overall_status} ✅<br>
+                    • Uptime: ${this.knowledgeBase.system_health.uptime}<br>
+                    • Response Time: ${this.knowledgeBase.system_health.response_time}<br>
+                    • Error Rate: ${this.knowledgeBase.system_health.error_rate}<br><br>
+                    <strong>AI Engines Status:</strong><br>
+                    • Kingdom Impact AI: ${this.knowledgeBase.system_health.ai_engines.kingdom_impact_ai}<br>
+                    • Investment Analysis AI: ${this.knowledgeBase.system_health.ai_engines.investment_analysis_ai}<br><br>
+                    All systems operating at peak performance! 🚀`;
+                }
+                
+                // Investment analysis queries
+                if (message.includes('invest') || message.includes('analysis') || message.includes('opportunities')) {
+                    return `💰 <strong>AI-Enhanced Investment Analysis:</strong><br><br>
+                    Our F.A.I.T.H. Platform uses advanced AI to:<br><br>
+                    • Analyze Biblical alignment of investments<br>
+                    • Calculate Kingdom ROI potential<br>
+                    • Assess community transformation impact<br>
+                    • Optimize portfolio for faith + returns<br><br>
+                    <strong>Recent High-Impact Investments:</strong><br>
+                    • Houston Heights Housing - Kingdom Score: 94/100<br>
+                    • East End Business Incubator - Kingdom Score: 89/100<br><br>
+                    Ready to build wealth while advancing God's Kingdom? 🙏`;
+                }
+                
+                // Faith and Biblical queries
+                if (message.includes('faith') || message.includes('biblical') || message.includes('god') || message.includes('christian')) {
+                    return `🙏 <strong>Faith-Based Investment Philosophy:</strong><br><br>
+                    We believe that wealth building should honor God and serve others. Our AI technology enhances traditional Biblical stewardship by:<br><br>
+                    • Screening investments for Biblical alignment<br>
+                    • Measuring real Kingdom impact<br>
+                    • Optimizing for both spiritual and financial returns<br>
+                    • Creating generational wealth that transforms communities<br><br>
+                    <em>"By wisdom a house is built, and through understanding it is established; through knowledge its rooms are filled with rare and beautiful treasures."</em> - Proverbs 24:3-4 ✨`;
+                }
+                
+                // Greetings
+                if (message.includes('hello') || message.includes('hi') || message.includes('hey')) {
+                    return `👋 Hello! I'm your Faith AI Assistant for Houston 100. I'm here to help you with Kingdom-focused investing, portfolio performance, system health, and Biblical stewardship guidance. What would you like to know about our AI-enhanced faith-based investment platform?`;
+                }
+                
+                // Default response with helpful suggestions
+                return `🤖 I'd be happy to help you with information about Houston 100's AI-enhanced Kingdom investing platform!<br><br>
+                <strong>I can assist with:</strong><br>
+                • Portfolio performance & analytics<br>
+                • Kingdom impact scoring & Biblical alignment<br>
+                • DHAP program details & membership<br>
+                • System health & platform status<br>
+                • Investment opportunities & analysis<br>
+                • Faith-based stewardship guidance<br><br>
+                What specific area would you like to explore? Feel free to ask me anything about building wealth while advancing God's Kingdom! 🙏`;
+            }
+            
+            scrollToBottom() {
+                setTimeout(() => {
+                    this.chatMessages.scrollTop = this.chatMessages.scrollHeight;
+                }, 100);
             }
         }
-    
-    def deploy_to_griptape_cloud(self):
-        """Deploy agent to Griptape Cloud"""
-        deployment_config = {
-            "agent_class": "Houston100Agent",
-            "runtime": "python3.9",
-            "memory": "2GB",
-            "cpu": "1vCPU",
-            "environment_variables": {
-                "HOUSTON_100_ENV": "production",
-                "AGENT_VERSION": "1.0.0",
-                "LOG_LEVEL": "INFO"
-            },
-            "secrets": [
-                "OPENAI_API_KEY",
-                "DATABASE_CONNECTION_STRING",
-                "ENCRYPTION_KEY",
-                "AIRTABLE_API_KEY",
-                "GOOGLE_SHEETS_API_KEY"
-            ]
-        }
         
-        return deployment_config
-    
-    def setup_monitoring(self):
-        """Setup comprehensive monitoring and alerting"""
-        monitoring_config = {
-            "metrics": [
-                "agent_response_time",
-                "agent_accuracy",
-                "system_health_score",
-                "investment_analysis_count",
-                "kingdom_impact_queries"
-            ],
-            "alerts": [
-                {
-                    "name": "High Response Time",
-                    "condition": "response_time > 2000ms",
-                    "action": "email_support"
-                },
-                {
-                    "name": "System Health Critical",
-                    "condition": "health_score < 85",
-                    "action": "page_on_call"
-                },
-                {
-                    "name": "Investment Analysis Error",
-                    "condition": "error_rate > 5%",
-                    "action": "slack_notification"
-                }
-            ],
-            "dashboards": [
-                "agent_performance",
-                "system_health",
-                "investment_analytics",
-                "kingdom_impact_metrics"
-            ]
-        }
+        // Initialize AI Assistant when page loads
+        let faithAI;
         
-        return monitoring_config
+        // Suggested questions functionality
+        function askSuggestedQuestion(question) {
+            if (faithAI) {
+                faithAI.chatInput.value = question;
+                faithAI.sendMessage();
+            }
+        }
 
-# Example Usage and Testing
-if __name__ == "__main__":
-    # Initialize Houston 100 AI Agent
-    agent = Houston100Agent()
-    
-    # Example conversations
-    example_queries = [
-        "What's the current health of our F.A.I.T.H. Platform?",
-        "Analyze the Kingdom impact of our recent affordable housing investment",
-        "What's our portfolio performance this quarter?",
-        "How should we evaluate a new solar energy investment opportunity?",
-        "Show me system alerts and recommendations",
-        "What's our average Kingdom score across all investments?",
-        "How many families have we housed through our DHAP program?",
-        "What Biblical principles guide our investment decisions?"
-    ]
-    
-    print("🤖 Houston 100 Faith AI Assistant Ready!")
-    print("=" * 50)
-    
-    for query in example_queries:
-        print(f"\n👤 User: {query}")
-        response = agent.run(query)
-        print(f"🤖 Faith AI: {response}")
-        print("-" * 50)
-    
-    # Production deployment
-    deployment = ProductionDeployment()
-    deploy_config = deployment.deploy_to_griptape_cloud()
-    monitoring_config = deployment.setup_monitoring()
-    
-    print("\n🚀 Production Deployment Configuration:")
-    print(json.dumps(deploy_config, indent=2))
-    print("\n📊 Monitoring Configuration:")
-    print(json.dumps(monitoring_config, indent=2))
+        // Handle navigation clicks
+        document.addEventListener('click', function(e) {
+            if (e.target.tagName === 'A' && e.target.getAttribute('href') && e.target.getAttribute('href').startsWith('#')) {
+                e.preventDefault();
+                const targetId = e.target.getAttribute('href').substring(1);
+                if (document.getElementById(targetId)) {
+                    showPage(targetId);
+                }
+            }
+        });
+
+        // Initialize everything when the page loads
+        window.addEventListener('load', function() {
+            // Loading screen
+            setTimeout(function() {
+                document.getElementById('loading-screen').style.display = 'none';
+                document.getElementById('main-nav').style.display = 'block';
+                document.getElementById('main-content').style.display = 'block';
+                
+                // Initialize AI Assistant after loading screen
+                faithAI = new FaithAIAssistant();
+                
+                // Initialize particle background
+                createParticleBackground();
+            }, 3000);
+        });
+
+        // Create animated particle background
+        function createParticleBackground() {
+            const particleBackground = document.getElementById('particle-background');
+            const particleCount = 50;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                // Random size between 2px and 6px
+                const size = Math.random() * 4 + 2;
+                particle.style.width = size + 'px';
+                particle.style.height = size + 'px';
+                
+                // Random horizontal position
+                particle.style.left = Math.random() * 100 + '%';
+                
+                // Random animation delay
+                particle.style.animationDelay = Math.random() * 20 + 's';
+                
+                // Random animation duration
+                particle.style.animationDuration = (Math.random() * 10 + 15) + 's';
+                
+                particleBackground.appendChild(particle);
+            }
+        }
+    </script>
+</body>
+</html>
